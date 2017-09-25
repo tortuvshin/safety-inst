@@ -4,5 +4,26 @@
     <string name="password">Нууц үг</string>
     <string name="imei">Imei код</string>
     <string name="company">Компани</string>
-<string name="username">Хэрэглэгчийн нэр</string>
+    <string name="username">Хэрэглэгчийн нэр</string>
+
+    <string name="action_settings">Тохиргоо</string>
+    <string name="next">Дараагийн</string>
+    <string name="start">Эхлэх</string>
+    <string name="skip">Алгасах</string>
+
+    <string name="no_internet">Интернет холболтоо шалгана уу</string>
+    <string name="not_found">Хоосон байна</string>
+
+    <string name="slide_1_title">Аюулгүй ажиллагаа</string>
+    <string name="slide_1_desc"> Аюулгүй ажиллагааны зааварчилгаа!</string>
+
+    <string name="slide_2_title">Аюулгүй ажиллагаа</string>
+    <string name="slide_2_desc">Аюулгүй ажиллагааны зааварчилгаа!</string>
+
+    <string name="slide_3_title">Аюулгүй ажиллагаа</string>
+    <string name="slide_3_desc">Аюулгүй ажиллагааны зааварчилгаа!</string>
+
+    <string name="slide_4_title">Аюулгүй ажиллагаа</string>
+    <string name="slide_4_desc">Аюулгүй ажиллагааны зааварчилгаа!</string>
+
 </resources>
