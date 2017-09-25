@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">ХАБ</string>
+    <string name="login">Нэвтрэх</string>
     <string name="password">Нууц үг</string>
+    <string name="imei">Imei код</string>
+    <string name="company">Компани</string>
+<string name="username">Хэрэглэгчийн нэр</string>
 </resources>
