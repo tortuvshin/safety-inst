@@ -9,7 +9,8 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:theme="@style/AppFullScreen">
 
     <ImageView
         android:layout_width="fill_parent"

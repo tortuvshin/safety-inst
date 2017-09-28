@@ -29,7 +29,6 @@ public class LoginImeiActivity extends AppCompatActivity {
 
         TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-
             return;
         }
         imeiCode.setText("Imei: "+mngr.getDeviceId());
