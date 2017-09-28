@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package btgt.mn.safetyinst.entity;
 
 /**
  * Created by turtuvshin on 9/28/17.

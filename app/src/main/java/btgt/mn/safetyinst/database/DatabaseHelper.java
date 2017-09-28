@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package btgt.mn.safetyinst.database;
 
 /**
  * Created by turtuvshin on 9/26/17.
@@ -8,9 +8,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
-import android.util.Log;
-
-import java.io.IOException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

@@ -6,6 +6,9 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +31,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import btgt.mn.safetyinst.fragment.AddInfoFragment;
+import btgt.mn.safetyinst.fragment.FinishFragment;
+import btgt.mn.safetyinst.fragment.SafetyFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
-    private MyViewPagerAdapter myViewPagerAdapter;
+    private ScreenSlidePagerAdapter myViewPagerAdapter;
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
@@ -47,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         changeStatusBarColor();
 
-        myViewPagerAdapter = new MyViewPagerAdapter();
+        myViewPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
@@ -150,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Deprecated
     public class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
@@ -183,6 +191,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            Fragment fragment = null;
+            if (position == 0) {
+                fragment = new SafetyFragment();
+            } else if (position == 1) {
+                fragment = new AddInfoFragment();
+            } else if (position == 2) {
+                fragment = new FinishFragment();
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    }
     private void readAssetAndMakeCopy()
     {
         AssetManager assetManager = getAssets();
