@@ -37,6 +37,7 @@ import btgt.mn.safetyinst.fragment.FinishFragment;
 import btgt.mn.safetyinst.fragment.SafetyFragment;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int NUM_PAGES = 3;
 
     private ViewPager viewPager;
     private ScreenSlidePagerAdapter myViewPagerAdapter;
@@ -61,11 +62,6 @@ public class MainActivity extends AppCompatActivity {
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
 
-        layouts = new int[]{
-                R.layout.safety_intro,
-                R.layout.add_information,
-                R.layout.finished};
-
         addBottomDots(0);
 
         changeStatusBarColor();
@@ -82,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int current = getItem(-1);
-                if (current < layouts.length) {
+                if (current < NUM_PAGES) {
                     viewPager.setCurrentItem(current);
                 } else {
                     launchHomeScreen();
@@ -94,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int current = getItem(+1);
-                if (current < layouts.length) {
+                if (current < NUM_PAGES) {
                     viewPager.setCurrentItem(current);
                 } else {
                     launchHomeScreen();
@@ -104,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
+        dots = new TextView[NUM_PAGES];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
@@ -137,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             addBottomDots(position);
 
-            if (position == layouts.length - 1) {
+            if (position == NUM_PAGES - 1) {
                 btnNext.setText(getString(R.string.start));
             } else {
                 btnNext.setText(getString(R.string.next));
@@ -184,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return NUM_PAGES;
         }
     }
 }

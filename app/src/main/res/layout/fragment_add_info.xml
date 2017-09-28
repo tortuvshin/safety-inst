@@ -4,18 +4,44 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <android.gesture.GestureOverlayView
-        android:id="@+id/signaturePad"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_weight="5"
-        android:background="@color/white"
-        android:eventsInterceptionEnabled="true"
-        android:fadeEnabled="false"
-        android:gestureColor="@color/colorPrimaryDark"
-        android:gestureStrokeLengthThreshold="0.1"
-        android:gestureStrokeType="multiple"
-        android:orientation="vertical" >
-    </android.gesture.GestureOverlayView>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.gesture.GestureOverlayView
+            android:id="@+id/signaturePad"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="5"
+            android:background="@color/white"
+            android:eventsInterceptionEnabled="true"
+            android:fadeEnabled="false"
+            android:gestureColor="@color/colorPrimaryDark"
+            android:gestureStrokeLengthThreshold="0.1"
+            android:gestureStrokeType="multiple"
+            android:orientation="vertical">
+        </android.gesture.GestureOverlayView>
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:layout_above="@+id/button1"
+            android:layout_alignParentTop="true"
+            android:src="@android:drawable/ic_menu_camera">
+        </ImageView>
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Зураг дарах">
+        </Button>
+
+
+    </LinearLayout>
 
 </RelativeLayout>
