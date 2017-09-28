@@ -1,7 +1,6 @@
 package btgt.mn.safetyinst;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
@@ -25,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts;
-    private Button btnSkip, btnNext;
+    private Button btnPrev, btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        btnSkip = (Button) findViewById(R.id.btn_skip);
+        btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
 
         layouts = new int[]{
-                R.layout.welcome_slide1,
-                R.layout.welcome_slide2,
-                R.layout.welcome_slide3,
-                R.layout.welcome_slide4};
+                R.layout.safety_intro,
+                R.layout.add_information,
+                R.layout.finished};
 
         addBottomDots(0);
 
@@ -56,10 +54,15 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
+        btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchHomeScreen();
+                int current = getItem(-1);
+                if (current < layouts.length) {
+                    viewPager.setCurrentItem(current);
+                } else {
+                    launchHomeScreen();
+                }
             }
         });
 
@@ -112,10 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
             if (position == layouts.length - 1) {
                 btnNext.setText(getString(R.string.start));
-                btnSkip.setVisibility(View.GONE);
             } else {
                 btnNext.setText(getString(R.string.next));
-                btnSkip.setVisibility(View.VISIBLE);
             }
         }
 

@@ -9,7 +9,7 @@
     <string name="action_settings">Тохиргоо</string>
     <string name="next">Дараагийн</string>
     <string name="start">Эхлэх</string>
-    <string name="skip">Алгасах</string>
+    <string name="prev">Өмнөх</string>
 
     <string name="no_internet">Интернет холболтоо шалгана уу</string>
     <string name="not_found">Хоосон байна</string>

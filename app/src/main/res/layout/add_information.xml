@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="86dp" />
+
     <android.gesture.GestureOverlayView
         android:id="@+id/signaturePad"
         android:layout_width="match_parent"
@@ -25,6 +26,5 @@
         android:gestureStrokeType="multiple"
         android:orientation="vertical" >
     </android.gesture.GestureOverlayView>
-
 
 </RelativeLayout>
