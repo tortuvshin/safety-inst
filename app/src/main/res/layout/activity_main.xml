@@ -8,7 +8,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"/>
 
     <LinearLayout
         android:id="@+id/layoutDots"
@@ -34,8 +35,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="@null"
-        android:text="@string/next"
-        android:textColor="@android:color/white" />
+        android:text="@string/next"/>
 
     <Button
         android:id="@+id/btn_skip"
@@ -44,6 +44,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:background="@null"
-        android:text="@string/prev"
-        android:textColor="@android:color/white" />
+        android:text="@string/prev"/>
 </RelativeLayout>

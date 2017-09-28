@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
+
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -71,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
         myViewPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
+        viewPager.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                return true;
+            }
+        });
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,40 +163,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Deprecated
-    public class MyViewPagerAdapter extends PagerAdapter {
-        private LayoutInflater layoutInflater;
-
-        public MyViewPagerAdapter() {
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            View view = layoutInflater.inflate(layouts[position], container, false);
-            container.addView(view);
-
-            return view;
-        }
-
-        @Override
-        public int getCount() {
-            return layouts.length;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object obj) {
-            return view == obj;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = (View) object;
-            container.removeView(view);
-        }
-    }
-
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -213,46 +185,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return 3;
-        }
-    }
-    private void readAssetAndMakeCopy()
-    {
-        AssetManager assetManager = getAssets();
-
-        InputStream in = null;
-        OutputStream out = null;
-        File file = new File(getFilesDir(), "git.pdf");
-        try
-        {
-            in = assetManager.open("git.pdf");
-            out = openFileOutput(file.getName(), Context.MODE_WORLD_READABLE);
-
-            copyFile(in, out);
-            in.close();
-            in = null;
-            out.flush();
-            out.close();
-            out = null;
-        } catch (Exception e)
-        {
-            Log.e("tag", e.getMessage());
-        }
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(
-                Uri.parse("file://" + getFilesDir() + "/git.pdf"),
-                "application/pdf");
-
-        startActivity(intent);
-    }
-
-    private void copyFile(InputStream in, OutputStream out) throws IOException
-    {
-        byte[] buffer = new byte[1024];
-        int read;
-        while ((read = in.read(buffer)) != -1)
-        {
-            out.write(buffer, 0, read);
         }
     }
 }
