@@ -7,11 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import btgt.mn.safetyinst.R;
 
 public class SafetyFragment extends Fragment {
 
+    ScrollView scrollView;
+    View rootView;
     public SafetyFragment() {
         // Required empty public constructor
     }
@@ -31,6 +34,8 @@ public class SafetyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_safety, container, false);
+        rootView = inflater.inflate(R.layout.fragment_safety, container, false);
+        scrollView = (ScrollView) rootView.findViewById(R.id.contentScroll);
+        return rootView;
     }
 }
