@@ -13,7 +13,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginImeiActivity">
         </activity>
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/AppFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
