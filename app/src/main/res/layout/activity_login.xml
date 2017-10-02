@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/AppTheme"
-    tools:context="btgt.mn.safetyinst.LoginImeiActivity">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -15,14 +14,14 @@
         android:paddingRight="24dp"
         android:paddingBottom="48dp">
         <ImageView
-            android:layout_width="@dimen/img_width_height"
-            android:layout_height="@dimen/img_width_height"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@mipmap/ic_launcher"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="40dp" />
+            android:layout_marginBottom="20dp" />
+
         <TextView android:id="@+id/imei_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,4 +69,4 @@
             android:gravity="center"
             android:textSize="16dip"/>
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</ScrollView>

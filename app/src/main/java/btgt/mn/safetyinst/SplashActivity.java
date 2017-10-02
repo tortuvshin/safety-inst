@@ -16,10 +16,10 @@ public class SplashActivity extends AppCompatActivity {
                 public void run(){
                     try{
                         sleep(1000);
-                    }catch(InterruptedException e){
+                    } catch(InterruptedException e){
                         e.printStackTrace();
-                    }finally{
-                        Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
+                    } finally{
+                        Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
                         startActivity(intent);
                         finish();
                     }
