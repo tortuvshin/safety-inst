@@ -32,16 +32,16 @@
             android:src="@android:drawable/ic_menu_camera">
         </ImageView>
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button1"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="Зураг дарах">
-        </Button>
-
-
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:background=""@android:color/white"
+            android:padding="12dp"
+            android:textColor="@color/white"
+            android:text="Зураг дарах"/>
     </LinearLayout>
 
 </RelativeLayout>
