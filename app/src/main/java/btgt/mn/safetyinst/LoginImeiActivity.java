@@ -1,6 +1,7 @@
 package btgt.mn.safetyinst;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -59,30 +60,13 @@ public class LoginImeiActivity extends AppCompatActivity {
     }
 
     public void login() {
-        if (!validate()) {
-            Toast.makeText(LoginImeiActivity.this, "Хэрэглэгчийн нэр нууц үг буруу байна", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        loginBtn.setEnabled(false);
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        Toast.makeText(LoginImeiActivity.this, "Тавтай морилно уу", Toast.LENGTH_SHORT).show();
-                    }
-                }, 3000);
-    }
-
-
-    public boolean validate() {
-        boolean valid = true;
 
         String password = passText.getText().toString();
 
 
         if (password.isEmpty() || password.length() < 4) {
             passText.setError("нууц үг 4-өөс олон тэмдэгт байна");
-            valid = false;
+            return;
         } else {
             passText.setError(null);
         }
@@ -94,20 +78,26 @@ public class LoginImeiActivity extends AppCompatActivity {
                 if (checkeduser.getCount() > 0){
                     stopManagingCursor(checkeduser);
                     checkeduser.close();
-
+                    loginBtn.setEnabled(false);
+                    final ProgressDialog progressDialog = new ProgressDialog(LoginImeiActivity.this);
+                    progressDialog.setIndeterminate(true);
+                    progressDialog.setMessage("Уншиж байна...");
+                    progressDialog.show();
                     new android.os.Handler().postDelayed(
                             new Runnable() {
                                 public void run() {
+                                    Toast.makeText(LoginImeiActivity.this, "Тавтай морилно уу", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(i);
                                 }
-                            }, 2000);
-                    valid = true;
+                            }, 1000);
                 }
                 else{
-                    valid = false;
+                    Toast.makeText(LoginImeiActivity.this, "Хэрэглэгчийн нэр нууц үг буруу байна", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 stopManagingCursor(checkeduser);
                 checkeduser.close();
@@ -116,13 +106,11 @@ public class LoginImeiActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "Database query error",
                         Toast.LENGTH_SHORT).show();
-                valid = false;
+                return;
             }
         } else {
             Toast.makeText(LoginImeiActivity.this,"Хэрэглэгчийн нэр нууц үгээ оруулна уу",Toast.LENGTH_SHORT).show();
-            valid = false;
+            return;
         }
-        return valid;
     }
-
 }

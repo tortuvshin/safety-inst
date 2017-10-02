@@ -74,24 +74,24 @@ public class RegisterActivity extends AppCompatActivity {
         }
         signUpButton.setEnabled(false);
 
-        // TODO: Implement your own signup logic here.
+        final ProgressDialog progressDialog = new ProgressDialog(RegisterActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Уншиж байна...");
+        progressDialog.show();
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         onSignupSuccess();
+                        progressDialog.dismiss();
+                        finish();
                     }
-                }, 3000);
+                }, 1000);
     }
 
     public void onSignupSuccess() {
         signUpButton.setEnabled(true);
         setResult(RESULT_OK, null);
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        finish();
-                    }
-                }, 3000);
+
         Log.d(TAG, "Бүртгэл амжилттай боллоо...");
         String name = nameEditText.getText().toString();
         String email = emailEditText.getText().toString();
