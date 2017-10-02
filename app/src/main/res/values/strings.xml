@@ -38,4 +38,8 @@ In eget ullamcorper ante. Nam mattis consectetur tortor, sed dictum velit rhoncu
 Sed volutpat risus ipsum, at porttitor lectus maximus vel. In risus nisi, efficitur fringilla nisi et, lobortis tempus nunc. Nunc nisi nisi, ultrices ac accumsan vitae, viverra sit amet leo. In hac habitasse platea dictumst. Ut at volutpat nisi, blandit iaculis velit. Pellentesque eu tellus eleifend, efficitur nibh et, ultricies sapien. Sed porttitor accumsan libero. Integer nisl urna, rutrum ac fermentum at, convallis laoreet nulla. Sed mollis, sem ut mattis ultricies, dui velit accumsan massa, cursus varius quam turpis vitae lectus. Aliquam nec sapien a metus lobortis porta. In porta, dui ut lobortis vulputate, nunc nunc volutpat odio, nec iaculis metus nibh ut neque. Morbi ultricies facilisis mi id imperdiet. Nunc volutpat felis et diam posuere ultricies.
 
 Suspendisse rhoncus purus in dolor pellentesque ornare. Fusce sit amet orci ut tortor accumsan dapibus. Phasellus commodo sodales ante a porttitor. Donec nec auctor est. Mauris iaculis mattis condimentum. Vivamus luctus ante ut odio tempus, eu euismod libero fermentum. Donec elit lacus, lacinia non ornare sit amet, hendrerit a eros. Etiam efficitur tortor ac elit ornare, ut ultrices erat viverra. Fusce dolor sapien, vulputate id condimentum a, gravida ut tortor.</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
