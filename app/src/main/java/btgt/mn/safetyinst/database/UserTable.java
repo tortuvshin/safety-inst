@@ -129,16 +129,15 @@ public class UserTable extends DatabaseHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                String id = cursor.getString(USER_ID_INDEX);
-                String name = cursor.getString(USER_NAME_INDEX);
-                String pos = cursor.getString(USER_POSITION_INDEX);
-                int phone = cursor.getInt(USER_PHONE_INDEX);
-                String imei = cursor.getString(USER_IMEI_INDEX);
-                String email = cursor.getString(USER_EMAIL_INDEX);
-                String pass = cursor.getString(USER_PASS_INDEX);
-                String profile = cursor.getString(USER_PROFILE_INDEX);
-                String lasts = cursor.getString(USER_LASTS_INDEX);
-                User user = new User(id, name, pos, phone, imei, email, pass, profile, lasts);
+                User user = new User(cursor.getString(USER_ID_INDEX),
+                        cursor.getString(USER_NAME_INDEX),
+                        cursor.getString(USER_POSITION_INDEX),
+                        cursor.getInt(USER_PHONE_INDEX),
+                        cursor.getString(USER_IMEI_INDEX),
+                        cursor.getString(USER_EMAIL_INDEX),
+                        cursor.getString(USER_PASS_INDEX),
+                        cursor.getString(USER_PROFILE_INDEX),
+                        cursor.getString(USER_LASTS_INDEX));
                 users.add(user);
             } while (cursor.moveToNext());
         }
