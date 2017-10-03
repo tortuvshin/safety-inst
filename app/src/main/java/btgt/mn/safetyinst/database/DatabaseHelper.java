@@ -40,6 +40,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SNoteTable.SNOTE_VOICE_DATA + " TEXT," +
             SNoteTable.SNOTE_TIMEOUT + " INT)";
 
+    private static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ CategoryTable.TABLE_CATEGORYS+" (" +
+            CategoryTable.CATEGORY_ID + " TEXT PRIMARY KEY," +
+            CategoryTable.CATEGORY_NAME + " TEXT," +
+            CategoryTable.CATEGORY_ICON + " TEXT," +
+            CategoryTable.CATEGORY_ORDER + " TEXT)";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         myContext = context;
