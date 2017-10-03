@@ -23,6 +23,15 @@ public class SignData {
         this.sendStatus = sendStatus;
     }
 
+    public SignData(String userId, String sNoteId, String viewDate, String userSign, String photo, String sendStatus) {
+        this.userId = userId;
+        this.sNoteId = sNoteId;
+        this.viewDate = viewDate;
+        this.userSign = userSign;
+        this.photo = photo;
+        this.sendStatus = sendStatus;
+    }
+
     public String getId() {
         return id;
     }

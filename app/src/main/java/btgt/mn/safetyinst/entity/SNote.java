@@ -25,6 +25,16 @@ public class SNote {
         this.timeout = timeout;
     }
 
+    public SNote(int categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
+        this.categoryId = categoryId;
+        this.name = name;
+        this.order = order;
+        this.frameType = frameType;
+        this.frameData = frameData;
+        this.voiceData = voiceData;
+        this.timeout = timeout;
+    }
+
     public String getId() {
         return id;
     }

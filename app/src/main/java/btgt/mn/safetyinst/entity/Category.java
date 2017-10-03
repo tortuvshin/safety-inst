@@ -17,6 +17,12 @@ public class Category {
         this.order = order;
     }
 
+    public Category(String name, String icon, String order) {
+        this.name = name;
+        this.icon = icon;
+        this.order = order;
+    }
+
     public String getId() {
         return id;
     }
