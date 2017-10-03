@@ -55,6 +55,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SignDataTable.SIGNDATA_PHOTO + " TEXT," +
             SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
 
+    private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ SettingsTable.TABLE_SETTINGS+" (" +
+            SettingsTable.SETTINGS_COMPANY_NAME + " TEXT PRIMARY KEY," +
+            SettingsTable.SETTINGS_DEFARTMENT_NAME + " TEXT," +
+            SettingsTable.SETTINGS_IMEI + " TEXT," +
+            SettingsTable.SETTINGS_ANDROID_ID + " TEXT," +
+            SettingsTable.SETTINGS_SNOTE_DATA + " TEXT)";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         myContext = context;
@@ -67,6 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SNOTES);
         db.execSQL(CREATE_TABLE_CATEGORYS);
         db.execSQL(CREATE_TABLE_SIGNDATA);
+        db.execSQL(CREATE_TABLE_SETTINGS);
     }
 
     @Override
@@ -75,6 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         dropTable(SNoteTable.TABLE_SNOTE);
         dropTable(CategoryTable.TABLE_CATEGORYS);
         dropTable(SignDataTable.TABLE_SIGNDATAS);
+        dropTable(SettingsTable.TABLE_SETTINGS);
         onCreate(db);
     }
 
