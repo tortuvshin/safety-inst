@@ -23,6 +23,7 @@ public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
     private EditText passText;
     private TextView imeiCode;
+    private TextView usernameText;
     private TextView regLink;
     UserTable userTable;
     TelephonyManager mngr;
@@ -32,6 +33,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         imeiCode = (TextView) findViewById(R.id.imei_code);
+        usernameText = (TextView) findViewById(R.id.username);
         passText = (EditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
         regLink = (TextView) findViewById(R.id.linkReg);
@@ -41,9 +43,10 @@ public class LoginImeiActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        Intent iGet = getIntent();
         imei = mngr.getDeviceId();
         imeiCode.setText("Imei: " + imei);
-
+        usernameText.setText("Хэрэглэгчийн нэр: "+iGet.getStringExtra("username"));
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

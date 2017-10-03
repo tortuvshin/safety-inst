@@ -51,9 +51,8 @@ public class LoginListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object o = parent.getItemAtPosition(position);
-                final String username = o.toString();
-
                 Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
+                intent.putExtra("username", o.toString());
                 startActivity(intent);
             }
         });
