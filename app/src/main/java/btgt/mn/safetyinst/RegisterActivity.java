@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.List;
 
 import btgt.mn.safetyinst.database.DatabaseHelper;
@@ -100,7 +101,8 @@ public class RegisterActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        userTable.addUser(new User(name, mngr.getDeviceId(), email, password));
+
+        userTable.addUser(new User(null, name, "", 99999999, mngr.getDeviceId(), email, password, "", Calendar.getInstance().getTime().toString()));
 
         List<User> userInfo = userTable.getAllUsers();
 
@@ -151,8 +153,6 @@ public class RegisterActivity extends AppCompatActivity {
         else{
             confirmPasswordEditText.setError(null);
         }
-
-        //password = PasswordHashes(password);
 
         Cursor user = userTable.checkUser(name,password);
 

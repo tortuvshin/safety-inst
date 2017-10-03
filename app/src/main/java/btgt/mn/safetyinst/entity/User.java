@@ -27,17 +27,6 @@ public class User {
         this.lastSigned = lastSigned;
     }
 
-    public User(String name, String position, int phone, String imei, String email, String password, String profile, String lastSigned) {
-        this.name = name;
-        this.position = position;
-        this.phone = phone;
-        this.imei = imei;
-        this.email = email;
-        this.password = password;
-        this.profile = profile;
-        this.lastSigned = lastSigned;
-    }
-
     public String getId() {
         return id;
     }
