@@ -7,23 +7,24 @@ package btgt.mn.safetyinst.entity;
 public class User {
     String id;
     String name;
+    String position;
+    int phone;
     String imei;
     String email;
     String password;
+    String profile;
+    String lastSigned;
 
-    public User(String id, String name, String imei, String email, String password) {
+    public User(String id, String name, String position, int phone, String imei, String email, String password, String profile, String lastSigned) {
         this.id = id;
         this.name = name;
+        this.position = position;
+        this.phone = phone;
         this.imei = imei;
         this.email = email;
         this.password = password;
-    }
-
-    public User(String name, String imei, String email, String password) {
-        this.name = name;
-        this.imei = imei;
-        this.email = email;
-        this.password = password;
+        this.profile = profile;
+        this.lastSigned = lastSigned;
     }
 
     public String getId() {
@@ -40,6 +41,22 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
     }
 
     public String getImei() {
@@ -64,5 +81,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public String getLastSigned() {
+        return lastSigned;
+    }
+
+    public void setLastSigned(String lastSigned) {
+        this.lastSigned = lastSigned;
     }
 }
