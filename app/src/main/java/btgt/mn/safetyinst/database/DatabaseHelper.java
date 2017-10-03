@@ -46,6 +46,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CategoryTable.CATEGORY_ICON + " TEXT," +
             CategoryTable.CATEGORY_ORDER + " TEXT)";
 
+    private static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ SignDataTable.TABLE_SIGNDATAS+" (" +
+            SignDataTable.SIGNDATA_ID + " TEXT PRIMARY KEY," +
+            SignDataTable.SIGNDATA_USER_ID + " TEXT," +
+            SignDataTable.SIGNDATA_SNOTE_ID + " TEXT," +
+            SignDataTable.SIGNDATA_VIEWDATE + " TEXT," +
+            SignDataTable.SIGNDATA_USERSIGN + " TEXT," +
+            SignDataTable.SIGNDATA_PHOTO + " TEXT," +
+            SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         myContext = context;
@@ -56,12 +65,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         db.execSQL(CREATE_TABLE_USERS);
         db.execSQL(CREATE_TABLE_SNOTES);
+        db.execSQL(CREATE_TABLE_CATEGORYS);
+        db.execSQL(CREATE_TABLE_SIGNDATA);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         dropTable(UserTable.TABLE_USERS);
         dropTable(SNoteTable.TABLE_SNOTE);
+        dropTable(CategoryTable.TABLE_CATEGORYS);
+        dropTable(SignDataTable.TABLE_SIGNDATAS);
         onCreate(db);
     }
 
