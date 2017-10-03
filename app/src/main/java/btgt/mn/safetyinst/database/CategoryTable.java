@@ -21,7 +21,7 @@ public class CategoryTable extends DatabaseHelper {
     public static final String CATEGORY_ID          = "id";
     public static final String CATEGORY_NAME        = "name";
     public static final String CATEGORY_ICON        = "icon";
-    public static final String CATEGORY_ORDER       = "order";
+    public static final String CATEGORY_ORDER       = "sorder";
 
     private static final int CATEGORY_ID_INDEX         = 0;
     private static final int CATEGORY_NAME_INDEX       = 1;

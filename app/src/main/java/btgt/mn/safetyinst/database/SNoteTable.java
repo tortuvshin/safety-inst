@@ -20,7 +20,7 @@ public class SNoteTable extends DatabaseHelper {
     public static final String SNOTE_ID          = "id";
     public static final String SNOTE_CAT_ID      = "category_id";
     public static final String SNOTE_NAME        = "name";
-    public static final String SNOTE_ORDER       = "order";
+    public static final String SNOTE_ORDER       = "sorder";
     public static final String SNOTE_FRAME_TYPE  = "frame_type";
     public static final String SNOTE_FRAME_DATA  = "frame_data";
     public static final String SNOTE_VOICE_DATA  = "voice_data";
