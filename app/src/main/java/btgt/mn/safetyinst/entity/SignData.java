@@ -5,20 +5,30 @@ package btgt.mn.safetyinst.entity;
  */
 
 public class SignData {
+    String id;
     String userId;
     String sNoteId;
     String viewDate;
     String userSign;
     String photo;
-    boolean sendStatus;
+    String sendStatus;
 
-    public SignData(String userId, String sNoteId, String viewDate, String userSign, String photo, boolean sendStatus) {
+    public SignData(String id, String userId, String sNoteId, String viewDate, String userSign, String photo, String sendStatus) {
+        this.id = id;
         this.userId = userId;
         this.sNoteId = sNoteId;
         this.viewDate = viewDate;
         this.userSign = userSign;
         this.photo = photo;
         this.sendStatus = sendStatus;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserId() {
@@ -61,11 +71,11 @@ public class SignData {
         this.photo = photo;
     }
 
-    public boolean isSendStatus() {
+    public String getSendStatus() {
         return sendStatus;
     }
 
-    public void setSendStatus(boolean sendStatus) {
+    public void setSendStatus(String sendStatus) {
         this.sendStatus = sendStatus;
     }
 }
