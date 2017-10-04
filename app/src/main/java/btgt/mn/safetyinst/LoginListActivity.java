@@ -18,7 +18,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import btgt.mn.safetyinst.adapter.UserListAdapter;
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.User;
 
@@ -78,4 +77,49 @@ public class LoginListActivity extends AppCompatActivity {
         });
         myArrayAdapter.notifyDataSetChanged();
     }
+
+
+    public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
+        private String[] mDataset;
+        ArrayList<String> userListItems = new ArrayList<String>();
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            public TextView mTextView;
+            public ViewHolder(View v) {
+                super(v);
+                v.setOnClickListener(this);
+                mTextView = (TextView) v.findViewById(R.id.username_text);
+            }
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
+                intent.putExtra("username", mTextView.getText().toString());
+                startActivity(intent);
+            }
+        }
+
+        public UserListAdapter(ArrayList<String> userList) {
+            userListItems = userList;
+        }
+
+        @Override
+        public UserListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                                                        int viewType) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.user_list_item, parent, false);
+            UserListAdapter.ViewHolder vh = new UserListAdapter.ViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
+            holder.mTextView.setText(userListItems.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return userListItems.size();
+        }
+    }
+
 }
