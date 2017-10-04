@@ -23,10 +23,9 @@ import btgt.mn.safetyinst.entity.User;
 
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
-    private ListView usersList;
-    final Context context = this;
+
     final ArrayList<String> userListItems = new ArrayList<String>();
-    private ArrayAdapter<String> myArrayAdapter;
+
     UserTable userTable;
 
     private RecyclerView mRecyclerView;
@@ -37,7 +36,6 @@ public class LoginListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_list);
-        usersList = (ListView)findViewById(R.id.usersList);
 
         userTable = new UserTable(this);
 
@@ -48,9 +46,6 @@ public class LoginListActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        myArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,userListItems);
-        usersList.setAdapter(myArrayAdapter);
-        usersList.setTextFilterEnabled(true);
         List<User> users = userTable.getAllUsers();
 
         try {
@@ -65,17 +60,6 @@ public class LoginListActivity extends AppCompatActivity {
         }
         mAdapter = new UserListAdapter(userListItems);
         mRecyclerView.setAdapter(mAdapter);
-
-        usersList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object o = parent.getItemAtPosition(position);
-                Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
-                intent.putExtra("username", o.toString());
-                startActivity(intent);
-            }
-        });
-        myArrayAdapter.notifyDataSetChanged();
     }
 
 
@@ -121,5 +105,4 @@ public class LoginListActivity extends AppCompatActivity {
             return userListItems.size();
         }
     }
-
 }

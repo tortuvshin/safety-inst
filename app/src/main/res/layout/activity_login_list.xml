@@ -5,12 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="btgt.mn.safetyinst.LoginListActivity">
-    <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingTop="200dp"
-        android:id="@+id/usersList"
-        android:layout_centerHorizontal="true" />
+    
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:scrollbars="vertical"
