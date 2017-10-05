@@ -42,7 +42,7 @@ public class AddInfoFragment extends Fragment {
         imageView = (ImageView) rootView.findViewById(R.id.imageView1);
         Button photoButton = (Button) rootView.findViewById(R.id.button1);
 
-        photoButton.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
