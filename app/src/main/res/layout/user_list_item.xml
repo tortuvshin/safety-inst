@@ -7,7 +7,7 @@
     android:id="@+id/card_view"
     android:layout_gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="60dp"
     card_view:cardCornerRadius="4dp">
     <LinearLayout
         android:orientation="horizontal"
@@ -29,12 +29,14 @@
                 android:id="@+id/username_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="21sp"/>
+                android:textSize="19sp"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/position_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="15sp"/>
+                android:textSize="13sp"
+                android:textStyle="italic"/>
         </LinearLayout>
 
     </LinearLayout>
