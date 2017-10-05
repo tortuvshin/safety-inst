@@ -36,7 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginListActivity" />
+        <activity
+            android:name=".LoginListActivity"
+            android:theme="@style/AppFullScreen"/>
         <activity android:name=".RegisterActivity"></activity>
     </application>
 
