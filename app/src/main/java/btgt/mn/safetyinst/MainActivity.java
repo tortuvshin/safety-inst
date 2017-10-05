@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
-                return true;
+                return false;
             }
         });
         btnPrev.setOnClickListener(new View.OnClickListener() {

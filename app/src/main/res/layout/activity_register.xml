@@ -88,6 +88,6 @@
             android:layout_marginBottom="24dp"
             android:text="Хэрэв та бүртгэлтэй бол энд дарна уу?"
             android:gravity="center"
-            android:textSize="16dip"/>
+            android:textSize="16sp"/>
     </LinearLayout>
 </ScrollView>
