@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.telephony.TelephonyManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +21,7 @@ import btgt.mn.safetyinst.database.UserTable;
 public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
     private EditText passText;
-    private TextView imeiCode;
+    private TextView positionText;
     private TextView usernameText;
     private TextView regLink;
     UserTable userTable;
@@ -32,7 +31,7 @@ public class LoginImeiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        imeiCode = (TextView) findViewById(R.id.imei_code);
+        positionText = (TextView) findViewById(R.id.position);
         usernameText = (TextView) findViewById(R.id.username);
         passText = (EditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
@@ -45,8 +44,8 @@ public class LoginImeiActivity extends AppCompatActivity {
         }
         Intent iGet = getIntent();
         imei = mngr.getDeviceId();
-        imeiCode.setText("Imei: " + imei);
-        usernameText.setText("Хэрэглэгчийн нэр: "+iGet.getStringExtra("username"));
+        positionText.setText(iGet.getStringExtra("position"));
+        usernameText.setText(iGet.getStringExtra("username"));
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +64,6 @@ public class LoginImeiActivity extends AppCompatActivity {
     public void login() {
 
         String password = passText.getText().toString();
-
 
         if (password.isEmpty() || password.length() < 4) {
             passText.setError("нууц үг 4-өөс олон тэмдэгт байна");

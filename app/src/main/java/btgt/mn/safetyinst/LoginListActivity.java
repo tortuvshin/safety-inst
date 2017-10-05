@@ -93,6 +93,7 @@ public class LoginListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
                 intent.putExtra("username", mTextView.getText().toString());
+                intent.putExtra("position", mPosText.getText().toString());
                 startActivity(intent);
             }
         }
