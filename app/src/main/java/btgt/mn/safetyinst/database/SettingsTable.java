@@ -42,7 +42,7 @@ public class SettingsTable extends DatabaseHelper {
         super(context);
     }
 
-    public void addSettings(Settings settings) {
+    public void add(Settings settings) {
         if (settings == null) {
             return;
         }
@@ -61,7 +61,7 @@ public class SettingsTable extends DatabaseHelper {
         db.close();
     }
 
-    public List<Settings> getSettings() {
+    public List<Settings> get() {
         List<Settings> settings = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
         SQLiteDatabase db = getReadableDatabase();
@@ -79,7 +79,7 @@ public class SettingsTable extends DatabaseHelper {
         cursor.close();
         return settings;
     }
-    public int updateSettings(Settings settings) {
+    public int update(Settings settings) {
         if (settings == null) {
             return -1;
         }

@@ -39,7 +39,7 @@ public class CategoryTable extends DatabaseHelper {
         super(context);
     }
 
-    public void addCategory(Category category) {
+    public void add(Category category) {
         if (category == null) {
             return;
         }
@@ -57,7 +57,7 @@ public class CategoryTable extends DatabaseHelper {
         db.close();
     }
 
-    public Category getCategory(int id) {
+    public Category get(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -76,7 +76,7 @@ public class CategoryTable extends DatabaseHelper {
         return category;
     }
 
-    public List<Category> getAllCategorys() {
+    public List<Category> getAll() {
         List<Category> categorys = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_CATEGORYS;
         SQLiteDatabase db = getReadableDatabase();
@@ -93,7 +93,7 @@ public class CategoryTable extends DatabaseHelper {
         cursor.close();
         return categorys;
     }
-    public int updateCategory(Category category) {
+    public int update(Category category) {
         if (category == null) {
             return -1;
         }
@@ -112,7 +112,7 @@ public class CategoryTable extends DatabaseHelper {
         return rowCount;
     }
 
-    public void deleteCategory(Category category) {
+    public void delete(Category category) {
         if (category == null) {
             return;
         }

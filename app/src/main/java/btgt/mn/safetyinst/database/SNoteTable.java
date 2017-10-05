@@ -50,7 +50,7 @@ public class SNoteTable extends DatabaseHelper {
         super(context);
     }
 
-    public void addSNote(SNote sNote) {
+    public void add(SNote sNote) {
         if (sNote == null) {
             return;
         }
@@ -72,7 +72,7 @@ public class SNoteTable extends DatabaseHelper {
         db.close();
     }
 
-    public SNote getSNote(int id) {
+    public SNote get(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -95,7 +95,7 @@ public class SNoteTable extends DatabaseHelper {
         return sNote;
     }
 
-    public List<SNote> getAllSNotes() {
+    public List<SNote> getAll() {
         List<SNote> sNotes = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SNOTE;
         SQLiteDatabase db = getReadableDatabase();
@@ -116,7 +116,7 @@ public class SNoteTable extends DatabaseHelper {
         cursor.close();
         return sNotes;
     }
-    public int updateSNote(SNote sNote) {
+    public int update(SNote sNote) {
         if (sNote == null) {
             return -1;
         }
@@ -139,7 +139,7 @@ public class SNoteTable extends DatabaseHelper {
         return rowCount;
     }
 
-    public void deleteSNote(SNote sNote) {
+    public void delete(SNote sNote) {
         if (sNote == null) {
             return;
         }

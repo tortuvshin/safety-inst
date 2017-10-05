@@ -55,7 +55,7 @@ public class UserTable extends DatabaseHelper {
         super(context);
     }
 
-    public void addUser(User user) {
+    public void add(User user) {
         if (user == null) {
             return;
         }
@@ -78,7 +78,7 @@ public class UserTable extends DatabaseHelper {
         Log.d("", "Added new user: "+user.getName());
     }
 
-    public User getUser(int id) {
+    public User get(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -124,7 +124,7 @@ public class UserTable extends DatabaseHelper {
         return cursor;
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         List<User> users = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_USERS;
         SQLiteDatabase db = getReadableDatabase();
@@ -148,7 +148,7 @@ public class UserTable extends DatabaseHelper {
         cursor.close();
         return users;
     }
-    public int updateUser(User user) {
+    public int update(User user) {
         if (user == null) {
             return -1;
         }
@@ -172,7 +172,7 @@ public class UserTable extends DatabaseHelper {
         return rowCount;
     }
 
-    public void deleteUser(User user) {
+    public void delete(User user) {
         if (user == null) {
             return;
         }

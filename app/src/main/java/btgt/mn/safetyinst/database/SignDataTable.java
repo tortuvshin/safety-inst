@@ -48,7 +48,7 @@ public class SignDataTable extends DatabaseHelper {
         super(context);
     }
 
-    public void addSignData(SignData signData) {
+    public void add(SignData signData) {
         if (signData == null) {
             return;
         }
@@ -69,7 +69,7 @@ public class SignDataTable extends DatabaseHelper {
         db.close();
     }
 
-    public SignData getSignData(int id) {
+    public SignData get(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -91,7 +91,7 @@ public class SignDataTable extends DatabaseHelper {
         return signData;
     }
 
-    public List<SignData> getAllSignDatas() {
+    public List<SignData> getAll() {
         List<SignData> signDatas = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SIGNDATAS;
         SQLiteDatabase db = getReadableDatabase();
@@ -111,7 +111,7 @@ public class SignDataTable extends DatabaseHelper {
         cursor.close();
         return signDatas;
     }
-    public int updateSignData(SignData signData) {
+    public int update(SignData signData) {
         if (signData == null) {
             return -1;
         }
@@ -133,7 +133,7 @@ public class SignDataTable extends DatabaseHelper {
         return rowCount;
     }
 
-    public void deleteSignData(SignData signData) {
+    public void delete(SignData signData) {
         if (signData == null) {
             return;
         }

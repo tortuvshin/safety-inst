@@ -11,7 +11,9 @@ import android.telephony.TelephonyManager;
 
 import java.util.Calendar;
 
+import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
+import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 
 public class SplashActivity extends AppCompatActivity {
@@ -25,9 +27,10 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
         UserTable userTable = new UserTable(this);
-        userTable.addUser(new User("1", "Төртүвшин", "", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.addUser(new User("2", "Гантулга", "", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-
+        userTable.add(new User("1", "Төртүвшин", "", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("2", "Гантулга", "", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
+        SettingsTable settingsTable = new SettingsTable(this);
+        settingsTable.add(new Settings("BTGT LLC", "Software Development", mngr.getDeviceId(), mngr.getDeviceSoftwareVersion(), "1"));
         try {
             Thread timerThread = new Thread(){
                 public void run(){

@@ -102,9 +102,9 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        userTable.addUser(new User(null, name, "", 99999999, mngr.getDeviceId(), email, password, "", Calendar.getInstance().getTime().toString()));
+        userTable.add(new User(null, name, "", 99999999, mngr.getDeviceId(), email, password, "", Calendar.getInstance().getTime().toString()));
 
-        List<User> userInfo = userTable.getAllUsers();
+        List<User> userInfo = userTable.getAll();
 
         for (User users : userInfo){
             String log = "ID:"+users.getId() + "\nNAME:"+users.getName()+

@@ -39,14 +39,14 @@ public class LoginListActivity extends AppCompatActivity {
 
         userTable = new UserTable(this);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
 
         mRecyclerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        List<User> users = userTable.getAllUsers();
+        List<User> users = userTable.getAll();
 
         try {
             for (User user : users){
