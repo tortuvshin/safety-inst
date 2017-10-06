@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.icu.text.SymbolTable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -24,11 +25,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import btgt.mn.safetyinst.database.SNoteTable;
+import btgt.mn.safetyinst.entity.SNote;
+import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.fragment.FinishFragment;
 import btgt.mn.safetyinst.fragment.SafetyFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int NUM_PAGES = 1;
+    private int NUM_PAGES = 1;
 
     private ViewPager viewPager;
     private ScreenSlidePagerAdapter myViewPagerAdapter;
@@ -37,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private int[] layouts;
     private Button btnPrev, btnNext;
     WebView webb;
+
+    ArrayList<String> sNotes = new ArrayList<String>();
+    SNoteTable sNoteTable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +58,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         reqPermissions();
         viewPager = (ViewPager) findViewById(R.id.pager);
-
+        sNoteTable = new SNoteTable(this);
+        List<SNote> sNoteList = sNoteTable.getAll();
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-
+        NUM_PAGES = sNoteTable.count();
         addBottomDots(0);
 
         changeStatusBarColor();

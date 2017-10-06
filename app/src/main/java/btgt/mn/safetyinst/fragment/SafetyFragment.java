@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 import btgt.mn.safetyinst.R;
+import btgt.mn.safetyinst.database.SNoteTable;
 
 public class SafetyFragment extends Fragment {
 
     ScrollView scrollView;
     View rootView;
+    SNoteTable sNoteTable;
+
     public SafetyFragment() {
         // Required empty public constructor
     }
@@ -28,6 +31,7 @@ public class SafetyFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sNoteTable = new SNoteTable(getContext());
     }
 
     @Override

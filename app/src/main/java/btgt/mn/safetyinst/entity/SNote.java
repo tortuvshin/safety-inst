@@ -6,7 +6,7 @@ package btgt.mn.safetyinst.entity;
 
 public class SNote {
     String id;
-    int categoryId;
+    String categoryId;
     String name;
     String order;
     int frameType;
@@ -14,7 +14,7 @@ public class SNote {
     String voiceData;
     int timeout;
 
-    public SNote(String id, int categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
+    public SNote(String id, String categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
         this.id = id;
         this.categoryId = categoryId;
         this.name = name;
@@ -25,7 +25,7 @@ public class SNote {
         this.timeout = timeout;
     }
 
-    public SNote(int categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
+    public SNote(String categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
         this.categoryId = categoryId;
         this.name = name;
         this.order = order;
@@ -43,11 +43,11 @@ public class SNote {
         this.id = id;
     }
 
-    public int getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 

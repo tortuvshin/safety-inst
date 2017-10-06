@@ -12,9 +12,11 @@ import android.telephony.TelephonyManager;
 import java.util.Calendar;
 
 import btgt.mn.safetyinst.database.CategoryTable;
+import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.Category;
+import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 
@@ -44,7 +46,15 @@ public class SplashActivity extends AppCompatActivity {
         settingsTable.add(new Settings("BTGT LLC", "Software Development", mngr.getDeviceId(), mngr.getDeviceSoftwareVersion(), "1"));
 
         CategoryTable categoryTable = new CategoryTable(this);
-        categoryTable.add(new Category("", "", "", ""));
+        categoryTable.add(new Category("1", "Tech", "", "1"));
+
+        SNoteTable sNoteTable = new SNoteTable(this);
+        sNoteTable.add(new SNote("1", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+        sNoteTable.add(new SNote("2", "1", "Заавар1", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+        sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+        sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+        sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+        sNoteTable.add(new SNote("6", "1", "Заавар5", "1", 1, "Заавар дэлгэрэнгүй", "",1));
 
         try {
             Thread timerThread = new Thread(){

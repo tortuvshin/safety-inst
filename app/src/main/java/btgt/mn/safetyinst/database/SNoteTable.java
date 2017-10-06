@@ -84,7 +84,7 @@ public class SNoteTable extends DatabaseHelper {
         }
 
         SNote sNote = new SNote(cursor.getString(SNOTE_ID_INDEX),
-                cursor.getInt(SNOTE_CAT_ID_INDEX),
+                cursor.getString(SNOTE_CAT_ID_INDEX),
                 cursor.getString(SNOTE_NAME_INDEX),
                 cursor.getString(SNOTE_ORDER_INDEX),
                 cursor.getInt(SNOTE_FRAME_TYPE_INDEX),
@@ -103,7 +103,7 @@ public class SNoteTable extends DatabaseHelper {
         if (cursor.moveToFirst()) {
             do {
                 SNote sNote = new SNote(cursor.getString(SNOTE_ID_INDEX),
-                        cursor.getInt(SNOTE_CAT_ID_INDEX),
+                        cursor.getString(SNOTE_CAT_ID_INDEX),
                         cursor.getString(SNOTE_NAME_INDEX),
                         cursor.getString(SNOTE_ORDER_INDEX),
                         cursor.getInt(SNOTE_FRAME_TYPE_INDEX),
@@ -149,5 +149,14 @@ public class SNoteTable extends DatabaseHelper {
         }
         db.delete(TABLE_SNOTE, SNOTE_ID + "=?", new String[]{String.valueOf(sNote.getId())});
         db.close();
+    }
+
+    public int count() {
+        String query = "SELECT * FROM  " + TABLE_SNOTE;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
     }
 }

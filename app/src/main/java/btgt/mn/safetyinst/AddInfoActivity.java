@@ -8,9 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import btgt.mn.safetyinst.database.SNoteTable;
+import btgt.mn.safetyinst.entity.SNote;
+
 public class AddInfoActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     ImageView imageView;
+    Bitmap photo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +35,7 @@ public class AddInfoActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            photo = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(photo);
         }
     }
