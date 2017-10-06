@@ -5,12 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.icu.text.SymbolTable;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -35,10 +31,6 @@ import java.util.List;
 
 import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.entity.SNote;
-import btgt.mn.safetyinst.entity.Settings;
-import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.fragment.FinishFragment;
-import btgt.mn.safetyinst.fragment.SafetyFragment;
 
 public class MainActivity extends AppCompatActivity {
     private int NUM_PAGES = 1;
@@ -51,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPrev, btnNext;
     WebView webb;
 
-    ArrayList<String> sNotes = new ArrayList<String>();
+    ArrayList<String> sNoteName = new ArrayList<String>();
+    ArrayList<String> sNoteData = new ArrayList<String>();
     SNoteTable sNoteTable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +60,25 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
+
+        sNoteTable = new SNoteTable(this);
+        List<SNote> sNoteList = sNoteTable.getAll();
+        try {
+            for (SNote sNote : sNoteList){
+                sNoteName.add(0, sNote.getName());
+                sNoteData.add(0, sNote.getFrameData());
+            }
+        }catch (NullPointerException npe){
+            Log.d("","Алдаа : "+npe);
+        }catch (Exception e){
+            Log.d("","Алдаа : "+e);
+        }
         NUM_PAGES = sNoteTable.count();
         addBottomDots(0);
 
         changeStatusBarColor();
 
-        myViewPagerAdapter = new ScreenSlidePagerAdapter();
+        myViewPagerAdapter = new ScreenSlidePagerAdapter(sNoteName, sNoteData);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
         viewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -103,19 +109,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        sNoteTable = new SNoteTable(this);
-        List<SNote> sNoteList = sNoteTable.getAll();
-
-        try {
-            for (SNote sNote : sNoteList){
-                sNotes.add(0, sNote.getName());
-            }
-        }catch (NullPointerException npe){
-            Log.d("","Алдаа : "+npe);
-        }catch (Exception e){
-            Log.d("","Алдаа : "+e);
-        }
     }
 
     private void addBottomDots(int currentPage) {
@@ -181,8 +174,12 @@ public class MainActivity extends AppCompatActivity {
     private class ScreenSlidePagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        public ScreenSlidePagerAdapter() {
+        ArrayList<String> sNoteName = new ArrayList<String>();
+        ArrayList<String> sNoteData = new ArrayList<String>();
 
+        public ScreenSlidePagerAdapter(ArrayList<String> sNoteName, ArrayList<String> sNoteData) {
+            this.sNoteName = sNoteName;
+            this.sNoteData = sNoteData;
         }
 
         @Override
@@ -190,6 +187,9 @@ public class MainActivity extends AppCompatActivity {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
+
+            TextView nameText = (TextView) view.findViewById(R.id.snote_content);
+            nameText.setText(sNoteData.get(position));
             container.addView(view);
 
             return view;
