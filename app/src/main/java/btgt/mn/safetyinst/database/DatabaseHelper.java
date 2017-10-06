@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SignDataTable.SIGNDATA_USER_ID + " TEXT," +
             SignDataTable.SIGNDATA_SNOTE_ID + " TEXT," +
             SignDataTable.SIGNDATA_VIEWDATE + " TEXT," +
-            SignDataTable.SIGNDATA_USERSIGN + " TEXT," +
+            SignDataTable.SIGNDATA_USERSIGN + " BLOB," +
             SignDataTable.SIGNDATA_PHOTO + " BLOB," +
             SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
 

@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class DbBitmap {
+
     public static byte[] getBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);

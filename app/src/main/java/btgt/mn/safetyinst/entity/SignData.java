@@ -9,11 +9,11 @@ public class SignData {
     String userId;
     String sNoteId;
     String viewDate;
-    String userSign;
+    byte[] userSign;
     byte[] photo;
     String sendStatus;
 
-    public SignData(String id, String userId, String sNoteId, String viewDate, String userSign, byte[] photo, String sendStatus) {
+    public SignData(String id, String userId, String sNoteId, String viewDate, byte[] userSign, byte[] photo, String sendStatus) {
         this.id = id;
         this.userId = userId;
         this.sNoteId = sNoteId;
@@ -23,7 +23,7 @@ public class SignData {
         this.sendStatus = sendStatus;
     }
 
-    public SignData(String userId, String sNoteId, String viewDate, String userSign, byte[] photo, String sendStatus) {
+    public SignData(String userId, String sNoteId, String viewDate, byte[] userSign, byte[] photo, String sendStatus) {
         this.userId = userId;
         this.sNoteId = sNoteId;
         this.viewDate = viewDate;
@@ -64,11 +64,11 @@ public class SignData {
         this.viewDate = viewDate;
     }
 
-    public String getUserSign() {
+    public byte[] getUserSign() {
         return userSign;
     }
 
-    public void setUserSign(String userSign) {
+    public void setUserSign(byte[] userSign) {
         this.userSign = userSign;
     }
 
