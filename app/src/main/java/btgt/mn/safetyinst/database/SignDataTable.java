@@ -85,7 +85,7 @@ public class SignDataTable extends DatabaseHelper {
                 cursor.getString(SIGNDATA_SNOTE_ID_INDEX),
                 cursor.getString(SIGNDATA_VIEWDATE_INDEX),
                 cursor.getString(SIGNDATA_USERSIGN_INDEX),
-                cursor.getString(SIGNDATA_PHOTO_INDEX),
+                cursor.getBlob(SIGNDATA_PHOTO_INDEX),
                 cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
         cursor.close();
         return signData;
@@ -103,7 +103,7 @@ public class SignDataTable extends DatabaseHelper {
                         cursor.getString(SIGNDATA_SNOTE_ID_INDEX),
                         cursor.getString(SIGNDATA_VIEWDATE_INDEX),
                         cursor.getString(SIGNDATA_USERSIGN_INDEX),
-                        cursor.getString(SIGNDATA_PHOTO_INDEX),
+                        cursor.getBlob(SIGNDATA_PHOTO_INDEX),
                         cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
                 signDatas.add(signData);
             } while (cursor.moveToNext());

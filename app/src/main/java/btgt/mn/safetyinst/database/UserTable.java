@@ -25,7 +25,7 @@ public class UserTable extends DatabaseHelper {
     public static final String USER_IMEI        = "imei";
     public static final String USER_EMAIL       = "email";
     public static final String USER_PASS        = "pass";
-    public static final String USER_PROFILE     = "profile";
+    public static final String USER_AVATAR     = "profile";
     public static final String USER_LAST_SIGNED = "lastSigned";
 
     private static final int USER_ID_INDEX       = 0;
@@ -35,7 +35,7 @@ public class UserTable extends DatabaseHelper {
     private static final int USER_IMEI_INDEX     = 4;
     private static final int USER_EMAIL_INDEX    = 5;
     private static final int USER_PASS_INDEX     = 6;
-    private static final int USER_PROFILE_INDEX  = 7;
+    private static final int USER_AVATAR_INDEX  = 7;
     private static final int USER_LASTS_INDEX    = 8;
 
 
@@ -47,7 +47,7 @@ public class UserTable extends DatabaseHelper {
             USER_IMEI,
             USER_EMAIL,
             USER_PASS,
-            USER_PROFILE,
+            USER_AVATAR,
             USER_LAST_SIGNED
     };
 
@@ -71,7 +71,7 @@ public class UserTable extends DatabaseHelper {
         cv.put(USER_IMEI, user.getImei());
         cv.put(USER_EMAIL, user.getEmail());
         cv.put(USER_PASS, user.getPassword());
-        cv.put(USER_PROFILE, user.getProfile());
+        cv.put(USER_AVATAR, user.getAvatar());
         cv.put(USER_LAST_SIGNED, user.getLastSigned());
         db.insert(TABLE_USERS, null, cv);
         db.close();
@@ -95,7 +95,7 @@ public class UserTable extends DatabaseHelper {
                 cursor.getString(USER_IMEI_INDEX),
                 cursor.getString(USER_EMAIL_INDEX),
                 cursor.getString(USER_PASS_INDEX),
-                cursor.getString(USER_PROFILE_INDEX),
+                cursor.getBlob(USER_AVATAR_INDEX),
                 cursor.getString(USER_LASTS_INDEX));
         cursor.close();
         return user;
@@ -113,7 +113,7 @@ public class UserTable extends DatabaseHelper {
                         USER_IMEI,
                         USER_EMAIL,
                         USER_PASS,
-                        USER_PROFILE,
+                        USER_AVATAR,
                         USER_LAST_SIGNED
                 },
                 USER_IMEI + "='" + imei + "' AND " +
@@ -138,10 +138,10 @@ public class UserTable extends DatabaseHelper {
                 String imei = cursor.getString(USER_IMEI_INDEX);
                 String email = cursor.getString(USER_EMAIL_INDEX);
                 String pass = cursor.getString(USER_PASS_INDEX);
-                String pro = cursor.getString(USER_PROFILE_INDEX);
+                byte[] avatar = cursor.getBlob(USER_AVATAR_INDEX);
                 String last = cursor.getString(USER_LASTS_INDEX);
 
-                User user = new User(id, name, pos, phone, imei, email, pass, pro, last);
+                User user = new User(id, name, pos, phone, imei, email, pass, avatar, last);
                 users.add(user);
             } while (cursor.moveToNext());
         }
@@ -164,7 +164,7 @@ public class UserTable extends DatabaseHelper {
         cv.put(USER_IMEI, user.getImei());
         cv.put(USER_EMAIL, user.getEmail());
         cv.put(USER_PASS, user.getPassword());
-        cv.put(USER_PROFILE, user.getProfile());
+        cv.put(USER_AVATAR, user.getAvatar());
         cv.put(USER_LAST_SIGNED, user.getLastSigned());
         int rowCount = db.update(TABLE_USERS, cv, USER_ID + "=?",
                 new String[]{String.valueOf(user.getId())});

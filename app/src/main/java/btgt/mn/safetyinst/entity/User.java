@@ -12,10 +12,10 @@ public class User {
     String imei;
     String email;
     String password;
-    String profile;
+    byte[] avatar;
     String lastSigned;
 
-    public User(String id, String name, String position, int phone, String imei, String email, String password, String profile, String lastSigned) {
+    public User(String id, String name, String position, int phone, String imei, String email, String password, byte[] avatar, String lastSigned) {
         this.id = id;
         this.name = name;
         this.position = position;
@@ -23,7 +23,18 @@ public class User {
         this.imei = imei;
         this.email = email;
         this.password = password;
-        this.profile = profile;
+        this.avatar = avatar;
+        this.lastSigned = lastSigned;
+    }
+
+    public User(String name, String position, int phone, String imei, String email, String password, byte[] avatar, String lastSigned) {
+        this.name = name;
+        this.position = position;
+        this.phone = phone;
+        this.imei = imei;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
         this.lastSigned = lastSigned;
     }
 
@@ -83,12 +94,12 @@ public class User {
         this.password = password;
     }
 
-    public String getProfile() {
-        return profile;
+    public byte[] getAvatar() {
+        return avatar;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
 
     public String getLastSigned() {

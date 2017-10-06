@@ -10,10 +10,10 @@ public class SignData {
     String sNoteId;
     String viewDate;
     String userSign;
-    String photo;
+    byte[] photo;
     String sendStatus;
 
-    public SignData(String id, String userId, String sNoteId, String viewDate, String userSign, String photo, String sendStatus) {
+    public SignData(String id, String userId, String sNoteId, String viewDate, String userSign, byte[] photo, String sendStatus) {
         this.id = id;
         this.userId = userId;
         this.sNoteId = sNoteId;
@@ -23,7 +23,7 @@ public class SignData {
         this.sendStatus = sendStatus;
     }
 
-    public SignData(String userId, String sNoteId, String viewDate, String userSign, String photo, String sendStatus) {
+    public SignData(String userId, String sNoteId, String viewDate, String userSign, byte[] photo, String sendStatus) {
         this.userId = userId;
         this.sNoteId = sNoteId;
         this.viewDate = viewDate;
@@ -72,11 +72,11 @@ public class SignData {
         this.userSign = userSign;
     }
 
-    public String getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 
