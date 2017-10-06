@@ -1,50 +1,34 @@
 package btgt.mn.safetyinst;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import btgt.mn.safetyinst.fragment.AddInfoFragment;
 import btgt.mn.safetyinst.fragment.FinishFragment;
 import btgt.mn.safetyinst.fragment.SafetyFragment;
 
-import static android.support.v4.app.ActivityCompat.requestPermissions;
-
 public class MainActivity extends AppCompatActivity {
-    private static final int NUM_PAGES = 3;
+    private static final int NUM_PAGES = 1;
 
     private ViewPager viewPager;
     private ScreenSlidePagerAdapter myViewPagerAdapter;
@@ -88,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 if (current < NUM_PAGES) {
                     viewPager.setCurrentItem(current);
                 } else {
-                    launchHomeScreen();
+                    addInfo();
                 }
             }
         });
@@ -100,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 if (current < NUM_PAGES) {
                     viewPager.setCurrentItem(current);
                 } else {
-                    launchHomeScreen();
+                    addInfo();
                 }
             }
         });
@@ -129,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
         return viewPager.getCurrentItem() + i;
     }
 
-    private void launchHomeScreen() {
+    private void addInfo() {
 
-        finish();
+        startActivity(new Intent(MainActivity.this, AddInfoActivity.class));
     }
 
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -177,9 +161,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = null;
             if (position == 0) {
                 fragment = new SafetyFragment();
-            } else if (position == 1) {
-                fragment = new AddInfoFragment();
-            } else if (position == 2) {
+            }  else if (position == 1) {
                 fragment = new FinishFragment();
             }
             return fragment;

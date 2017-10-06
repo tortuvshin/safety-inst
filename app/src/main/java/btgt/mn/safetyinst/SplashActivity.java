@@ -11,8 +11,10 @@ import android.telephony.TelephonyManager;
 
 import java.util.Calendar;
 
+import btgt.mn.safetyinst.database.CategoryTable;
 import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
+import btgt.mn.safetyinst.entity.Category;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 
@@ -40,6 +42,10 @@ public class SplashActivity extends AppCompatActivity {
         SettingsTable settingsTable = new SettingsTable(this);
 
         settingsTable.add(new Settings("BTGT LLC", "Software Development", mngr.getDeviceId(), mngr.getDeviceSoftwareVersion(), "1"));
+
+        CategoryTable categoryTable = new CategoryTable(this);
+        categoryTable.add(new Category("", "", "", ""));
+
         try {
             Thread timerThread = new Thread(){
                 public void run(){
