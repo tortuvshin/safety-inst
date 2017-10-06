@@ -104,20 +104,20 @@ public class MainActivity extends AppCompatActivity {
     private void addBottomDots(int currentPage) {
         dots = new TextView[NUM_PAGES];
 
-        int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
-        int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
+        int colorsActive = getResources().getColor(R.color.active);
+        int colorsInactive = getResources().getColor(R.color.inactive);
 
         dotsLayout.removeAllViews();
         for (int i = 0; i < dots.length; i++) {
             dots[i] = new TextView(this);
             dots[i].setText(Html.fromHtml("&#8226;"));
             dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive[currentPage]);
+            dots[i].setTextColor(colorsInactive);
             dotsLayout.addView(dots[i]);
         }
 
         if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive[currentPage]);
+            dots[currentPage].setTextColor(colorsActive);
     }
 
     private int getItem(int i) {
@@ -169,13 +169,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
 
-            Fragment fragment = null;
-            if (position == 0) {
-                fragment = new SafetyFragment();
-            }  else if (position == 1) {
-                fragment = new FinishFragment();
-            }
-            return fragment;
+            return SafetyFragment.newInstance();
         }
 
         @Override
