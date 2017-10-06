@@ -34,7 +34,7 @@ public class AddInfoActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
             photo = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(photo);
         }
