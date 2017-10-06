@@ -3,9 +3,13 @@ package btgt.mn.safetyinst;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.gesture.GestureOverlayView;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,9 +20,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.List;
 
@@ -28,7 +35,7 @@ import btgt.mn.safetyinst.entity.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
-
+    private static final int CAMERA_REQUEST = 1889;
     private static final String TAG = "RegisterActivity";
     UserTable userTable;
     public SharedPreferences sharedPreferences;
@@ -36,7 +43,9 @@ public class RegisterActivity extends AppCompatActivity {
     EditText nameEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     Button signUpButton;
     TextView loginLink;
+    ImageView regImg;
     Animation waveAnimation,shakeAnimation,myShakeAnimation;
+    Bitmap photo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
         confirmPasswordEditText = (EditText)findViewById(R.id.sComfirmPassword);
         signUpButton = (Button)findViewById(R.id.btnSignUp);
         loginLink = (TextView)findViewById(R.id.linkLogin);
+        regImg = (ImageView) findViewById(R.id.reg_img);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,6 +74,14 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Finish the registration screen and return to the Login activity
                 finish();
+            }
+        });
+
+        regImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
     }
@@ -102,7 +120,11 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        userTable.add(new User(null, name, "", 99999999, mngr.getDeviceId(), email, password, "", Calendar.getInstance().getTime().toString()));
+//        GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
+//        gestureView.setDrawingCacheEnabled(true);
+//        Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
+//
+//        userTable.add(new User(null, name, "", 99999999, mngr.getDeviceId(), email, password, "", Calendar.getInstance().getTime().toString()));
 
         List<User> userInfo = userTable.getAll();
 
@@ -170,5 +192,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return valid;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            photo = (Bitmap) data.getExtras().get("data");
+            regImg.setImageBitmap(photo);
+        }
     }
 }

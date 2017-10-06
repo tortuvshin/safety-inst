@@ -16,8 +16,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME    = "safea.db";
+    private static final int    DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +
             UserTable.USER_ID + " TEXT PRIMARY KEY," +

@@ -95,7 +95,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                                     startActivity(i);
                                     finish();
                                 }
-                            }, 1000);
+                            }, 300);
                 }
                 else{
                     Toast.makeText(LoginImeiActivity.this, "Хэрэглэгчийн нэр нууц үг буруу байна", Toast.LENGTH_SHORT).show();

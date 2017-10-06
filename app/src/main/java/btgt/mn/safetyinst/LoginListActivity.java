@@ -2,6 +2,7 @@ package btgt.mn.safetyinst;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,10 +24,12 @@ import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
+import btgt.mn.safetyinst.utils.DbBitmap;
 
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
 
+    final ArrayList<byte[]> userImg = new ArrayList<byte[]>();
     final ArrayList<String> userName = new ArrayList<String>();
     final ArrayList<String> userPos = new ArrayList<String>();
 
@@ -57,6 +61,7 @@ public class LoginListActivity extends AppCompatActivity {
 
         try {
             for (User user : users){
+                userImg.add(0, user.getAvatar());
                 userName.add(0, user.getName());
                 userPos.add(0, user.getPosition());
             }
@@ -70,20 +75,23 @@ public class LoginListActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.d(TAG,"Алдаа : "+e);
         }
-        mAdapter = new UserListAdapter(userName, userPos);
+        mAdapter = new UserListAdapter(userImg, userName, userPos);
         mRecyclerView.setAdapter(mAdapter);
     }
 
 
     public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
+        ArrayList<byte[]> userImg = new ArrayList<byte[]>();
         ArrayList<String> userNames = new ArrayList<String>();
         ArrayList<String> userPos = new ArrayList<String>();
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            public ImageView imageView;
             public TextView mTextView;
             public TextView mPosText;
             public ViewHolder(View v) {
                 super(v);
                 v.setOnClickListener(this);
+                imageView = (ImageView) v.findViewById(R.id.user_img);
                 mTextView = (TextView) v.findViewById(R.id.username_text);
                 mPosText = (TextView) v.findViewById(R.id.position_text);
 
@@ -98,7 +106,8 @@ public class LoginListActivity extends AppCompatActivity {
             }
         }
 
-        public UserListAdapter(ArrayList<String> userNames,ArrayList<String> userPos) {
+        public UserListAdapter(ArrayList<byte[]> userImg,ArrayList<String> userNames,ArrayList<String> userPos) {
+            this.userImg = userImg;
             this.userNames = userNames;
             this.userPos = userPos;
         }
@@ -114,6 +123,7 @@ public class LoginListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
+            holder.imageView.setImageBitmap(DbBitmap.getImage(userImg.get(position)));
             holder.mTextView.setText(userNames.get(position));
             holder.mPosText.setText(userPos.get(position));
         }

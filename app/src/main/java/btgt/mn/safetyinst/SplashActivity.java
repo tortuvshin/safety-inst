@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import btgt.mn.safetyinst.entity.Category;
 import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
+import btgt.mn.safetyinst.utils.DbBitmap;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -30,17 +33,19 @@ public class SplashActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+
         UserTable userTable = new UserTable(this);
-        userTable.add(new User("1", "Цогтгэрэл", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("2", "Ганцоож", "Вэб дизайнер", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("3", "Бат-Эрдэнэ", "Мобайл апп хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("4", "Ганцоож", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("5", "Төртүвшин", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("6", "Энхбаяр", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("7", "Цэнд-Аюуш", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("8", "Анхаа", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("9", "Цэнгүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("10", "Тэргүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", "", Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("1", "Цогтгэрэл", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("2", "Ганцоож", "Вэб дизайнер", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("3", "Бат-Эрдэнэ", "Мобайл апп хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("4", "Ганцоож", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("5", "Төртүвшин", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("6", "Энхбаяр", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("7", "Цэнд-Аюуш", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("8", "Анхаа", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("9", "Цэнгүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+        userTable.add(new User("10", "Тэргүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
         SettingsTable settingsTable = new SettingsTable(this);
 
         settingsTable.add(new Settings("BTGT LLC", "Software Development", mngr.getDeviceId(), mngr.getDeviceSoftwareVersion(), "1"));
@@ -54,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "",1));
         sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "",1));
         sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-        sNoteTable.add(new SNote("6", "1", "Заавар5", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+        sNoteTable.add(new SNote("6", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
 
         try {
             Thread timerThread = new Thread(){
