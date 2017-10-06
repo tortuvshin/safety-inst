@@ -1,7 +1,5 @@
 package btgt.mn.safetyinst.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -38,7 +36,7 @@ public class SafetyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        rootView = inflater.inflate(R.layout.fragment_safety, container, false);
+        rootView = inflater.inflate(R.layout.snote_viewer, container, false);
         scrollView = (ScrollView) rootView.findViewById(R.id.contentScroll);
         return rootView;
     }

@@ -1,6 +1,7 @@
 package btgt.mn.safetyinst;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -11,12 +12,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
@@ -30,6 +35,7 @@ import java.util.List;
 
 import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.entity.SNote;
+import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.fragment.FinishFragment;
 import btgt.mn.safetyinst.fragment.SafetyFragment;
@@ -58,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         reqPermissions();
         viewPager = (ViewPager) findViewById(R.id.pager);
-        sNoteTable = new SNoteTable(this);
-        List<SNote> sNoteList = sNoteTable.getAll();
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -68,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         changeStatusBarColor();
 
-        myViewPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        myViewPagerAdapter = new ScreenSlidePagerAdapter();
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
         viewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -99,6 +103,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        sNoteTable = new SNoteTable(this);
+        List<SNote> sNoteList = sNoteTable.getAll();
+
+        try {
+            for (SNote sNote : sNoteList){
+                sNotes.add(0, sNote.getName());
+            }
+        }catch (NullPointerException npe){
+            Log.d("","Алдаа : "+npe);
+        }catch (Exception e){
+            Log.d("","Алдаа : "+e);
+        }
     }
 
     private void addBottomDots(int currentPage) {
@@ -161,20 +178,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        public ScreenSlidePagerAdapter(FragmentManager fm) {
-            super(fm);
+    private class ScreenSlidePagerAdapter extends PagerAdapter {
+        private LayoutInflater layoutInflater;
+
+        public ScreenSlidePagerAdapter() {
+
         }
 
         @Override
-        public Fragment getItem(int position) {
+        public Object instantiateItem(ViewGroup container, int position) {
+            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            return SafetyFragment.newInstance();
+            View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
+            container.addView(view);
+
+            return view;
         }
 
         @Override
         public int getCount() {
             return NUM_PAGES;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
         }
     }
 
