@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         reqPermissions();
         viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
