@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             UserTable.USER_IMEI + " TEXT," +
             UserTable.USER_EMAIL + " TEXT," +
             UserTable.USER_PASS + " TEXT," +
-            UserTable.USER_PROFILE + " TEXT," +
+            UserTable.USER_AVATAR + " BLOB," +
             UserTable.USER_LAST_SIGNED + " TEXT)";
 
     private static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ SNoteTable.TABLE_SNOTE+" (" +
@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SignDataTable.SIGNDATA_SNOTE_ID + " TEXT," +
             SignDataTable.SIGNDATA_VIEWDATE + " TEXT," +
             SignDataTable.SIGNDATA_USERSIGN + " TEXT," +
-            SignDataTable.SIGNDATA_PHOTO + " TEXT," +
+            SignDataTable.SIGNDATA_PHOTO + " BLOB," +
             SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
 
     private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ SettingsTable.TABLE_SETTINGS+" (" +
@@ -79,19 +79,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        dropTable(UserTable.TABLE_USERS);
-        dropTable(SNoteTable.TABLE_SNOTE);
-        dropTable(CategoryTable.TABLE_CATEGORYS);
-        dropTable(SignDataTable.TABLE_SIGNDATAS);
-        dropTable(SettingsTable.TABLE_SETTINGS);
+        db.execSQL("DROP TABLE IF EXISTS " + UserTable.TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + SNoteTable.TABLE_SNOTE);
+        db.execSQL("DROP TABLE IF EXISTS " + CategoryTable.TABLE_CATEGORYS);
+        db.execSQL("DROP TABLE IF EXISTS " + SignDataTable.TABLE_SIGNDATAS);
+        db.execSQL("DROP TABLE IF EXISTS " + SettingsTable.TABLE_SETTINGS);
         onCreate(db);
-    }
-
-    public void dropTable(String tableName) {
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null || TextUtils.isEmpty(tableName)) {
-            return;
-        }
-        db.execSQL("DROP TABLE IF EXISTS " + tableName);
     }
 }
