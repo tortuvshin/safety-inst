@@ -14,9 +14,13 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Calendar;
 
 import btgt.mn.safetyinst.database.SNoteTable;
+import btgt.mn.safetyinst.database.SignDataTable;
 import btgt.mn.safetyinst.entity.SNote;
+import btgt.mn.safetyinst.entity.SignData;
+import btgt.mn.safetyinst.utils.DbBitmap;
 
 public class AddInfoActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
@@ -30,6 +34,8 @@ public class AddInfoActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView1);
         Button saveBtn = (Button) findViewById(R.id.save);
         Button clearBtn = (Button) findViewById(R.id.clear);
+
+        final SignDataTable signDataTable = new SignDataTable(this);
 
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,17 +51,12 @@ public class AddInfoActivity extends AppCompatActivity {
                     GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
                     gestureView.setDrawingCacheEnabled(true);
                     Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
-                    File f = new File(Environment.getExternalStorageDirectory()
-                                   + File.separator + "signature.png");
-                    f.createNewFile();
-                    FileOutputStream os = new FileOutputStream(f);
-                    os = new FileOutputStream(f);
-                    //compress to specified format (PNG), quality - which is ignored for PNG, and out stream
-                    bm.compress(Bitmap.CompressFormat.PNG, 100, os);
-                    os.close();
+                    signDataTable.add(new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), DbBitmap.getBytes(bm), ""));
+
                     Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
                  } catch (Exception e) {
                     Log.v("Gestures", e.getMessage());
+                    Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                  }
             }
