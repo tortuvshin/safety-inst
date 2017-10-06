@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setHomeButtonEnabled(true);
         reqPermissions();
         viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
 
             TextView nameText = (TextView) view.findViewById(R.id.snote_content);
+            getSupportActionBar().setTitle(sNoteName.get(position));
             nameText.setText(sNoteData.get(position));
             container.addView(view);
 
