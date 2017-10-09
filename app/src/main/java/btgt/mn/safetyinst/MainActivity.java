@@ -43,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPrev, btnNext;
     WebView webb;
 
-    ArrayList<String> sNoteName = new ArrayList<String>();
-    ArrayList<String> sNoteData = new ArrayList<String>();
     SNoteTable sNoteTable;
+    List<SNote> sNotes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,23 +64,15 @@ public class MainActivity extends AppCompatActivity {
         btnNext = (Button) findViewById(R.id.btn_next);
 
         sNoteTable = new SNoteTable(this);
-        List<SNote> sNoteList = sNoteTable.getAll();
-        try {
-            for (SNote sNote : sNoteList){
-                sNoteName.add(0, sNote.getName());
-                sNoteData.add(0, sNote.getFrameData());
-            }
-        }catch (NullPointerException npe){
-            Log.d("","Алдаа : "+npe);
-        }catch (Exception e){
-            Log.d("","Алдаа : "+e);
-        }
+
+        sNotes = sNoteTable.getAll();
+
         NUM_PAGES = sNoteTable.count();
         addBottomDots(0);
 
         changeStatusBarColor();
 
-        myViewPagerAdapter = new ScreenSlidePagerAdapter(sNoteName, sNoteData);
+        myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
         viewPager.setOnTouchListener(new View.OnTouchListener() {
@@ -177,12 +168,10 @@ public class MainActivity extends AppCompatActivity {
     private class ScreenSlidePagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        ArrayList<String> sNoteName = new ArrayList<String>();
-        ArrayList<String> sNoteData = new ArrayList<String>();
+        List<SNote> sNotes;
 
-        public ScreenSlidePagerAdapter(ArrayList<String> sNoteName, ArrayList<String> sNoteData) {
-            this.sNoteName = sNoteName;
-            this.sNoteData = sNoteData;
+        public ScreenSlidePagerAdapter(List<SNote> sNotes) {
+            this.sNotes = sNotes;
         }
 
         @Override
@@ -192,8 +181,8 @@ public class MainActivity extends AppCompatActivity {
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
 
             TextView nameText = (TextView) view.findViewById(R.id.snote_content);
-            getSupportActionBar().setTitle(sNoteName.get(position));
-            nameText.setText(sNoteData.get(position));
+            getSupportActionBar().setTitle(sNotes.get(position).getName());
+            nameText.setText(sNotes.get(position).getFrameData());
             container.addView(view);
 
             return view;
