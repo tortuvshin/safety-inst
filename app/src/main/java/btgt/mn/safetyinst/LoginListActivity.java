@@ -29,10 +29,6 @@ import btgt.mn.safetyinst.utils.DbBitmap;
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
 
-    final ArrayList<byte[]> userImg = new ArrayList<byte[]>();
-    final ArrayList<String> userName = new ArrayList<String>();
-    final ArrayList<String> userPos = new ArrayList<String>();
-
     UserTable userTable;
     SettingsTable settingsTable;
     private RecyclerView mRecyclerView;
@@ -57,14 +53,8 @@ public class LoginListActivity extends AppCompatActivity {
         List<User> users = userTable.getAll();
         List<Settings> sett = settingsTable.get();
 
-        Log.d("", sett.toString());
-
         try {
-            for (User user : users){
-                userImg.add(0, user.getAvatar());
-                userName.add(0, user.getName());
-                userPos.add(0, user.getPosition());
-            }
+
             for (Settings settings : sett){
                 compName.setText(settings.getCompanyName());
             }
@@ -75,15 +65,13 @@ public class LoginListActivity extends AppCompatActivity {
         }catch (Exception e){
             Log.d(TAG,"Алдаа : "+e);
         }
-        mAdapter = new UserListAdapter(userImg, userName, userPos);
+        mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);
     }
 
 
     public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
-        ArrayList<byte[]> userImg = new ArrayList<byte[]>();
-        ArrayList<String> userNames = new ArrayList<String>();
-        ArrayList<String> userPos = new ArrayList<String>();
+        List<User> users;
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public ImageView imageView;
             public TextView mTextView;
@@ -106,10 +94,8 @@ public class LoginListActivity extends AppCompatActivity {
             }
         }
 
-        public UserListAdapter(ArrayList<byte[]> userImg,ArrayList<String> userNames,ArrayList<String> userPos) {
-            this.userImg = userImg;
-            this.userNames = userNames;
-            this.userPos = userPos;
+        public UserListAdapter(List<User> users) {
+            this.users = users;
         }
 
         @Override
@@ -123,14 +109,14 @@ public class LoginListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
-            holder.imageView.setImageBitmap(DbBitmap.getImage(userImg.get(position)));
-            holder.mTextView.setText(userNames.get(position));
-            holder.mPosText.setText(userPos.get(position));
+            holder.imageView.setImageBitmap(DbBitmap.getImage(users.get(position).getAvatar()));
+            holder.mTextView.setText(users.get(position).getName());
+            holder.mPosText.setText(users.get(position).getPosition());
         }
 
         @Override
         public int getItemCount() {
-            return userNames.size();
+            return users.size();
         }
     }
 }
