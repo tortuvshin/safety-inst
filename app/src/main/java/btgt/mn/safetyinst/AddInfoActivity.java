@@ -30,6 +30,7 @@ import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.database.SignDataTable;
 import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.SignData;
+import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.DbBitmap;
 
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
@@ -40,7 +41,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     Camera camera;
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
-
+    SignData userSigned;
     Camera.PictureCallback rawCallback;
     Camera.ShutterCallback shutterCallback;
     Camera.PictureCallback jpegCallback;
@@ -50,7 +51,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
 
-        AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
+        final AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
         AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
         final TextView textView = (TextView) findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
@@ -114,6 +115,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onClick(View view) {
                 refreshCamera();
                 gestureView.clear(true);
+                saveBtn.setText(R.string.save);
             }
         });
 
@@ -121,20 +123,23 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onClick(View view) {
             try {
-
-                Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
-                captureImage(view);
-                signDataTable.add(new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), DbBitmap.getBytes(bm), ""));
-
-                Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
-             } catch (Exception e) {
+                if (saveBtn.getText() == getString(R.string.save)) {
+                    Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
+                    captureImage(view);
+                    userSigned = new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), DbBitmap.getBytes(bm), "");
+                    Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
+                    saveBtn.setText(R.string.send);
+                } else {
+//                    signDataTable.add(userSigned);
+                    startActivity(new Intent(AddInfoActivity.this, FinishActivity.class));
+                }
+            } catch (Exception e) {
                 Log.v("Gestures", e.getMessage());
                 Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
-             }
+            }
             }
         });
-
     }
 
     public void captureImage(View v) throws IOException {

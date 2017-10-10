@@ -88,14 +88,15 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:textColor="@color/white"
-                android:text="Цэвэрлэх"/>
+                android:text="@string/clear"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                android:text="Хадгалах"/>
+                android:text="@string/save"/>
+
         </LinearLayout>
     </LinearLayout>
 

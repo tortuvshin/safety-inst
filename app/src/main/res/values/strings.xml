@@ -10,6 +10,9 @@
     <string name="next">Дараагийн</string>
     <string name="start">Дуусгах</string>
     <string name="prev">Өмнөх</string>
+    <string name="save">Хадгалах</string>
+    <string name="clear">Цэвэрлэх</string>
+    <string name="send">Илгээх</string>
 
     <string name="no_internet">Интернет холболтоо шалгана уу</string>
     <string name="not_found">Хоосон байна</string>
