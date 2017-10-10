@@ -5,16 +5,19 @@ import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -49,7 +52,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
         AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
-
+        final TextView textView = (TextView) findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
 
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
@@ -82,10 +85,35 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
             }
         };
+
+        final GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
+        gestureView.setDrawingCacheEnabled(true);
+        gestureView.addOnGestureListener(new GestureOverlayView.OnGestureListener() {
+            @Override
+            public void onGestureStarted(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+                textView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onGesture(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onGestureEnded(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onGestureCancelled(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+
+            }
+        });
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 refreshCamera();
+                gestureView.clear(true);
             }
         });
 
@@ -93,8 +121,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onClick(View view) {
             try {
-                GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
-                gestureView.setDrawingCacheEnabled(true);
+
                 Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
                 captureImage(view);
                 signDataTable.add(new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), DbBitmap.getBytes(bm), ""));
@@ -108,22 +135,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
 
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-//            }
-//        });
     }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-//            photo = (Bitmap) data.getExtras().get("data");
-////            imageView.setImageBitmap(photo);
-//        }
-//    }
 
     public void captureImage(View v) throws IOException {
         camera.takePicture(null, null, jpegCallback);

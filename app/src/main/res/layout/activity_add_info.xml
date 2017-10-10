@@ -62,9 +62,10 @@
                     android:gestureColor="@color/colorPrimaryDark"
                     android:gestureStrokeLengthThreshold="0.1"
                     android:gestureStrokeType="multiple"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:tooltipText="@string/app_name">
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/gestureTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Гарын үсэгээ зурна уу"
