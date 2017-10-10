@@ -31,7 +31,7 @@ import btgt.mn.safetyinst.utils.DbBitmap;
 
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
     private static final int CAMERA_REQUEST = 1888;
-    ImageView imageView;
+
     Bitmap photo;
 
     Camera camera;
@@ -47,7 +47,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
 
-//        imageView = (ImageView) findViewById(R.id.imageView1);
         AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
         AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
 
@@ -63,52 +62,49 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                FileOutputStream outStream = null;
-                try {
-                    outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
+            FileOutputStream outStream = null;
+            try {
+                outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
 
-                    outStream.write(data);
-                    outStream.close();
-                }
+                outStream.write(data);
+                outStream.close();
+            }
 
-                catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
 
-                finally {
-                }
-
-                Toast.makeText(getApplicationContext(), "Picture Saved", Toast.LENGTH_LONG).show();
-                refreshCamera();
+            finally {
+            }
             }
         };
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                refreshCamera();
             }
         });
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
-                    gestureView.setDrawingCacheEnabled(true);
-                    Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
-                    captureImage(view);
-                    signDataTable.add(new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), DbBitmap.getBytes(bm), ""));
+            try {
+                GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
+                gestureView.setDrawingCacheEnabled(true);
+                Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
+                captureImage(view);
+                signDataTable.add(new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), DbBitmap.getBytes(bm), ""));
 
-                    Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
-                 } catch (Exception e) {
-                    Log.v("Gestures", e.getMessage());
-                    Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                 }
+                Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
+             } catch (Exception e) {
+                Log.v("Gestures", e.getMessage());
+                Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+             }
             }
         });
 
