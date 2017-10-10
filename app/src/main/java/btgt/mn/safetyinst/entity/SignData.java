@@ -13,6 +13,9 @@ public class SignData {
     byte[] photo;
     String sendStatus;
 
+    public SignData() {
+    }
+
     public SignData(String id, String userId, String sNoteId, String viewDate, byte[] userSign, byte[] photo, String sendStatus) {
         this.id = id;
         this.userId = userId;
