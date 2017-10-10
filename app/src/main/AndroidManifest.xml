@@ -49,7 +49,6 @@
             android:name=".RegisterActivity"
             android:theme="@style/AppFullScreen" />
         <activity android:name=".AddInfoActivity" />
-        <activity android:name=".FinishActivity" />
     </application>
 
 </manifest>

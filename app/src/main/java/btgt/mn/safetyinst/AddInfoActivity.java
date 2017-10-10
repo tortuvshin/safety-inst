@@ -53,6 +53,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     Camera.PictureCallback rawCallback;
     Camera.ShutterCallback shutterCallback;
     Camera.PictureCallback jpegCallback;
+    SignDataTable signDataTable;
 
     byte [] avatar;
     @Override
@@ -61,6 +62,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         setContentView(R.layout.activity_add_info);
 
         userSigned = new SignData();
+        signDataTable = new SignDataTable(this);
         final AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
         AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
         final TextView textView = (TextView) findViewById(R.id.gestureTextView);
@@ -169,20 +171,20 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         final AppCompatDialog myDialog = new AppCompatDialog(this);
         myDialog.setContentView(R.layout.activity_finish);
         myDialog.setTitle("Таны мэдээлэл");
-        myDialog.setCancelable(false);
+        myDialog.setCancelable(true);
 
         ImageView photo = (ImageView) myDialog.findViewById(R.id.user_avatar);
         ImageView signature = (ImageView) myDialog.findViewById(R.id.user_signature);
 
         photo.setImageBitmap(DbBitmap.getImage(userSigned.getPhoto()));
         signature.setImageBitmap(DbBitmap.getImage(userSigned.getUserSign()));
-        Button login = (Button) myDialog.findViewById(R.id.user_save);
-        login.setOnClickListener(new View.OnClickListener() {
+        Button save = (Button) myDialog.findViewById(R.id.user_save);
+        save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                signDataTable.add(userSigned);
                 myDialog.dismiss();
             }
         });
-
         myDialog.show();
     }
 
@@ -220,7 +222,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         try {
             camera = Camera.open(1);
             camera.setDisplayOrientation(90);
-
         }
 
         catch (RuntimeException e) {
