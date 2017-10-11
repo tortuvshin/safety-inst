@@ -42,7 +42,7 @@ public class SafConstants {
         //Log.d("ANDROID_ID",myAndroidId);
     }
 
-    public static String myAppVersion(Context myContext){
+    public static String getAppVersion(Context myContext){
         PackageInfo pi;
         try {
             pi = myContext.getPackageManager().getPackageInfo(myContext.getPackageName(), 0);

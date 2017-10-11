@@ -150,12 +150,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
                     saveBtn.setText(R.string.send);
                 } else {
-//                    signDataTable.add(userSigned);
-//                    Intent intent = new Intent(AddInfoActivity.this, FinishActivity.class);
-//                    ArrayList<SignData> signDatas = new ArrayList<SignData>();
-//                    signDatas.add(userSigned);
-//                    intent.putExtra("signed_user", signDatas);
-//                    startActivity(intent);
                     messageDialog();
                 }
             } catch (Exception e) {

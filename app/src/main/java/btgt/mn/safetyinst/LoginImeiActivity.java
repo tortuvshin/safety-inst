@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.utils.PrefManager;
+import btgt.mn.safetyinst.utils.SafConstants;
 
 public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
@@ -26,7 +27,6 @@ public class LoginImeiActivity extends AppCompatActivity {
     private TextView usernameText;
     private TextView regLink;
     UserTable userTable;
-    TelephonyManager mngr;
     String imei;
     PrefManager prefManager;
     @Override
@@ -40,12 +40,9 @@ public class LoginImeiActivity extends AppCompatActivity {
         regLink = (TextView) findViewById(R.id.linkReg);
         userTable = new UserTable(this);
         prefManager = new PrefManager(this);
-        mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+
         Intent iGet = getIntent();
-        imei = mngr.getDeviceId();
+        imei = SafConstants.getImei(this);
         positionText.setText(iGet.getStringExtra("position"));
         usernameText.setText(iGet.getStringExtra("username"));
         loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +65,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         String password = passText.getText().toString();
 
         if (password.isEmpty() || password.length() < 4) {
-            passText.setError("нууц үг 4-өөс олон тэмдэгт байна");
+            passText.setError("Нууц үг буруу байна");
             return;
         } else {
             passText.setError(null);
