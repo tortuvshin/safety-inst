@@ -18,10 +18,8 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.UUID;
 
 import btgt.mn.safetyinst.database.CategoryTable;
 import btgt.mn.safetyinst.database.SNoteTable;
@@ -32,6 +30,7 @@ import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.DbBitmap;
+import btgt.mn.safetyinst.utils.HttpsTrustManager;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
@@ -47,10 +46,15 @@ public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private Handler mHandler;
     PrefManager prefManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        if (ActivityCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
 
         prefManager = new PrefManager(this);
 
@@ -61,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     connectServer();
 
-                    if (prefManager.isFirstTimeLaunch()){
+                    if (prefManager.isFirstTimeLaunch()) {
                         TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                         if (ActivityCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                             return;
@@ -88,12 +92,12 @@ public class SplashActivity extends AppCompatActivity {
                         categoryTable.add(new Category("1", "Tech", "", "1"));
 
                         SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
-                        sNoteTable.add(new SNote("1", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-                        sNoteTable.add(new SNote("2", "1", "Заавар1", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-                        sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-                        sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-                        sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-                        sNoteTable.add(new SNote("6", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                        sNoteTable.add(new SNote("1", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
+                        sNoteTable.add(new SNote("2", "1", "Заавар1", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
+                        sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
+                        sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
+                        sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
+                        sNoteTable.add(new SNote("6", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
                         prefManager.setFirstTimeLaunch(false);
                     }
 
@@ -113,17 +117,17 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    public void connectServer (){
+    public void connectServer() {
+        TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("Content-Type","application/x-www-form-urlencoded")
-                .addFormDataPart("app", "")
-                .addFormDataPart("appV", "")
-                .addFormDataPart("Imei", "")
-                .addFormDataPart("AndroidId", "")
-                .addFormDataPart("nuuts", SafConstants.getSecretCode("", ""))
+                .addFormDataPart("time", Calendar.getInstance().getTime().toString())
+                .addFormDataPart("imei", mngr.getDeviceId())
                 .build();
 
         String uri = SafConstants.WebURL;
@@ -131,16 +135,24 @@ public class SplashActivity extends AppCompatActivity {
 
         Request request = new Request.Builder()
                 .url(uri)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("app", "1")
+                .addHeader("appV", "1")
+                .addHeader("Imei", SafConstants.getImei(this))
+                .addHeader("AndroidId", SafConstants.getAndroiId(this))
+                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), Calendar.getInstance().getTime().toString()))
                 .post(formBody)
                 .build();
 
         Log.e(TAG, request.toString());
+        Log.e(TAG, "Headers : "+request.headers().toString());
+        HttpsTrustManager.allowAllSSL();
 
         client.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Login failed : " + e.getMessage());
+                Log.e(TAG, "Server connection failed : " + e.getMessage());
             }
 
             @Override
