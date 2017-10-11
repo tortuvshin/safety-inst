@@ -91,7 +91,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                                 public void run() {
                                     Toast.makeText(LoginImeiActivity.this, "Тавтай морилно уу", Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
-                                    prefManager.setLogin(true);
+//                                    prefManager.setLogin(true);
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

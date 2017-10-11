@@ -30,7 +30,6 @@ import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.DbBitmap;
-import btgt.mn.safetyinst.utils.HttpsTrustManager;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
@@ -46,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private Handler mHandler;
     PrefManager prefManager;
-
+    SettingsTable settingsTable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,16 +117,14 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void connectServer() {
-        TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+        settingsTable = new SettingsTable(SplashActivity.this);
+
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", Calendar.getInstance().getTime().toString())
-                .addFormDataPart("imei", mngr.getDeviceId())
+                .addFormDataPart("imei", SafConstants.getImei(this))
                 .build();
 
         String uri = SafConstants.WebURL;
@@ -136,8 +133,8 @@ public class SplashActivity extends AppCompatActivity {
         Request request = new Request.Builder()
                 .url(uri)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("app", "1")
-                .addHeader("appV", "1")
+                .addHeader("app", SafConstants.APP_NAME)
+                .addHeader("appV", SafConstants.myAppVersion(this))
                 .addHeader("Imei", SafConstants.getImei(this))
                 .addHeader("AndroidId", SafConstants.getAndroiId(this))
                 .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), Calendar.getInstance().getTime().toString()))
@@ -146,7 +143,6 @@ public class SplashActivity extends AppCompatActivity {
 
         Log.e(TAG, request.toString());
         Log.e(TAG, "Headers : "+request.headers().toString());
-        HttpsTrustManager.allowAllSSL();
 
         client.newCall(request).enqueue(new Callback() {
 
@@ -166,12 +162,13 @@ public class SplashActivity extends AppCompatActivity {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             Log.e(TAG, ob.toString());
-                            String success = "";
+                            String comp = "";
                             for (int i = 0; i < ob.length(); i++) {
-                                success = ob.getJSONObject(i).getString("success");
+                                comp = ob.getJSONObject(i).getString("comp");
                             }
-
-                            if (success == "1") {
+                            Toast.makeText(SplashActivity.this, comp, Toast.LENGTH_LONG)
+                                    .show();
+                            if (comp == "1") {
                                 Toast.makeText(SplashActivity.this, "Амжилттай холбогдсон", Toast.LENGTH_LONG)
                                         .show();
                             } else {

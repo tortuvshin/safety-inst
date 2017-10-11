@@ -13,7 +13,10 @@ import android.telephony.TelephonyManager;
  */
 
 public class SafConstants {
+
     public static String WebURL = "http://www.mongolgps.com/phone.php/safe_settings";
+
+    public static String APP_NAME = "iSafe";
 
     public static String getSecretCode(String imei, String time){
         return MD5_Hash(imei + "-BTGT-" + String.valueOf(time));
