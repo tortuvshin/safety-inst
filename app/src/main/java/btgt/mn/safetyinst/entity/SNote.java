@@ -14,25 +14,8 @@ public class SNote {
     String voiceData;
     int timeout;
 
-    public SNote(String id, String categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
-        this.id = id;
-        this.categoryId = categoryId;
-        this.name = name;
-        this.order = order;
-        this.frameType = frameType;
-        this.frameData = frameData;
-        this.voiceData = voiceData;
-        this.timeout = timeout;
-    }
+    public SNote() {
 
-    public SNote(String categoryId, String name, String order, int frameType, String frameData, String voiceData, int timeout) {
-        this.categoryId = categoryId;
-        this.name = name;
-        this.order = order;
-        this.frameType = frameType;
-        this.frameData = frameData;
-        this.voiceData = voiceData;
-        this.timeout = timeout;
     }
 
     public String getId() {

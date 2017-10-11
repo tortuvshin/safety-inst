@@ -1,30 +1,23 @@
 package btgt.mn.safetyinst;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.DbBitmap;
 import btgt.mn.safetyinst.utils.ImageLoader;
 import btgt.mn.safetyinst.utils.SafConstants;
 

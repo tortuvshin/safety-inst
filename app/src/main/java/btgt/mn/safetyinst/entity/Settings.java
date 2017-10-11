@@ -12,13 +12,8 @@ public class Settings {
     private String androidId;
     private String sNoteData;
 
-    public Settings(String companyName, String departmentName, String image, String imei, String androidId, String sNoteData) {
-        this.companyName = companyName;
-        this.departmentName = departmentName;
-        this.image = image;
-        this.imei = imei;
-        this.androidId = androidId;
-        this.sNoteData = sNoteData;
+    public Settings() {
+
     }
 
     public String getCompanyName() {

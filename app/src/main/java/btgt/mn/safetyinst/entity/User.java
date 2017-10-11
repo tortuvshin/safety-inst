@@ -15,27 +15,8 @@ public class User {
     String avatar;
     String lastSigned;
 
-    public User(String id, String name, String position, int phone, String imei, String email, String password, String avatar, String lastSigned) {
-        this.id = id;
-        this.name = name;
-        this.position = position;
-        this.phone = phone;
-        this.imei = imei;
-        this.email = email;
-        this.password = password;
-        this.avatar = avatar;
-        this.lastSigned = lastSigned;
-    }
+    public User() {
 
-    public User(String name, String position, int phone, String imei, String email, String password, String avatar, String lastSigned) {
-        this.name = name;
-        this.position = position;
-        this.phone = phone;
-        this.imei = imei;
-        this.email = email;
-        this.password = password;
-        this.avatar = avatar;
-        this.lastSigned = lastSigned;
     }
 
     public String getId() {

@@ -5,22 +5,12 @@ package btgt.mn.safetyinst.entity;
  */
 
 public class Category {
-    String id;
-    String name;
-    String icon;
-    String order;
+    private String id;
+    private String name;
+    private String icon;
+    private String order;
 
-    public Category(String id, String name, String icon, String order) {
-        this.id = id;
-        this.name = name;
-        this.icon = icon;
-        this.order = order;
-    }
-
-    public Category(String name, String icon, String order) {
-        this.name = name;
-        this.icon = icon;
-        this.order = order;
+    public Category() {
     }
 
     public String getId() {
