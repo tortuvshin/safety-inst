@@ -6,12 +6,22 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.UUID;
 
 import btgt.mn.safetyinst.database.CategoryTable;
 import btgt.mn.safetyinst.database.SNoteTable;
@@ -22,62 +32,134 @@ import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.DbBitmap;
+import btgt.mn.safetyinst.utils.SafConstants;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class SplashActivity extends AppCompatActivity {
+
+    private static final String TAG = SplashActivity.class.getSimpleName();
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
 
-        UserTable userTable = new UserTable(this);
-        userTable.add(new User("1", "Цогтгэрэл", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("2", "Ганцоож", "Вэб дизайнер", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("3", "Бат-Эрдэнэ", "Мобайл апп хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("4", "Ганцоож", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("5", "Төртүвшин", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("6", "Энхбаяр", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("7", "Цэнд-Аюуш", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("8", "Анхаа", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("9", "Цэнгүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        userTable.add(new User("10", "Тэргүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-        SettingsTable settingsTable = new SettingsTable(this);
+        mHandler = new Handler(Looper.getMainLooper());
 
-        settingsTable.add(new Settings("BTGT LLC", "Software Development", mngr.getDeviceId(), mngr.getDeviceSoftwareVersion(), "1"));
-
-        CategoryTable categoryTable = new CategoryTable(this);
-        categoryTable.add(new Category("1", "Tech", "", "1"));
-
-        SNoteTable sNoteTable = new SNoteTable(this);
-        sNoteTable.add(new SNote("1", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-        sNoteTable.add(new SNote("2", "1", "Заавар1", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-        sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-        sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-        sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-        sNoteTable.add(new SNote("6", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
-
-        try {
-            Thread timerThread = new Thread(){
-                public void run(){
-                    try{
-                        sleep(1000);
-                    } catch(InterruptedException e){
-                        e.printStackTrace();
-                    } finally{
-                        Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-                        startActivity(intent);
-                        finish();
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    connectServer();
+                    TelephonyManager mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                    if (ActivityCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
                     }
-                }
-            };
-            timerThread.start();
-        }catch (Exception e){
 
-        }
+                    Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+
+                    UserTable userTable = new UserTable(SplashActivity.this);
+                    userTable.add(new User("1", "Цогтгэрэл", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("2", "Ганцоож", "Вэб дизайнер", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("3", "Бат-Эрдэнэ", "Мобайл апп хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("4", "Ганцоож", "Програм хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("5", "Төртүвшин", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("6", "Энхбаяр", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("7", "Цэнд-Аюуш", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("8", "Анхаа", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("9", "Цэнгүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    userTable.add(new User("10", "Тэргүүн", "Вэб хөгжүүлэгч", 99999999, mngr.getDeviceId(), "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
+                    SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
+
+                    settingsTable.add(new Settings("BTGT LLC", "Software Development", mngr.getDeviceId(), mngr.getDeviceSoftwareVersion(), "1"));
+
+                    CategoryTable categoryTable = new CategoryTable(SplashActivity.this);
+                    categoryTable.add(new Category("1", "Tech", "", "1"));
+
+                    SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
+                    sNoteTable.add(new SNote("1", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                    sNoteTable.add(new SNote("2", "1", "Заавар1", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                    sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                    sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                    sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                    sNoteTable.add(new SNote("6", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "",1));
+                    Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
+                    startActivity(intent);
+                    finish();
+                } catch (Exception ex) {
+
+                }
+            }
+        });
+    }
+
+    public void connectServer (){
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("Content-Type","application/x-www-form-urlencoded")
+                .addFormDataPart("app", "")
+                .addFormDataPart("appV", "")
+                .addFormDataPart("Imei", "")
+                .addFormDataPart("AndroidId", "")
+                .addFormDataPart("nuuts", SafConstants.getSecretCode("", ""))
+                .build();
+
+        String uri = SafConstants.WebURL;
+        Log.e(TAG, uri + " ");
+
+        Request request = new Request.Builder()
+                .url(uri)
+                .post(formBody)
+                .build();
+
+        Log.e(TAG, request.toString());
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Login failed : " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String res = response.body().string();
+
+                Log.e(TAG, res);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray ob = new JSONArray(String.valueOf(res));
+                            Log.e(TAG, ob.toString());
+                            String success = "";
+                            for (int i = 0; i < ob.length(); i++) {
+                                success = ob.getJSONObject(i).getString("success");
+                            }
+
+                            if (success == "1") {
+                                Toast.makeText(SplashActivity.this, "Амжилттай холбогдсон", Toast.LENGTH_LONG)
+                                        .show();
+                            } else {
+                                Toast.makeText(SplashActivity.this, "Алдаа гарлаа", Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("ERROR : ", e.getMessage() + " ");
+                        }
+                    }
+                });
+            }
+        });
     }
 }
