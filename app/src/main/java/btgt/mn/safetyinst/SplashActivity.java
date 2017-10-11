@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -62,38 +63,6 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     connectServer();
 
-                    if (prefManager.isFirstTimeLaunch()) {
-
-                        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-
-                        UserTable userTable = new UserTable(SplashActivity.this);
-                        userTable.add(new User("1", "Цогтгэрэл", "Програм хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("2", "Ганцоож", "Вэб дизайнер", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("3", "Бат-Эрдэнэ", "Мобайл апп хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("4", "Ганцоож", "Програм хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("5", "Төртүвшин", "Вэб хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("6", "Энхбаяр", "Вэб хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("7", "Цэнд-Аюуш", "Вэб хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("8", "Анхаа", "Вэб хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("9", "Цэнгүүн", "Вэб хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        userTable.add(new User("10", "Тэргүүн", "Вэб хөгжүүлэгч", 99999999, imei, "toroo.byamba@gmail.com", "admin", DbBitmap.getBytes(bm), Calendar.getInstance().getTime().toString()));
-                        SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
-
-                        settingsTable.add(new Settings("BTGT LLC", "Software Development", imei, SafConstants.getAppVersion(SplashActivity.this), "1"));
-
-                        CategoryTable categoryTable = new CategoryTable(SplashActivity.this);
-                        categoryTable.add(new Category("1", "Tech", "", "1"));
-
-                        SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
-                        sNoteTable.add(new SNote("1", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
-                        sNoteTable.add(new SNote("2", "1", "Заавар1", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
-                        sNoteTable.add(new SNote("3", "1", "Заавар2", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
-                        sNoteTable.add(new SNote("4", "1", "Заавар3", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
-                        sNoteTable.add(new SNote("5", "1", "Заавар4", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
-                        sNoteTable.add(new SNote("6", "1", "Заавар", "1", 1, "Заавар дэлгэрэнгүй", "", 1));
-                        prefManager.setFirstTimeLaunch(false);
-                    }
-
                     if (prefManager.isLoggedIn()) {
                         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -111,8 +80,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void connectServer() {
-
-        SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
@@ -155,14 +122,51 @@ public class SplashActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
+                            JSONObject setting = ob.getJSONObject(0);
+                            JSONArray users = setting.getJSONArray("users");
+                            JSONArray notes = setting.getJSONArray("notes");
+
                             Log.e(TAG, ob.toString());
-                            String comp = "";
-                            for (int i = 0; i < ob.length(); i++) {
-                                comp = ob.getJSONObject(i).getString("comp");
+
+                            UserTable userTable = new UserTable(SplashActivity.this);
+                            SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
+                            SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
+                            settingsTable.add(new Settings(
+                                    setting.getString("comp"),
+                                    "",
+                                    SafConstants.getImei(SplashActivity.this),
+                                    SafConstants.getAndroiId(SplashActivity.this),
+                                    setting.getString("company_logo")
+                                    ));
+                            byte[] image = new byte[0];
+                            for (int i = 0; i < users.length(); i++) {
+                                userTable.add(new User(
+                                        users.getJSONObject(i).getString("id"),
+                                        users.getJSONObject(i).getString("name"),
+                                        users.getJSONObject(i).getString("job"),
+                                        users.getJSONObject(i).getInt("id"),
+                                        SafConstants.getImei(SplashActivity.this),
+                                        "",
+                                        users.getJSONObject(i).getString("pass"),
+                                        image,
+                                        ""
+                                ));
                             }
-                            Toast.makeText(SplashActivity.this, comp, Toast.LENGTH_LONG)
-                                    .show();
-                            if (comp == "1") {
+
+                            for (int i = 0; i < notes.length(); i++) {
+                                sNoteTable.add(new SNote(
+                                        notes.getJSONObject(i).getString("id"),
+                                        notes.getJSONObject(i).getString("id"),
+                                        notes.getJSONObject(i).getString("photo"),
+                                        notes.getJSONObject(i).getString("id"),
+                                        notes.getJSONObject(i).getInt("dur"),
+                                        notes.getJSONObject(i).getString("info"),
+                                        notes.getJSONObject(i).getString("id"),
+                                        notes.getJSONObject(i).getInt("dur")
+                                        ));
+                            }
+
+                            if (setting.getString("error").equals("0")) {
                                 Toast.makeText(SplashActivity.this, "Амжилттай холбогдсон", Toast.LENGTH_LONG)
                                         .show();
                             } else {
