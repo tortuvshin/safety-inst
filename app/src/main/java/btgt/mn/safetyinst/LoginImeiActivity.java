@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import btgt.mn.safetyinst.database.UserTable;
+import btgt.mn.safetyinst.utils.PrefManager;
 
 public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
@@ -27,6 +28,7 @@ public class LoginImeiActivity extends AppCompatActivity {
     UserTable userTable;
     TelephonyManager mngr;
     String imei;
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +39,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         loginBtn = (AppCompatButton) findViewById(R.id.login);
         regLink = (TextView) findViewById(R.id.linkReg);
         userTable = new UserTable(this);
-
+        prefManager = new PrefManager(this);
         mngr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -84,18 +86,19 @@ public class LoginImeiActivity extends AppCompatActivity {
                     progressDialog.setIndeterminate(true);
                     progressDialog.setMessage("Уншиж байна...");
                     progressDialog.show();
-                    new android.os.Handler().postDelayed(
+                    new android.os.Handler().post(
                             new Runnable() {
                                 public void run() {
                                     Toast.makeText(LoginImeiActivity.this, "Тавтай морилно уу", Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
+                                    prefManager.setLogin(true);
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(i);
                                     finish();
                                 }
-                            }, 300);
+                            });
                 }
                 else{
                     Toast.makeText(LoginImeiActivity.this, "Хэрэглэгчийн нэр нууц үг буруу байна", Toast.LENGTH_SHORT).show();
