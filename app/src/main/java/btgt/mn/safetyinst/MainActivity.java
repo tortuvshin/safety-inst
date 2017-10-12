@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
@@ -44,11 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private int[] layouts;
     private Button btnPrev, btnNext;
     WebView webb;
-
-    ImageView imgPreview;
-    TextView txtText;
-
-    CoordinatorLayout coordinatorLayout;
 
     SNoteTable sNoteTable;
     List<SNote> sNotes;
@@ -174,6 +170,11 @@ public class MainActivity extends AppCompatActivity {
         private LayoutInflater layoutInflater;
 
         List<SNote> sNotes;
+        CollapsingToolbarLayout collapsingToolbar;
+
+        ImageView imgPreview;
+        TextView txtText;
+        CoordinatorLayout coordinatorLayout;
 
         public ScreenSlidePagerAdapter(List<SNote> sNotes) {
             this.sNotes = sNotes;
@@ -184,10 +185,14 @@ public class MainActivity extends AppCompatActivity {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
-
+            collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+            imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
+            txtText = (TextView) view.findViewById(R.id.txtText);
+            txtText.setText(sNotes.get(position).getFrameData());
+            coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 //            TextView nameText = (TextView) view.findViewById(R.id.snote_content);
 //            getSupportActionBar().setTitle(sNotes.get(position).getName());
-//            nameText.setText(sNotes.get(position).getFrameData());
+
             container.addView(view);
 
             return view;
