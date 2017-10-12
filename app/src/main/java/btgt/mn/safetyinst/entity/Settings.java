@@ -5,15 +5,17 @@ package btgt.mn.safetyinst.entity;
  */
 
 public class Settings {
-    String companyName;
-    String departmentName;
-    String imei;
-    String androidId;
-    String sNoteData;
+    private String companyName;
+    private String departmentName;
+    private String image;
+    private String imei;
+    private String androidId;
+    private String sNoteData;
 
-    public Settings(String companyName, String departmentName, String imei, String androidId, String sNoteData) {
+    public Settings(String companyName, String departmentName, String image, String imei, String androidId, String sNoteData) {
         this.companyName = companyName;
         this.departmentName = departmentName;
+        this.image = image;
         this.imei = imei;
         this.androidId = androidId;
         this.sNoteData = sNoteData;
@@ -33,6 +35,14 @@ public class Settings {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getImei() {

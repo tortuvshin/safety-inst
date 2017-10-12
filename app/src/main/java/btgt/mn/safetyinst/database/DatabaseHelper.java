@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 4;
+    private static final int    DATABASE_VERSION = 5;
     private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +
@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             UserTable.USER_IMEI + " TEXT," +
             UserTable.USER_EMAIL + " TEXT," +
             UserTable.USER_PASS + " TEXT," +
-            UserTable.USER_AVATAR + " BLOB," +
+            UserTable.USER_AVATAR + " TEXT," +
             UserTable.USER_LAST_SIGNED + " TEXT)";
 
     private static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ SNoteTable.TABLE_SNOTE+" (" +
@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ SettingsTable.TABLE_SETTINGS+" (" +
             SettingsTable.SETTINGS_COMPANY_NAME + " TEXT PRIMARY KEY," +
             SettingsTable.SETTINGS_DEFARTMENT_NAME + " TEXT," +
+            SettingsTable.SETTINGS_IMAGE + " TEXT," +
             SettingsTable.SETTINGS_IMEI + " TEXT," +
             SettingsTable.SETTINGS_ANDROID_ID + " TEXT," +
             SettingsTable.SETTINGS_SNOTE_DATA + " TEXT)";

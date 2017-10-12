@@ -95,7 +95,7 @@ public class UserTable extends DatabaseHelper {
                 cursor.getString(USER_IMEI_INDEX),
                 cursor.getString(USER_EMAIL_INDEX),
                 cursor.getString(USER_PASS_INDEX),
-                cursor.getBlob(USER_AVATAR_INDEX),
+                cursor.getString(USER_AVATAR_INDEX),
                 cursor.getString(USER_LASTS_INDEX));
         cursor.close();
         return user;
@@ -138,7 +138,7 @@ public class UserTable extends DatabaseHelper {
                 String imei = cursor.getString(USER_IMEI_INDEX);
                 String email = cursor.getString(USER_EMAIL_INDEX);
                 String pass = cursor.getString(USER_PASS_INDEX);
-                byte[] avatar = cursor.getBlob(USER_AVATAR_INDEX);
+                String avatar = cursor.getString(USER_AVATAR_INDEX);
                 String last = cursor.getString(USER_LASTS_INDEX);
 
                 User user = new User(id, name, pos, phone, imei, email, pass, avatar, last);

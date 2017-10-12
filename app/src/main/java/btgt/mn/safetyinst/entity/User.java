@@ -12,10 +12,10 @@ public class User {
     String imei;
     String email;
     String password;
-    byte[] avatar;
+    String avatar;
     String lastSigned;
 
-    public User(String id, String name, String position, int phone, String imei, String email, String password, byte[] avatar, String lastSigned) {
+    public User(String id, String name, String position, int phone, String imei, String email, String password, String avatar, String lastSigned) {
         this.id = id;
         this.name = name;
         this.position = position;
@@ -27,7 +27,7 @@ public class User {
         this.lastSigned = lastSigned;
     }
 
-    public User(String name, String position, int phone, String imei, String email, String password, byte[] avatar, String lastSigned) {
+    public User(String name, String position, int phone, String imei, String email, String password, String avatar, String lastSigned) {
         this.name = name;
         this.position = position;
         this.phone = phone;
@@ -94,11 +94,11 @@ public class User {
         this.password = password;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
