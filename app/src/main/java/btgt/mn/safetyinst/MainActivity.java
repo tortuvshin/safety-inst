@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPrev, btnNext;
     WebView webb;
 
+    ImageView imgPreview;
+    TextView txtText;
+
+    CoordinatorLayout coordinatorLayout;
+
     SNoteTable sNoteTable;
     List<SNote> sNotes;
     @Override
@@ -54,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         reqPermissions();
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -180,9 +185,9 @@ public class MainActivity extends AppCompatActivity {
 
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
 
-            TextView nameText = (TextView) view.findViewById(R.id.snote_content);
-            getSupportActionBar().setTitle(sNotes.get(position).getName());
-            nameText.setText(sNotes.get(position).getFrameData());
+//            TextView nameText = (TextView) view.findViewById(R.id.snote_content);
+//            getSupportActionBar().setTitle(sNotes.get(position).getName());
+//            nameText.setText(sNotes.get(position).getFrameData());
             container.addView(view);
 
             return view;
