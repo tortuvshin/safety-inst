@@ -31,6 +31,7 @@ import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.DbBitmap;
+import btgt.mn.safetyinst.utils.ImageLoader;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
@@ -47,6 +48,7 @@ public class SplashActivity extends AppCompatActivity {
     private Handler mHandler;
     PrefManager prefManager;
     String imei;
+    ImageLoader imageLoader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
         imei = SafConstants.getImei(this);
 
         prefManager = new PrefManager(this);
+        imageLoader = new ImageLoader(this);
 
         mHandler = new Handler(Looper.getMainLooper());
         mHandler.post(new Runnable() {
@@ -88,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .build();
 
-        String uri = SafConstants.WebURL;
+        String uri = SafConstants.ApiUrl;
         Log.e(TAG, uri + " ");
 
         Request request = new Request.Builder()
@@ -134,11 +137,14 @@ public class SplashActivity extends AppCompatActivity {
                             settingsTable.add(new Settings(
                                     setting.getString("comp"),
                                     "",
+                                    setting.getString("company_logo"),
                                     SafConstants.getImei(SplashActivity.this),
                                     SafConstants.getAndroiId(SplashActivity.this),
                                     setting.getString("company_logo")
                                     ));
-                            byte[] image = new byte[0];
+
+                            Log.d(TAG, users.toString()+"\n");
+
                             for (int i = 0; i < users.length(); i++) {
                                 userTable.add(new User(
                                         users.getJSONObject(i).getString("id"),
@@ -148,7 +154,7 @@ public class SplashActivity extends AppCompatActivity {
                                         SafConstants.getImei(SplashActivity.this),
                                         "",
                                         users.getJSONObject(i).getString("pass"),
-                                        image,
+                                        users.getJSONObject(i).getString("photo"),
                                         ""
                                 ));
                             }

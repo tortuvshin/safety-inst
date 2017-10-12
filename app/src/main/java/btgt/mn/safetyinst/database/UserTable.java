@@ -75,7 +75,6 @@ public class UserTable extends DatabaseHelper {
         cv.put(USER_LAST_SIGNED, user.getLastSigned());
         db.insert(TABLE_USERS, null, cv);
         db.close();
-        Log.d("", "Added new user: "+user.getName());
     }
 
     public User get(int id) {

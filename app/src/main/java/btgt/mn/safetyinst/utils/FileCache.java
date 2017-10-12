@@ -12,7 +12,7 @@ public class FileCache {
     public FileCache(Context context){
 
         if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-            cacheDir=new File(android.os.Environment.getExternalStorageDirectory(),"Cache dgl");
+            cacheDir=new File(android.os.Environment.getExternalStorageDirectory(),"saf");
         else
             cacheDir=context.getCacheDir();
         if(!cacheDir.exists())

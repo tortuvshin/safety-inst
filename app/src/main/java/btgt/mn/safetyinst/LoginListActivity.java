@@ -25,6 +25,8 @@ import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.DbBitmap;
+import btgt.mn.safetyinst.utils.ImageLoader;
+import btgt.mn.safetyinst.utils.SafConstants;
 
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
@@ -34,12 +36,13 @@ public class LoginListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
+    ImageLoader imageLoader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_list);
 
+        imageLoader = new ImageLoader(this);
         userTable = new UserTable(this);
         settingsTable = new SettingsTable(this);
         mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
@@ -109,7 +112,8 @@ public class LoginListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
-            holder.imageView.setImageBitmap(DbBitmap.getImage(users.get(position).getAvatar()));
+//            holder.imageView.setImageBitmap(DbBitmap.getImage(users.get(position).getAvatar()));
+            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
             holder.mTextView.setText(users.get(position).getName());
             holder.mPosText.setText(users.get(position).getPosition());
         }

@@ -17,8 +17,8 @@ import java.io.OutputStream;
 
 public class SafConstants {
 
-    public static String WebURL = "http://www.mongolgps.com/phone.php/safe_settings";
-
+    public static String WebURL = "http://www.mongolgps.com";
+    public static String ApiUrl = WebURL+"/phone.php/safe_settings";
     public static String APP_NAME = "iSafe";
 
     public static String getSecretCode(String imei, String time){
