@@ -8,6 +8,9 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * Created by turtuvshin on 10/11/17.
  */
@@ -61,5 +64,22 @@ public class SafConstants {
             return "";
         }
         return mngr.getDeviceId();
+    }
+
+    public static void CopyStream(InputStream is, OutputStream os)
+    {
+        final int buffer_size=1024;
+        try
+        {
+            byte[] bytes=new byte[buffer_size];
+            for(;;)
+            {
+                int count=is.read(bytes, 0, buffer_size);
+                if(count==-1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        }
+        catch(Exception ex){}
     }
 }
