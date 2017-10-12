@@ -176,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
             confirmPasswordEditText.setError(null);
         }
 
-        Cursor user = userTable.checkUser(name,password);
+        Cursor user = userTable.checkUser(password);
 
         if(user == null){
             valid = false;

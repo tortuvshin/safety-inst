@@ -75,6 +75,7 @@ public class LoginListActivity extends AppCompatActivity {
 
     public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
         List<User> users;
+        String imageName;
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             public ImageView imageView;
             public TextView mTextView;
@@ -85,7 +86,6 @@ public class LoginListActivity extends AppCompatActivity {
                 imageView = (ImageView) v.findViewById(R.id.user_img);
                 mTextView = (TextView) v.findViewById(R.id.username_text);
                 mPosText = (TextView) v.findViewById(R.id.position_text);
-
             }
 
             @Override
@@ -93,6 +93,7 @@ public class LoginListActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
                 intent.putExtra("username", mTextView.getText().toString());
                 intent.putExtra("position", mPosText.getText().toString());
+                intent.putExtra("image", imageName);
                 startActivity(intent);
             }
         }
@@ -113,6 +114,7 @@ public class LoginListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
 //            holder.imageView.setImageBitmap(DbBitmap.getImage(users.get(position).getAvatar()));
+            imageName = users.get(position).getAvatar();
             imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
             holder.mTextView.setText(users.get(position).getName());
             holder.mPosText.setText(users.get(position).getPosition());

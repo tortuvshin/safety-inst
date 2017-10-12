@@ -63,16 +63,17 @@ public class LoginImeiActivity extends AppCompatActivity {
     public void login() {
 
         String password = passText.getText().toString();
+        String username = usernameText.getText().toString();
 
-        if (password.isEmpty() || password.length() < 4) {
-            passText.setError("Нууц үг буруу байна");
-            return;
-        } else {
-            passText.setError(null);
-        }
+//        if (password.isEmpty() || password.length() < 4) {
+//            passText.setError("Нууц үг буруу байна");
+//            return;
+//        } else {
+//            passText.setError(null);
+//        }
         if (password.trim().length() > 0) {
 
-            Cursor checkeduser = userTable.checkUser(imei, password);
+            Cursor checkeduser = userTable.checkUser(password);
             if(checkeduser != null){
                 startManagingCursor(checkeduser);
                 if (checkeduser.getCount() > 0){

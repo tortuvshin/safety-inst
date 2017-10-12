@@ -34,6 +34,8 @@ import java.util.List;
 
 import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.entity.SNote;
+import btgt.mn.safetyinst.utils.ImageLoader;
+import btgt.mn.safetyinst.utils.SafConstants;
 
 public class MainActivity extends AppCompatActivity {
     private int NUM_PAGES = 1;
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView imgPreview;
         TextView txtText;
         CoordinatorLayout coordinatorLayout;
-
+        ImageLoader imageLoader;
         public ScreenSlidePagerAdapter(List<SNote> sNotes) {
             this.sNotes = sNotes;
         }
@@ -188,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
             collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
             txtText = (TextView) view.findViewById(R.id.txtText);
+            imageLoader = new ImageLoader(MainActivity.this);
+            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+sNotes.get(position).getVoiceData(), imgPreview);
             txtText.setText(sNotes.get(position).getFrameData());
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 //            TextView nameText = (TextView) view.findViewById(R.id.snote_content);

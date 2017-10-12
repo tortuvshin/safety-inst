@@ -171,7 +171,7 @@ public class ImageLoader {
             if(bitmap!=null)
                 photoToLoad.imageView.setImageBitmap(bitmap);
             else
-                photoToLoad.imageView.setBackgroundColor(Color.parseColor("#1e1411"));
+                photoToLoad.imageView.setBackgroundColor(Color.parseColor("#00000000"));
         }
     }
 

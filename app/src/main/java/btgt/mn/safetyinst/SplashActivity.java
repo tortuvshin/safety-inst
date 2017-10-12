@@ -153,7 +153,8 @@ public class SplashActivity extends AppCompatActivity {
                                         users.getJSONObject(i).getInt("id"),
                                         SafConstants.getImei(SplashActivity.this),
                                         "",
-                                        users.getJSONObject(i).getString("pass"),
+//                                        users.getJSONObject(i).getString("pass"),
+                                        "1234",
                                         users.getJSONObject(i).getString("photo"),
                                         ""
                                 ));
@@ -163,11 +164,11 @@ public class SplashActivity extends AppCompatActivity {
                                 sNoteTable.add(new SNote(
                                         notes.getJSONObject(i).getString("id"),
                                         notes.getJSONObject(i).getString("id"),
-                                        notes.getJSONObject(i).getString("photo"),
+                                        notes.getJSONObject(i).getString("name"),
                                         notes.getJSONObject(i).getString("id"),
                                         notes.getJSONObject(i).getInt("dur"),
                                         notes.getJSONObject(i).getString("info"),
-                                        notes.getJSONObject(i).getString("id"),
+                                        notes.getJSONObject(i).getString("photo"),
                                         notes.getJSONObject(i).getInt("dur")
                                         ));
                             }

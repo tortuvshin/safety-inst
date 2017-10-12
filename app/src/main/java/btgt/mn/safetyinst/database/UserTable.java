@@ -100,7 +100,7 @@ public class UserTable extends DatabaseHelper {
         return user;
     }
 
-    public Cursor checkUser(String imei,String password){
+    public Cursor checkUser(String password){
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -115,7 +115,7 @@ public class UserTable extends DatabaseHelper {
                         USER_AVATAR,
                         USER_LAST_SIGNED
                 },
-                USER_IMEI + "='" + imei + "' AND " +
+//                USER_NAME + "='" + username + "' AND " +
                         USER_PASS + "='" + password + "'", null, null, null, null);
         if (cursor != null){
             cursor.moveToFirst();

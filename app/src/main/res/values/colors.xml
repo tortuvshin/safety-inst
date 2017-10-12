@@ -8,4 +8,6 @@
     <color name="inactive">#a0a1ef</color>
     <color name="active">#2f32d1</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
 </resources>
