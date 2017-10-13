@@ -11,12 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.awt.font.TextAttribute;
+
 import btgt.mn.safetyinst.database.UserTable;
+import btgt.mn.safetyinst.entity.User;
+import btgt.mn.safetyinst.utils.ImageLoader;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 
@@ -26,6 +32,7 @@ public class LoginImeiActivity extends AppCompatActivity {
     private TextView positionText;
     private TextView usernameText;
     private TextView regLink;
+    private ImageView imageView;
     UserTable userTable;
     String imei;
     PrefManager prefManager;
@@ -33,6 +40,7 @@ public class LoginImeiActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        imageView = (ImageView) findViewById(R.id.login_user_avatar);
         positionText = (TextView) findViewById(R.id.position);
         usernameText = (TextView) findViewById(R.id.username);
         passText = (EditText) findViewById(R.id.password);
@@ -40,11 +48,15 @@ public class LoginImeiActivity extends AppCompatActivity {
         regLink = (TextView) findViewById(R.id.linkReg);
         userTable = new UserTable(this);
         prefManager = new PrefManager(this);
-
+        ImageLoader imageLoader = new ImageLoader(this);
         Intent iGet = getIntent();
+
+        int id = Integer.parseInt(iGet.getStringExtra("user_id"));
+        User user = userTable.get(id);
         imei = SafConstants.getImei(this);
-        positionText.setText(iGet.getStringExtra("position"));
-        usernameText.setText(iGet.getStringExtra("username"));
+        imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+user.getAvatar(), imageView);
+        positionText.setText(user.getPosition());
+        usernameText.setText(user.getName());
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

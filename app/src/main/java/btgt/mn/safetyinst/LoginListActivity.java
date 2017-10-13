@@ -30,6 +30,7 @@ public class LoginListActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     ImageLoader imageLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,19 +49,8 @@ public class LoginListActivity extends AppCompatActivity {
 
         List<User> users = userTable.getAll();
         List<Settings> sett = settingsTable.get();
+        compName.setText(sett.get(0).getCompanyName());
 
-        try {
-
-            for (Settings settings : sett){
-                compName.setText(settings.getCompanyName());
-            }
-
-
-        }catch (NullPointerException npe){
-            Log.d(TAG,"Алдаа : "+npe);
-        }catch (Exception e){
-            Log.d(TAG,"Алдаа : "+e);
-        }
         mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -70,10 +60,10 @@ public class LoginListActivity extends AppCompatActivity {
         List<User> users;
         String imageName;
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            public ImageView imageView;
-            public TextView mTextView;
-            public TextView mPosText;
-            public ViewHolder(View v) {
+            private ImageView imageView;
+            private TextView mTextView;
+            private TextView mPosText;
+            private ViewHolder(View v) {
                 super(v);
                 v.setOnClickListener(this);
                 imageView = (ImageView) v.findViewById(R.id.user_img);
@@ -84,9 +74,8 @@ public class LoginListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
-                intent.putExtra("username", mTextView.getText().toString());
-                intent.putExtra("position", mPosText.getText().toString());
-                intent.putExtra("image", imageName);
+                intent.putExtra("user_id", users.get(this.getAdapterPosition()).getId().toString());
+                Log.d("", users.get(this.getAdapterPosition()).getId());
                 startActivity(intent);
             }
         }
@@ -106,7 +95,6 @@ public class LoginListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
-//            holder.imageView.setImageBitmap(DbBitmap.getImage(users.get(position).getAvatar()));
             imageName = users.get(position).getAvatar();
             imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
             holder.mTextView.setText(users.get(position).getName());
