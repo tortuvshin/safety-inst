@@ -2,12 +2,14 @@ package btgt.mn.safetyinst;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.Image;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialog;
@@ -138,7 +140,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 if (saveBtn.getText() == getString(R.string.save)) {
                     Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
-//                    userSigned = new SignData("1", "1", "1", Calendar.getInstance().getTime().toString(), DbBitmap.getBytes(bm), userSigned.getPhoto(), "");
                     userSigned.setId("1");
                     userSigned.setsNoteId("1");
                     userSigned.setUserId("1");
@@ -150,7 +151,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
                     saveBtn.setText(R.string.send);
                 } else {
-                    messageDialog();
+                    openDialog();
                 }
             } catch (Exception e) {
                 Log.d("Gestures", e.getMessage());
@@ -160,26 +161,29 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
     }
-    public void messageDialog() {
 
-        final AppCompatDialog myDialog = new AppCompatDialog(this);
-        myDialog.setContentView(R.layout.activity_finish);
-        myDialog.setTitle("Таны мэдээлэл");
-        myDialog.setCancelable(true);
+    public void openDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
 
-        ImageView photo = (ImageView) myDialog.findViewById(R.id.user_avatar);
-        ImageView signature = (ImageView) myDialog.findViewById(R.id.user_signature);
+        alertDialogBuilder.setMessage("Зааварчилгаатай танилцаж гарын үсэг зурсан");
+                alertDialogBuilder.setPositiveButton("Тийм",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                signDataTable.add(userSigned);
+                                Toast.makeText(AddInfoActivity.this,"Таны мэдээлэл амжилттай хадгалагдлаа",Toast.LENGTH_LONG).show();
+                            }
+                        });
 
-        photo.setImageBitmap(DbBitmap.getImage(userSigned.getPhoto()));
-        signature.setImageBitmap(DbBitmap.getImage(userSigned.getUserSign()));
-        Button save = (Button) myDialog.findViewById(R.id.user_save);
-        save.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                signDataTable.add(userSigned);
-                myDialog.dismiss();
+        alertDialogBuilder.setNegativeButton("Буцах",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
             }
         });
-        myDialog.show();
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public void captureImage(View v) throws IOException {
