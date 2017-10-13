@@ -83,14 +83,15 @@ public class SNoteTable extends DatabaseHelper {
             return null;
         }
 
-        SNote sNote = new SNote(cursor.getString(SNOTE_ID_INDEX),
-                cursor.getString(SNOTE_CAT_ID_INDEX),
-                cursor.getString(SNOTE_NAME_INDEX),
-                cursor.getString(SNOTE_ORDER_INDEX),
-                cursor.getInt(SNOTE_FRAME_TYPE_INDEX),
-                cursor.getString(SNOTE_FRAME_DATA_INDEX),
-                cursor.getString(SNOTE_VOICE_DATA_INDEX),
-                cursor.getInt(SNOTE_TIMEOUT_INDEX));
+        SNote sNote = new SNote();
+        sNote.setId(cursor.getString(SNOTE_ID_INDEX));
+        sNote.setCategoryId(cursor.getString(SNOTE_CAT_ID_INDEX));
+        sNote.setName(cursor.getString(SNOTE_NAME_INDEX));
+        sNote.setOrder(cursor.getString(SNOTE_ORDER_INDEX));
+        sNote.setFrameType(cursor.getInt(SNOTE_FRAME_TYPE_INDEX));
+        sNote.setFrameData(cursor.getString(SNOTE_FRAME_DATA_INDEX));
+        sNote.setVoiceData(cursor.getString(SNOTE_VOICE_DATA_INDEX));
+        sNote.setTimeout(cursor.getInt(SNOTE_TIMEOUT_INDEX));
         cursor.close();
         return sNote;
     }
@@ -102,14 +103,15 @@ public class SNoteTable extends DatabaseHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                SNote sNote = new SNote(cursor.getString(SNOTE_ID_INDEX),
-                        cursor.getString(SNOTE_CAT_ID_INDEX),
-                        cursor.getString(SNOTE_NAME_INDEX),
-                        cursor.getString(SNOTE_ORDER_INDEX),
-                        cursor.getInt(SNOTE_FRAME_TYPE_INDEX),
-                        cursor.getString(SNOTE_FRAME_DATA_INDEX),
-                        cursor.getString(SNOTE_VOICE_DATA_INDEX),
-                        cursor.getInt(SNOTE_TIMEOUT_INDEX));
+                SNote sNote = new SNote();
+                sNote.setId(cursor.getString(SNOTE_ID_INDEX));
+                sNote.setCategoryId(cursor.getString(SNOTE_CAT_ID_INDEX));
+                sNote.setName(cursor.getString(SNOTE_NAME_INDEX));
+                sNote.setOrder(cursor.getString(SNOTE_ORDER_INDEX));
+                sNote.setFrameType(cursor.getInt(SNOTE_FRAME_TYPE_INDEX));
+                sNote.setFrameData(cursor.getString(SNOTE_FRAME_DATA_INDEX));
+                sNote.setVoiceData(cursor.getString(SNOTE_VOICE_DATA_INDEX));
+                sNote.setTimeout(cursor.getInt(SNOTE_TIMEOUT_INDEX));
                 sNotes.add(sNote);
             } while (cursor.moveToNext());
         }

@@ -80,13 +80,14 @@ public class SignDataTable extends DatabaseHelper {
             return null;
         }
 
-        SignData signData = new SignData(cursor.getString(SIGNDATA_ID_INDEX),
-                cursor.getString(SIGNDATA_USER_ID_INDEX),
-                cursor.getString(SIGNDATA_SNOTE_ID_INDEX),
-                cursor.getString(SIGNDATA_VIEWDATE_INDEX),
-                cursor.getBlob(SIGNDATA_USERSIGN_INDEX),
-                cursor.getBlob(SIGNDATA_PHOTO_INDEX),
-                cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
+        SignData signData = new SignData();
+        signData.setId(cursor.getString(SIGNDATA_ID_INDEX));
+        signData.setUserId(cursor.getString(SIGNDATA_USER_ID_INDEX));
+        signData.setsNoteId(cursor.getString(SIGNDATA_SNOTE_ID_INDEX));
+        signData.setViewDate(cursor.getString(SIGNDATA_VIEWDATE_INDEX));
+        signData.setUserSign(cursor.getBlob(SIGNDATA_USERSIGN_INDEX));
+        signData.setPhoto(cursor.getBlob(SIGNDATA_PHOTO_INDEX));
+        signData.setSendStatus(cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
         cursor.close();
         return signData;
     }
@@ -98,13 +99,14 @@ public class SignDataTable extends DatabaseHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                SignData signData = new SignData(cursor.getString(SIGNDATA_ID_INDEX),
-                        cursor.getString(SIGNDATA_USER_ID_INDEX),
-                        cursor.getString(SIGNDATA_SNOTE_ID_INDEX),
-                        cursor.getString(SIGNDATA_VIEWDATE_INDEX),
-                        cursor.getBlob(SIGNDATA_USERSIGN_INDEX),
-                        cursor.getBlob(SIGNDATA_PHOTO_INDEX),
-                        cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
+                SignData signData = new SignData();
+                signData.setId(cursor.getString(SIGNDATA_ID_INDEX));
+                signData.setUserId(cursor.getString(SIGNDATA_USER_ID_INDEX));
+                signData.setsNoteId(cursor.getString(SIGNDATA_SNOTE_ID_INDEX));
+                signData.setViewDate(cursor.getString(SIGNDATA_VIEWDATE_INDEX));
+                signData.setUserSign(cursor.getBlob(SIGNDATA_USERSIGN_INDEX));
+                signData.setPhoto(cursor.getBlob(SIGNDATA_PHOTO_INDEX));
+                signData.setSendStatus(cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
                 signDatas.add(signData);
             } while (cursor.moveToNext());
         }

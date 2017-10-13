@@ -72,12 +72,13 @@ public class SettingsTable extends DatabaseHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                Settings setting = new Settings(cursor.getString(SETTINGS_COMPANY_INDEX),
-                        cursor.getString(SETTINGS_DEPARTMENT_INDEX),
-                        cursor.getString(SETTINGS_IMAGE_INDEX),
-                        cursor.getString(SETTINGS_IMEI_INDEX),
-                        cursor.getString(SETTINGS_ANDROID_INDEX),
-                        cursor.getString(SETTINGS_SNOTE_INDEX));
+                Settings setting = new Settings();
+                setting.setCompanyName(cursor.getString(SETTINGS_COMPANY_INDEX));
+                setting.setDepartmentName(cursor.getString(SETTINGS_DEPARTMENT_INDEX));
+                setting.setImage(cursor.getString(SETTINGS_IMAGE_INDEX));
+                setting.setImei(cursor.getString(SETTINGS_IMEI_INDEX));
+                setting.setAndroidId(cursor.getString(SETTINGS_ANDROID_INDEX));
+                setting.setsNoteData(cursor.getString(SETTINGS_SNOTE_INDEX));
                 settings.add(setting);
             } while (cursor.moveToNext());
         }

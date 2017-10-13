@@ -68,10 +68,11 @@ public class CategoryTable extends DatabaseHelper {
             return null;
         }
 
-        Category category = new Category(cursor.getString(CATEGORY_ID_INDEX),
-                cursor.getString(CATEGORY_NAME_INDEX),
-                cursor.getString(CATEGORY_ICON_INDEX),
-                cursor.getString(CATEGORY_ORDER_INDEX));
+        Category category = new Category();
+        category.setId(cursor.getString(CATEGORY_ID_INDEX));
+        category.setName(cursor.getString(CATEGORY_NAME_INDEX));
+        category.setIcon(cursor.getString(CATEGORY_ICON_INDEX));
+        category.setOrder(cursor.getString(CATEGORY_ORDER_INDEX));
         cursor.close();
         return category;
     }
@@ -83,10 +84,11 @@ public class CategoryTable extends DatabaseHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                Category category = new Category(cursor.getString(CATEGORY_ID_INDEX),
-                        cursor.getString(CATEGORY_NAME_INDEX),
-                        cursor.getString(CATEGORY_ICON_INDEX),
-                        cursor.getString(CATEGORY_ORDER_INDEX));
+                Category category = new Category();
+                category.setId(cursor.getString(CATEGORY_ID_INDEX));
+                category.setName(cursor.getString(CATEGORY_NAME_INDEX));
+                category.setIcon(cursor.getString(CATEGORY_ICON_INDEX));
+                category.setOrder(cursor.getString(CATEGORY_ORDER_INDEX));
                 categorys.add(category);
             } while (cursor.moveToNext());
         }

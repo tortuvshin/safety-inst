@@ -87,15 +87,16 @@ public class UserTable extends DatabaseHelper {
         if (!cursor.moveToFirst()) {
             return null;
         }
-        User user = new User(cursor.getString(USER_ID_INDEX),
-                cursor.getString(USER_NAME_INDEX),
-                cursor.getString(USER_POSITION_INDEX),
-                cursor.getInt(USER_PHONE_INDEX),
-                cursor.getString(USER_IMEI_INDEX),
-                cursor.getString(USER_EMAIL_INDEX),
-                cursor.getString(USER_PASS_INDEX),
-                cursor.getString(USER_AVATAR_INDEX),
-                cursor.getString(USER_LASTS_INDEX));
+        User user = new User();
+        user.setId(cursor.getString(USER_ID_INDEX));
+        user.setName(cursor.getString(USER_NAME_INDEX));
+        user.setPosition(cursor.getString(USER_POSITION_INDEX));
+        user.setPhone(cursor.getInt(USER_PHONE_INDEX));
+        user.setImei(cursor.getString(USER_IMEI_INDEX));
+        user.setEmail(cursor.getString(USER_EMAIL_INDEX));
+        user.setPassword(cursor.getString(USER_PASS_INDEX));
+        user.setAvatar(cursor.getString(USER_AVATAR_INDEX));
+        user.setLastSigned(cursor.getString(USER_LASTS_INDEX));
         cursor.close();
         return user;
     }
@@ -130,17 +131,16 @@ public class UserTable extends DatabaseHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                String id = cursor.getString(USER_ID_INDEX);
-                String name = cursor.getString(USER_NAME_INDEX);
-                String pos = cursor.getString(USER_POSITION_INDEX);
-                int phone = cursor.getInt(USER_PHONE_INDEX);
-                String imei = cursor.getString(USER_IMEI_INDEX);
-                String email = cursor.getString(USER_EMAIL_INDEX);
-                String pass = cursor.getString(USER_PASS_INDEX);
-                String avatar = cursor.getString(USER_AVATAR_INDEX);
-                String last = cursor.getString(USER_LASTS_INDEX);
-
-                User user = new User(id, name, pos, phone, imei, email, pass, avatar, last);
+                User user = new User();
+                user.setId(cursor.getString(USER_ID_INDEX));
+                user.setName(cursor.getString(USER_NAME_INDEX));
+                user.setPosition(cursor.getString(USER_POSITION_INDEX));
+                user.setPhone(cursor.getInt(USER_PHONE_INDEX));
+                user.setImei(cursor.getString(USER_IMEI_INDEX));
+                user.setEmail(cursor.getString(USER_EMAIL_INDEX));
+                user.setPassword(cursor.getString(USER_PASS_INDEX));
+                user.setAvatar(cursor.getString(USER_AVATAR_INDEX));
+                user.setLastSigned(cursor.getString(USER_LASTS_INDEX));
                 users.add(user);
             } while (cursor.moveToNext());
         }
