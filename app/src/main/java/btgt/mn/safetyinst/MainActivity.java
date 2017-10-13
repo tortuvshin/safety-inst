@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -47,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private Button btnPrev, btnNext;
-    WebView webb;
 
     SNoteTable sNoteTable;
     List<SNote> sNotes;
@@ -185,9 +186,11 @@ public class MainActivity extends AppCompatActivity {
         CollapsingToolbarLayout collapsingToolbar;
 
         ImageView imgPreview;
-        TextView txtText;
         CoordinatorLayout coordinatorLayout;
         ImageLoader imageLoader;
+
+        WebView noteInfo;
+
         public ScreenSlidePagerAdapter(List<SNote> sNotes) {
             this.sNotes = sNotes;
         }
@@ -199,15 +202,20 @@ public class MainActivity extends AppCompatActivity {
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
             collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
-            txtText = (TextView) view.findViewById(R.id.txtText);
+
+            noteInfo = (WebView) view.findViewById(R.id.noteInfo);
             imageLoader = new ImageLoader(MainActivity.this);
 //            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+sNotes.get(position).getVoiceData(), imgPreview);
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
-            txtText.setText(sNotes.get(position).getFrameData());
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
-//            TextView nameText = (TextView) view.findViewById(R.id.snote_content);
-//            getSupportActionBar().setTitle(sNotes.get(position).getName());
             collapsingToolbar.setTitle(sNotes.get(position).getName());
+
+            noteInfo.loadDataWithBaseURL("", sNotes.get(position).getFrameData(), "text/html", "UTF-8", "");
+            noteInfo.setBackgroundColor(Color.parseColor("#ffffff"));
+
+            noteInfo.getSettings().setDefaultTextEncodingName("UTF-8");
+            WebSettings webSettings = noteInfo.getSettings();
+            Resources res = getResources();
             container.addView(view);
 
             return view;
