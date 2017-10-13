@@ -5,15 +5,15 @@ package btgt.mn.safetyinst.entity;
  */
 
 public class User {
-    String id;
-    String name;
-    String position;
-    int phone;
-    String imei;
-    String email;
-    String password;
-    String avatar;
-    String lastSigned;
+    private String id;
+    private String name;
+    private String position;
+    private int phone;
+    private String imei;
+    private String email;
+    private String password;
+    private String avatar;
+    private String lastSigned;
 
     public User() {
 

@@ -5,13 +5,13 @@ package btgt.mn.safetyinst.entity;
  */
 
 public class SignData {
-    String id;
-    String userId;
-    String sNoteId;
-    String viewDate;
-    byte[] userSign;
-    byte[] photo;
-    String sendStatus;
+    private String id;
+    private String userId;
+    private String sNoteId;
+    private String viewDate;
+    private byte[] userSign;
+    private byte[] photo;
+    private String sendStatus;
 
     public SignData() {
     }

@@ -134,43 +134,43 @@ public class SplashActivity extends AppCompatActivity {
                             UserTable userTable = new UserTable(SplashActivity.this);
                             SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
                             SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
-                            settingsTable.add(new Settings(
-                                    setting.getString("comp"),
-                                    "",
-                                    setting.getString("company_logo"),
-                                    SafConstants.getImei(SplashActivity.this),
-                                    SafConstants.getAndroiId(SplashActivity.this),
-                                    setting.getString("company_logo")
-                                    ));
+                            Settings settings = new Settings();
+                            settings.setCompanyName(setting.getString("comp"));
+                            settings.setDepartmentName("");
+                            settings.setImei(SafConstants.getImei(SplashActivity.this));
+                            settings.setAndroidId(SafConstants.getAndroiId(SplashActivity.this));
+                            settings.setImage(setting.getString("company_logo"));
+
+                            settingsTable.add(settings);
 
                             Log.d(TAG, users.toString()+"\n");
 
                             for (int i = 0; i < users.length(); i++) {
-                                userTable.add(new User(
-                                        users.getJSONObject(i).getString("id"),
-                                        users.getJSONObject(i).getString("name"),
-                                        users.getJSONObject(i).getString("job"),
-                                        users.getJSONObject(i).getInt("id"),
-                                        SafConstants.getImei(SplashActivity.this),
-                                        "",
-//                                        users.getJSONObject(i).getString("pass"),
-                                        "1234",
-                                        users.getJSONObject(i).getString("photo"),
-                                        ""
-                                ));
+
+                                User user = new User();
+                                user.setId(users.getJSONObject(i).getString("id"));
+                                user.setName(users.getJSONObject(i).getString("name"));
+                                user.setPosition(users.getJSONObject(i).getString("job"));
+                                user.setPhone(1);
+                                user.setImei(SafConstants.getImei(SplashActivity.this));
+                                user.setEmail("");
+                                user.setPassword("1234");
+                                user.setAvatar(users.getJSONObject(i).getString("photo"));
+                                user.setLastSigned("");
+                                userTable.add(user);
                             }
 
                             for (int i = 0; i < notes.length(); i++) {
-                                sNoteTable.add(new SNote(
-                                        notes.getJSONObject(i).getString("id"),
-                                        notes.getJSONObject(i).getString("id"),
-                                        notes.getJSONObject(i).getString("name"),
-                                        notes.getJSONObject(i).getString("id"),
-                                        notes.getJSONObject(i).getInt("dur"),
-                                        notes.getJSONObject(i).getString("info"),
-                                        notes.getJSONObject(i).getString("photo"),
-                                        notes.getJSONObject(i).getInt("dur")
-                                        ));
+                                SNote sNote = new SNote();
+                                sNote.setId(notes.getJSONObject(i).getString("id"));
+                                sNote.setCategoryId(notes.getJSONObject(i).getString("id"));
+                                sNote.setName(notes.getJSONObject(i).getString("name"));
+                                sNote.setOrder(notes.getJSONObject(i).getString("id"));
+                                sNote.setFrameType(notes.getJSONObject(i).getInt("dur"));
+                                sNote.setFrameData(notes.getJSONObject(i).getString("info"));
+                                sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
+                                sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
+                                sNoteTable.add(sNote);
                             }
 
                             if (setting.getString("error").equals("0")) {

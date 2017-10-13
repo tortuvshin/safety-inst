@@ -5,14 +5,14 @@ package btgt.mn.safetyinst.entity;
  */
 
 public class SNote {
-    String id;
-    String categoryId;
-    String name;
-    String order;
-    int frameType;
-    String frameData;
-    String voiceData;
-    int timeout;
+    private String id;
+    private String categoryId;
+    private String name;
+    private String order;
+    private int frameType;
+    private String frameData;
+    private String voiceData;
+    private int timeout;
 
     public SNote() {
 
