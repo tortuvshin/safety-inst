@@ -14,6 +14,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     SNoteTable sNoteTable;
     List<SNote> sNotes;
+    CollapsingToolbarLayout collapsingToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_main);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         reqPermissions();
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -191,12 +201,13 @@ public class MainActivity extends AppCompatActivity {
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
             txtText = (TextView) view.findViewById(R.id.txtText);
             imageLoader = new ImageLoader(MainActivity.this);
-            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+sNotes.get(position).getVoiceData(), imgPreview);
+//            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+sNotes.get(position).getVoiceData(), imgPreview);
+            imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
             txtText.setText(sNotes.get(position).getFrameData());
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
 //            TextView nameText = (TextView) view.findViewById(R.id.snote_content);
 //            getSupportActionBar().setTitle(sNotes.get(position).getName());
-
+            collapsingToolbar.setTitle(sNotes.get(position).getName());
             container.addView(view);
 
             return view;

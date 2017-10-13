@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -69,7 +70,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
         final TextView textView = (TextView) findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
-
+        
         surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
 
