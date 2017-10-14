@@ -14,11 +14,11 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import agency.techstar.imageloader.ImageLoader;
 import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.ImageLoader;
 import btgt.mn.safetyinst.utils.SafConstants;
 
 public class LoginListActivity extends AppCompatActivity {

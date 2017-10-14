@@ -1,28 +1,20 @@
 package btgt.mn.safetyinst;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.awt.font.TextAttribute;
-
+import agency.techstar.imageloader.ImageLoader;
 import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.ImageLoader;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 

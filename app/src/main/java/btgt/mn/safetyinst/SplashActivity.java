@@ -1,17 +1,10 @@
 package btgt.mn.safetyinst;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,16 +15,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Calendar;
 
-import btgt.mn.safetyinst.database.CategoryTable;
+import agency.techstar.imageloader.ImageLoader;
 import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.UserTable;
-import btgt.mn.safetyinst.entity.Category;
 import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.DbBitmap;
-import btgt.mn.safetyinst.utils.ImageLoader;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;

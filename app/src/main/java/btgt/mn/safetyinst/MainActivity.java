@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,13 +31,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import agency.techstar.imageloader.ImageLoader;
 import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.entity.SNote;
-import btgt.mn.safetyinst.utils.ImageLoader;
-import btgt.mn.safetyinst.utils.SafConstants;
 
 public class MainActivity extends AppCompatActivity {
     private int NUM_PAGES = 1;
