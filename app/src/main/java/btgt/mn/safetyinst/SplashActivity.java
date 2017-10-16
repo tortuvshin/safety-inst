@@ -22,6 +22,7 @@ import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.SNote;
 import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.User;
+import btgt.mn.safetyinst.utils.ConnectionDetector;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
@@ -74,6 +75,10 @@ public class SplashActivity extends AppCompatActivity {
 
     public void connectServer() {
 
+        if (!ConnectionDetector.isNetworkAvailable(this)){
+            Toast.makeText(SplashActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+            return;
+        }
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)

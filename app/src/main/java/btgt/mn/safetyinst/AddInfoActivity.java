@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.media.Image;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +30,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,15 +43,31 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Stack;
 
+import agency.techstar.imageloader.ImageLoader;
 import btgt.mn.safetyinst.database.SNoteTable;
+import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.SignDataTable;
+import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.SNote;
+import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.SignData;
 import btgt.mn.safetyinst.entity.User;
+import btgt.mn.safetyinst.utils.ConnectionDetector;
 import btgt.mn.safetyinst.utils.DbBitmap;
+import btgt.mn.safetyinst.utils.PrefManager;
+import btgt.mn.safetyinst.utils.SafConstants;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
     private static final int CAMERA_REQUEST = 1888;
+
+    private static final String TAG = AddInfoActivity.class.getSimpleName();
 
     Bitmap photo;
 
@@ -58,12 +80,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     Camera.PictureCallback jpegCallback;
     SignDataTable signDataTable;
 
-    byte [] avatar;
+    private Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
-
+        mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
         final AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
@@ -254,5 +277,64 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         camera.stopPreview();
         camera.release();
         camera = null;
+    }
+
+    public void sendInfo() {
+
+        if (!ConnectionDetector.isNetworkAvailable(this)){
+            Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("time", Calendar.getInstance().getTime().toString())
+                .addFormDataPart("imei", SafConstants.getImei(this))
+                .build();
+
+        String uri = SafConstants.ApiUrl;
+        Log.e(TAG, uri + " ");
+
+        Request request = new Request.Builder()
+                .url(uri)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("app", SafConstants.APP_NAME)
+                .addHeader("appV", SafConstants.getAppVersion(this))
+                .addHeader("Imei", SafConstants.getImei(this))
+                .addHeader("AndroidId", SafConstants.getAndroiId(this))
+                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), Calendar.getInstance().getTime().toString()))
+                .post(formBody)
+                .build();
+
+        Log.e(TAG, request.toString());
+        Log.e(TAG, "Headers : "+request.headers().toString());
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG, "Server connection failed : " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String res = response.body().string();
+
+                Log.e(TAG, res);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray ob = new JSONArray(String.valueOf(res));
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("ERROR : ", e.getMessage() + " ");
+                        }
+                    }
+                });
+            }
+        });
     }
 }

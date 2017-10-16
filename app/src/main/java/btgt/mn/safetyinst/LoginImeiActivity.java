@@ -17,6 +17,7 @@ import btgt.mn.safetyinst.database.UserTable;
 import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
+import btgt.mn.safetyinst.utils.Validation;
 
 public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
@@ -69,6 +70,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         String password = passText.getText().toString();
         String username = usernameText.getText().toString();
 
+        Validation.empty(passText);
 //        if (password.isEmpty() || password.length() < 4) {
 //            passText.setError("Нууц үг буруу байна");
 //            return;
