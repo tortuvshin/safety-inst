@@ -53,16 +53,21 @@ public class SettingsTable extends DatabaseHelper {
         if (db == null) {
             return;
         }
-
-        ContentValues cv = new ContentValues();
-        cv.put(SETTINGS_COMPANY_NAME, settings.getCompanyName());
-        cv.put(SETTINGS_DEFARTMENT_NAME, settings.getDepartmentName());
-        cv.put(SETTINGS_IMAGE, settings.getImage());
-        cv.put(SETTINGS_IMEI, settings.getImei());
-        cv.put(SETTINGS_ANDROID_ID, settings.getAndroidId());
-        cv.put(SETTINGS_SNOTE_DATA, settings.getsNoteData());
-        db.insert(TABLE_SETTINGS, null, cv);
-        db.close();
+        db.beginTransaction();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(SETTINGS_COMPANY_NAME, settings.getCompanyName());
+            cv.put(SETTINGS_DEFARTMENT_NAME, settings.getDepartmentName());
+            cv.put(SETTINGS_IMAGE, settings.getImage());
+            cv.put(SETTINGS_IMEI, settings.getImei());
+            cv.put(SETTINGS_ANDROID_ID, settings.getAndroidId());
+            cv.put(SETTINGS_SNOTE_DATA, settings.getsNoteData());
+            db.insert(TABLE_SETTINGS, null, cv);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public List<Settings> get() {

@@ -58,18 +58,23 @@ public class SNoteTable extends DatabaseHelper {
         if (db == null) {
             return;
         }
-
-        ContentValues cv = new ContentValues();
-        cv.put(SNOTE_ID, sNote.getId());
-        cv.put(SNOTE_CAT_ID, sNote.getCategoryId());
-        cv.put(SNOTE_NAME, sNote.getName());
-        cv.put(SNOTE_ORDER, sNote.getOrder());
-        cv.put(SNOTE_FRAME_TYPE, sNote.getFrameType());
-        cv.put(SNOTE_FRAME_DATA, sNote.getFrameData());
-        cv.put(SNOTE_VOICE_DATA, sNote.getVoiceData());
-        cv.put(SNOTE_TIMEOUT, sNote.getTimeout());
-        db.insert(TABLE_SNOTE, null, cv);
-        db.close();
+        db.beginTransaction();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(SNOTE_ID, sNote.getId());
+            cv.put(SNOTE_CAT_ID, sNote.getCategoryId());
+            cv.put(SNOTE_NAME, sNote.getName());
+            cv.put(SNOTE_ORDER, sNote.getOrder());
+            cv.put(SNOTE_FRAME_TYPE, sNote.getFrameType());
+            cv.put(SNOTE_FRAME_DATA, sNote.getFrameData());
+            cv.put(SNOTE_VOICE_DATA, sNote.getVoiceData());
+            cv.put(SNOTE_TIMEOUT, sNote.getTimeout());
+            db.insert(TABLE_SNOTE, null, cv);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public SNote get(int id) {
@@ -100,6 +105,7 @@ public class SNoteTable extends DatabaseHelper {
         List<SNote> sNotes = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SNOTE;
         SQLiteDatabase db = getReadableDatabase();
+
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {

@@ -47,14 +47,18 @@ public class CategoryTable extends DatabaseHelper {
         if (db == null) {
             return;
         }
-
-        ContentValues cv = new ContentValues();
-        cv.put(CATEGORY_ID, category.getId());
-        cv.put(CATEGORY_NAME, category.getName());
-        cv.put(CATEGORY_ICON, category.getIcon());
-        cv.put(CATEGORY_ORDER, category.getOrder());
-        db.insert(TABLE_CATEGORYS, null, cv);
-        db.close();
+        db.beginTransaction();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(CATEGORY_ID, category.getId());
+            cv.put(CATEGORY_NAME, category.getName());
+            cv.put(CATEGORY_ICON, category.getIcon());
+            cv.put(CATEGORY_ORDER, category.getOrder());
+            db.insert(TABLE_CATEGORYS, null, cv);
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public Category get(int id) {

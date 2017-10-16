@@ -63,18 +63,24 @@ public class UserTable extends DatabaseHelper {
         if (db == null) {
             return;
         }
-        ContentValues cv = new ContentValues();
-        cv.put(USER_ID, user.getId());
-        cv.put(USER_NAME, user.getName());
-        cv.put(USER_POSITION, user.getPosition());
-        cv.put(USER_PHONE, user.getPhone());
-        cv.put(USER_IMEI, user.getImei());
-        cv.put(USER_EMAIL, user.getEmail());
-        cv.put(USER_PASS, user.getPassword());
-        cv.put(USER_AVATAR, user.getAvatar());
-        cv.put(USER_LAST_SIGNED, user.getLastSigned());
-        db.insert(TABLE_USERS, null, cv);
-        db.close();
+        db.beginTransaction();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(USER_ID, user.getId());
+            cv.put(USER_NAME, user.getName());
+            cv.put(USER_POSITION, user.getPosition());
+            cv.put(USER_PHONE, user.getPhone());
+            cv.put(USER_IMEI, user.getImei());
+            cv.put(USER_EMAIL, user.getEmail());
+            cv.put(USER_PASS, user.getPassword());
+            cv.put(USER_AVATAR, user.getAvatar());
+            cv.put(USER_LAST_SIGNED, user.getLastSigned());
+            db.insert(TABLE_USERS, null, cv);
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public User get(int id) {

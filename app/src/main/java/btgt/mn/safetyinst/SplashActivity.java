@@ -130,6 +130,7 @@ public class SplashActivity extends AppCompatActivity {
                             SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
                             SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
 
+                            long startTime = System.currentTimeMillis();
                             //Truncate tables
                             userTable.deleteAll();
                             settingsTable.deleteAll();
@@ -173,6 +174,9 @@ public class SplashActivity extends AppCompatActivity {
                                 sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
                                 sNoteTable.add(sNote);
                             }
+                            long diff = System.currentTimeMillis() - startTime;
+
+                            Log.e(TAG, "TIME: "+ Long.toString(diff) + " ms");
 
                             if (setting.getString("error").equals("0")) {
                                 Toast.makeText(SplashActivity.this, "Амжилттай холбогдсон", Toast.LENGTH_LONG)
