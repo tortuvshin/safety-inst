@@ -45,32 +45,26 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        final long startTime = System.currentTimeMillis();
+        Log.e(TAG, "TIME: "+ Long.toString(startTime) + " ms");
         imei = SafConstants.getImei(this);
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
 
         mHandler = new Handler(Looper.getMainLooper());
-        mHandler.post(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                try {
-                    connectServer();
+                Log.e(TAG, "CONN START: "+ Long.toString(System.currentTimeMillis()) + " ms");
 
-                    if (prefManager.isLoggedIn()) {
-                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                } catch (Exception ex) {
+                connectServer();
 
-                }
+                long diff = System.currentTimeMillis() - startTime;
+
+                Log.e(TAG, "CONN SUCCESS: "+ Long.toString(diff) + " ms");
             }
-        });
+        }, 10);
     }
 
     public void connectServer() {
@@ -79,6 +73,7 @@ public class SplashActivity extends AppCompatActivity {
             Toast.makeText(SplashActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
             return;
         }
+
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -87,7 +82,6 @@ public class SplashActivity extends AppCompatActivity {
                 .build();
 
         String uri = SafConstants.ApiUrl;
-        Log.e(TAG, uri + " ");
 
         Request request = new Request.Builder()
                 .url(uri)
@@ -100,9 +94,6 @@ public class SplashActivity extends AppCompatActivity {
                 .post(formBody)
                 .build();
 
-        Log.e(TAG, request.toString());
-        Log.e(TAG, "Headers : "+request.headers().toString());
-
         client.newCall(request).enqueue(new Callback() {
 
             @Override
@@ -114,7 +105,6 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -124,13 +114,10 @@ public class SplashActivity extends AppCompatActivity {
                             JSONArray users = setting.getJSONArray("users");
                             JSONArray notes = setting.getJSONArray("notes");
 
-                            Log.e(TAG, ob.toString());
-
                             UserTable userTable = new UserTable(SplashActivity.this);
                             SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
                             SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
 
-                            long startTime = System.currentTimeMillis();
                             //Truncate tables
                             userTable.deleteAll();
                             settingsTable.deleteAll();
@@ -144,8 +131,6 @@ public class SplashActivity extends AppCompatActivity {
                             settings.setImage(setting.getString("company_logo"));
 
                             settingsTable.add(settings);
-
-                            Log.d(TAG, users.toString()+"\n");
 
                             for (int i = 0; i < users.length(); i++) {
 
@@ -162,6 +147,20 @@ public class SplashActivity extends AppCompatActivity {
                                 userTable.add(user);
                             }
 
+                            for (int i = 0; i < 100; i++) {
+
+                                User user = new User();
+                                user.setName("Demo" + i);
+                                user.setPosition("Desc "+i);
+                                user.setPhone(1);
+                                user.setImei(SafConstants.getImei(SplashActivity.this));
+                                user.setEmail("");
+                                user.setPassword("1234");
+                                user.setAvatar(users.getJSONObject(1).getString("photo"));
+                                user.setLastSigned("");
+                                userTable.add(user);
+                            }
+
                             for (int i = 0; i < notes.length(); i++) {
                                 SNote sNote = new SNote();
                                 sNote.setId(notes.getJSONObject(i).getString("id"));
@@ -172,17 +171,24 @@ public class SplashActivity extends AppCompatActivity {
                                 sNote.setFrameData(notes.getJSONObject(i).getString("info"));
                                 sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
                                 sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
-                                sNoteTable.add(sNote);
+//                                sNoteTable.add(sNote);
                             }
-                            long diff = System.currentTimeMillis() - startTime;
-
-                            Log.e(TAG, "TIME: "+ Long.toString(diff) + " ms");
 
                             if (setting.getString("error").equals("0")) {
                                 Toast.makeText(SplashActivity.this, "Амжилттай холбогдсон", Toast.LENGTH_LONG)
                                         .show();
                             } else {
                                 Toast.makeText(SplashActivity.this, "Алдаа гарлаа", Toast.LENGTH_LONG).show();
+                            }
+
+                            if (prefManager.isLoggedIn()) {
+                                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
 
                         } catch (JSONException e) {
