@@ -147,7 +147,7 @@ public class SplashActivity extends AppCompatActivity {
                                 userTable.add(user);
                             }
 
-                            for (int i = 0; i < 100; i++) {
+                            for (int i = 0; i < 20; i++) {
 
                                 User user = new User();
                                 user.setName("Demo" + i);
@@ -163,7 +163,7 @@ public class SplashActivity extends AppCompatActivity {
 
                             for (int i = 0; i < notes.length(); i++) {
                                 SNote sNote = new SNote();
-                                sNote.setId(notes.getJSONObject(i).getString("id"));
+//                                sNote.setId(notes.getJSONObject(i).getString("id"));
                                 sNote.setCategoryId(notes.getJSONObject(i).getString("id"));
                                 sNote.setName(notes.getJSONObject(i).getString("name"));
                                 sNote.setOrder(notes.getJSONObject(i).getString("id"));
@@ -171,7 +171,20 @@ public class SplashActivity extends AppCompatActivity {
                                 sNote.setFrameData(notes.getJSONObject(i).getString("info"));
                                 sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
                                 sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
-//                                sNoteTable.add(sNote);
+                                sNoteTable.add(sNote);
+                            }
+
+                            for (int i = 0; i < notes.length(); i++) {
+                                SNote sNote = new SNote();
+//                                sNote.setId(notes.getJSONObject(i).getString("id"));
+                                sNote.setCategoryId(notes.getJSONObject(i).getString("id"));
+                                sNote.setName(notes.getJSONObject(i).getString("name"));
+                                sNote.setOrder(notes.getJSONObject(i).getString("id"));
+                                sNote.setFrameType(notes.getJSONObject(i).getInt("dur"));
+                                sNote.setFrameData(notes.getJSONObject(i).getString("info"));
+                                sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
+                                sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
+                                sNoteTable.add(sNote);
                             }
 
                             if (setting.getString("error").equals("0")) {
