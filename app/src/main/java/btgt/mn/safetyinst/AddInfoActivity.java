@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Stack;
+import java.util.UUID;
 
 import agency.techstar.imageloader.ImageLoader;
 import btgt.mn.safetyinst.database.SNoteTable;
@@ -58,6 +60,7 @@ import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -69,7 +72,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
 
-    Bitmap photo;
+    Bitmap bm;
 
     Camera camera;
     SurfaceView surfaceView;
@@ -162,7 +165,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onClick(View view) {
             try {
                 if (saveBtn.getText() == getString(R.string.save)) {
-                    Bitmap bm = Bitmap.createBitmap(gestureView.getDrawingCache());
+                    bm = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
                     userSigned.setId("1");
                     userSigned.setsNoteId("1");
@@ -195,6 +198,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 signDataTable.add(userSigned);
+                                if (!ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
+                                    return;
+                                sendInfo();
                                 Toast.makeText(AddInfoActivity.this,"Таны мэдээлэл амжилттай хадгалагдлаа",Toast.LENGTH_LONG).show();
                             }
                         });
@@ -280,7 +286,12 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     public void sendInfo() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        byte[] imageBytes = baos.toByteArray();
 
+        String randomChunk = UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
+        String imageName = randomChunk.concat(".jpg");
         if (!ConnectionDetector.isNetworkAvailable(this)){
             Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
             return;
@@ -289,7 +300,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", Calendar.getInstance().getTime().toString())
+                .addFormDataPart("sing_data_id", userSigned.getId())
+                .addFormDataPart("user_id", userSigned.getUserId())
+                .addFormDataPart("note_id", userSigned.getsNoteId())
+                .addFormDataPart("view_date", userSigned.getViewDate())
+                .addFormDataPart("user_sign", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .addFormDataPart("imei", SafConstants.getImei(this))
+                .addFormDataPart("user_photo", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .build();
 
         String uri = SafConstants.ApiUrl;
