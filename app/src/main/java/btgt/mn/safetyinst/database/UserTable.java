@@ -183,4 +183,10 @@ public class UserTable extends DatabaseHelper {
         db.close();
     }
 
+    public void deleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_USERS, null, null);
+    }
+
 }

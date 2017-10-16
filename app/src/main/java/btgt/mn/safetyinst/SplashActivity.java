@@ -129,6 +129,12 @@ public class SplashActivity extends AppCompatActivity {
                             UserTable userTable = new UserTable(SplashActivity.this);
                             SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
                             SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
+
+                            //Truncate tables
+                            userTable.deleteAll();
+                            settingsTable.deleteAll();
+                            sNoteTable.deleteAll();
+
                             Settings settings = new Settings();
                             settings.setCompanyName(setting.getString("comp"));
                             settings.setDepartmentName("");

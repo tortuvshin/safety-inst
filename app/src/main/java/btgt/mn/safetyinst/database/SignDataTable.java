@@ -146,4 +146,10 @@ public class SignDataTable extends DatabaseHelper {
         db.delete(TABLE_SIGNDATAS, SIGNDATA_ID + "=?", new String[]{String.valueOf(signData.getId())});
         db.close();
     }
+
+    public void deleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_SIGNDATAS, null, null);
+    }
 }

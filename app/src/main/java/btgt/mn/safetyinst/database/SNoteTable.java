@@ -161,4 +161,10 @@ public class SNoteTable extends DatabaseHelper {
         cursor.close();
         return count;
     }
+
+    public void deleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_SNOTE, null, null);
+    }
 }

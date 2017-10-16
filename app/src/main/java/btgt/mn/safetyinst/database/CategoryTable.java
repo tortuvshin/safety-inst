@@ -125,4 +125,10 @@ public class CategoryTable extends DatabaseHelper {
         db.delete(TABLE_CATEGORYS, CATEGORY_ID + "=?", new String[]{String.valueOf(category.getId())});
         db.close();
     }
+
+    public void deleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_CATEGORYS, null, null);
+    }
 }

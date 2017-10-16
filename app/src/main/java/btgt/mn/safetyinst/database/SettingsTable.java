@@ -105,4 +105,10 @@ public class SettingsTable extends DatabaseHelper {
         db.close();
         return rowCount;
     }
+
+    public void deleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_SETTINGS, null, null);
+    }
 }
