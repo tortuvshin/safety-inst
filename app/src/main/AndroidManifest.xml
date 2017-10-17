@@ -44,9 +44,6 @@
         <activity
             android:name=".LoginListActivity"
             android:theme="@style/AppFullScreen" />
-        <activity
-            android:name=".RegisterActivity"
-            android:theme="@style/AppFullScreen" />
         <activity android:name=".AddInfoActivity" />
     </application>
 

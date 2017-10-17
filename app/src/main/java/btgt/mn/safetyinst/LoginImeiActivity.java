@@ -24,7 +24,6 @@ public class LoginImeiActivity extends AppCompatActivity {
     private EditText passText;
     private TextView positionText;
     private TextView usernameText;
-    private TextView regLink;
     private ImageView imageView;
     UserTable userTable;
     String imei;
@@ -38,7 +37,6 @@ public class LoginImeiActivity extends AppCompatActivity {
         usernameText = (TextView) findViewById(R.id.username);
         passText = (EditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
-        regLink = (TextView) findViewById(R.id.linkReg);
         userTable = new UserTable(this);
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
@@ -57,12 +55,6 @@ public class LoginImeiActivity extends AppCompatActivity {
             }
         });
 
-        regLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginImeiActivity.this, RegisterActivity.class));
-            }
-        });
     }
 
     public void login() {
