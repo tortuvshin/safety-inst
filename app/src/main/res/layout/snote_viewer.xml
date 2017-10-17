@@ -47,7 +47,7 @@
         android:id="@+id/sclDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
+        android:layout_margin="2dp"
         android:layout_marginBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:fillViewport="true" >
@@ -79,4 +79,16 @@
 
     </android.support.v4.widget.NestedScrollView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_volume_up_white"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        />
 </android.support.design.widget.CoordinatorLayout>

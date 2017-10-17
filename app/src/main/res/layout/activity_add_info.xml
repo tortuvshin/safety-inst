@@ -85,13 +85,16 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
+                android:background="@color/colorPrimaryDark"
                 android:textColor="@color/white"
+                android:layout_marginRight="3dp"
                 android:text="@string/clear"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorPrimaryDark"
                 android:textColor="@color/white"
                 android:text="@string/save"/>
 

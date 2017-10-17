@@ -52,7 +52,7 @@ public class SplashActivity extends AppCompatActivity {
         reqPermissions();
 
         final long startTime = System.currentTimeMillis();
-        Log.e(TAG, "TIME: "+ Long.toString(startTime) + " ms");
+
         imei = SafConstants.getImei(this);
 
         prefManager = new PrefManager(this);

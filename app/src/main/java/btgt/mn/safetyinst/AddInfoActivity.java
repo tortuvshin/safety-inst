@@ -5,6 +5,7 @@ import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,6 +13,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -33,13 +35,11 @@ import java.util.UUID;
 
 import btgt.mn.safetyinst.database.SignDataTable;
 import btgt.mn.safetyinst.entity.SignData;
-import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.ConnectionDetector;
 import btgt.mn.safetyinst.utils.DbBitmap;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -67,6 +67,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
@@ -129,6 +131,22 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             }
         });
+
+        Camera.FaceDetectionListener faceDetectionListener
+                = new Camera.FaceDetectionListener(){
+
+            @Override
+            public void onFaceDetection(Camera.Face[] faces, Camera camera) {
+
+            }
+
+            private boolean processing = false;
+
+            public void setProcessing(boolean processing) {
+                this.processing = processing;
+            }
+        };
+
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -291,6 +309,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .addFormDataPart("json_data", sArray.toString())
                 .build();
+
         Log.e(TAG, sArray.toString());
         String uri = SafConstants.SendUrl;
         Log.e(TAG, uri + " ");
@@ -338,4 +357,17 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return false;
+    }
+
 }
