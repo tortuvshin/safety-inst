@@ -19,7 +19,7 @@ public class SafConstants {
     public static String SendUrl = WebURL+"/phone.php/safe_upload";
     public static String APP_NAME = "iSafe";
 
-    public static String getSecretCode(String imei, String time){
+    public static String getSecretCode(String imei, long time){
         return MD5_Hash(imei + "-BTGT-" + String.valueOf(time));
     }
 

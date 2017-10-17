@@ -8,7 +8,7 @@ public class SignData {
     private String id;
     private String userId;
     private String sNoteId;
-    private String viewDate;
+    private long viewDate;
     private byte[] userSign;
     private byte[] photo;
     private String sendStatus;
@@ -40,11 +40,11 @@ public class SignData {
         this.sNoteId = sNoteId;
     }
 
-    public String getViewDate() {
+    public long getViewDate() {
         return viewDate;
     }
 
-    public void setViewDate(String viewDate) {
+    public void setViewDate(long viewDate) {
         this.viewDate = viewDate;
     }
 

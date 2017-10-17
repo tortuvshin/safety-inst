@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-        btnNext.setVisibility(View.INVISIBLE);
+//        btnNext.setVisibility(View.INVISIBLE);
         sNoteTable = new SNoteTable(this);
 
         sNotes = sNoteTable.getAll();
@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
         myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-        viewPager.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View arg0, MotionEvent arg1) {
-                return true;
-            }
-        });
+//        viewPager.setOnTouchListener(new View.OnTouchListener() {
+//            public boolean onTouch(View arg0, MotionEvent arg1) {
+//                return true;
+//            }
+//        });
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

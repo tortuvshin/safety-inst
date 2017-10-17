@@ -102,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
                 .addHeader("appV", SafConstants.getAppVersion(this))
                 .addHeader("Imei", SafConstants.getImei(this))
                 .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), Calendar.getInstance().getTime().toString()))
+                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), System.currentTimeMillis()))
                 .post(formBody)
                 .build();
 
