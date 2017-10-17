@@ -19,6 +19,7 @@ public class SafConstants {
 
     public static String WebURL = "http://www.mongolgps.com";
     public static String ApiUrl = WebURL+"/phone.php/safe_settings";
+    public static String SendUrl = WebURL+"/phone.php/safe_upload";
     public static String APP_NAME = "iSafe";
 
     public static String getSecretCode(String imei, String time){
@@ -42,7 +43,6 @@ public class SafConstants {
     public static String getAndroiId(Context myContext){
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         return androidId.toString();
-        //Log.d("ANDROID_ID",myAndroidId);
     }
 
     public static String getAppVersion(Context myContext){
