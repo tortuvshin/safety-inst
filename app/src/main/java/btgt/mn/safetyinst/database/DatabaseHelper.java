@@ -7,9 +7,6 @@ package btgt.mn.safetyinst.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.TextUtils;
-
-import btgt.mn.safetyinst.entity.SNote;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 

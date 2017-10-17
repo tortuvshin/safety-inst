@@ -1,62 +1,38 @@
 package btgt.mn.safetyinst;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.media.Image;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.Toolbar;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
-import java.util.Stack;
 import java.util.UUID;
 
-import agency.techstar.imageloader.ImageLoader;
-import btgt.mn.safetyinst.database.SNoteTable;
-import btgt.mn.safetyinst.database.SettingsTable;
 import btgt.mn.safetyinst.database.SignDataTable;
-import btgt.mn.safetyinst.database.UserTable;
-import btgt.mn.safetyinst.entity.SNote;
-import btgt.mn.safetyinst.entity.Settings;
 import btgt.mn.safetyinst.entity.SignData;
-import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.ConnectionDetector;
 import btgt.mn.safetyinst.utils.DbBitmap;
-import btgt.mn.safetyinst.utils.PrefManager;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -68,7 +44,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
-    private static final int CAMERA_REQUEST = 1888;
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
 

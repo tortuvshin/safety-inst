@@ -8,9 +8,6 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
 /**
  * Created by turtuvshin on 10/11/17.
  */
