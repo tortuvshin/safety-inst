@@ -21,16 +21,19 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import btgt.mn.safetyinst.database.SignDataTable;
 import btgt.mn.safetyinst.entity.SignData;
+import btgt.mn.safetyinst.entity.User;
 import btgt.mn.safetyinst.utils.ConnectionDetector;
 import btgt.mn.safetyinst.utils.DbBitmap;
 import btgt.mn.safetyinst.utils.SafConstants;
@@ -142,8 +145,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     captureImage(view);
                     userSigned.setsNoteId("1");
                     userSigned.setUserId("1");
-                    userSigned.setViewDate(Calendar.getInstance().getTime().toString());
-                    userSigned.setPhoto(userSigned.getPhoto());
+                    userSigned.setViewDate(System.currentTimeMillis());
+                    userSigned.setPhoto(DbBitmap.getBytes(bm));
                     userSigned.setUserSign(DbBitmap.getBytes(bm));
                     userSigned.setSendStatus("");
 
@@ -248,28 +251,47 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     public void sendInfo() {
+        if (!ConnectionDetector.isNetworkAvailable(this)){
+            Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+            return;
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 85, baos);
         byte[] imageBytes = baos.toByteArray();
 
         String randomChunk = UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
         String imageName = randomChunk.concat(".jpg");
-        if (!ConnectionDetector.isNetworkAvailable(this)){
-            Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
-            return;
+
+        List<SignData> sDataList = signDataTable.getAll();
+
+        JSONArray sArray = new JSONArray();
+        try
+        {
+            for (SignData sData : sDataList)
+            {
+                JSONObject sJSON = new JSONObject();
+                sJSON.put("id", sData.getId());
+                sJSON.put("user_id", sData.getUserId());
+                sJSON.put("note_id", sData.getsNoteId());
+                sJSON.put("view_date", sData.getViewDate());
+                sJSON.put("user_sign", sData.getUserSign());
+                sJSON.put("user_photo", sData.getPhoto());
+
+                sArray.put(sJSON);
+            }
+            Log.e(TAG, sArray.toString());
+        } catch (JSONException je) {
+            je.printStackTrace();
         }
+
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", Calendar.getInstance().getTime().toString())
-                .addFormDataPart("user_id", userSigned.getUserId())
-                .addFormDataPart("note_id", userSigned.getsNoteId())
-                .addFormDataPart("view_date", userSigned.getViewDate())
-                .addFormDataPart("user_sign", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .addFormDataPart("imei", SafConstants.getImei(this))
-                .addFormDataPart("user_photo", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
+                .addFormDataPart("json_data", sArray.toString())
                 .build();
-
+        Log.e(TAG, sArray.toString());
         String uri = SafConstants.SendUrl;
         Log.e(TAG, uri + " ");
 
@@ -280,7 +302,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addHeader("appV", SafConstants.getAppVersion(this))
                 .addHeader("Imei", SafConstants.getImei(this))
                 .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), Calendar.getInstance().getTime().toString()))
+                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), System.currentTimeMillis()))
                 .post(formBody)
                 .build();
 
@@ -304,6 +326,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
+                            JSONObject resp = ob.getJSONObject(0);
+                            if (resp.getString("success").equals("1"))
+                                signDataTable.deleteAll();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("ERROR : ", e.getMessage() + " ");
