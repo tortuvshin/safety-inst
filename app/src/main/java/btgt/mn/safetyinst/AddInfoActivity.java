@@ -140,7 +140,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             try {
                     bm = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
-                    userSigned.setId("1");
                     userSigned.setsNoteId("1");
                     userSigned.setUserId("1");
                     userSigned.setViewDate(Calendar.getInstance().getTime().toString());
@@ -149,9 +148,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setSendStatus("");
 
                     signDataTable.add(userSigned);
-                    if (!ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
-                        return;
-                    sendInfo();
 
                     openDialog();
 
@@ -172,6 +168,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
+                                if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
+                                    sendInfo();
                                 finish();
                             }
                         });
@@ -264,7 +262,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", Calendar.getInstance().getTime().toString())
-                .addFormDataPart("sing_data_id", userSigned.getId())
                 .addFormDataPart("user_id", userSigned.getUserId())
                 .addFormDataPart("note_id", userSigned.getsNoteId())
                 .addFormDataPart("view_date", userSigned.getViewDate())
@@ -273,7 +270,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("user_photo", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .build();
 
-        String uri = SafConstants.ApiUrl;
+        String uri = SafConstants.SendUrl;
         Log.e(TAG, uri + " ");
 
         Request request = new Request.Builder()
@@ -307,8 +304,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("ERROR : ", e.getMessage() + " ");

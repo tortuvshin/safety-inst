@@ -7,13 +7,16 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +38,9 @@ import btgt.mn.safetyinst.database.SNoteTable;
 import btgt.mn.safetyinst.entity.SNote;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     private int NUM_PAGES = 1;
 
     private ViewPager viewPager;
@@ -47,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     SNoteTable sNoteTable;
     List<SNote> sNotes;
     CollapsingToolbarLayout collapsingToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-
+        btnNext.setVisibility(View.INVISIBLE);
         sNoteTable = new SNoteTable(this);
 
         sNotes = sNoteTable.getAll();
@@ -84,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
         viewPager.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent arg1) {
-                return false;
+                return true;
             }
         });
         btnPrev.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void addBottomDots(int currentPage) {
@@ -136,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addInfo() {
-
+        finish();
         startActivity(new Intent(MainActivity.this, AddInfoActivity.class));
     }
 
@@ -183,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         ImageLoader imageLoader;
 
         WebView noteInfo;
+        NestedScrollView nestedScrollView;
 
         public ScreenSlidePagerAdapter(List<SNote> sNotes) {
             this.sNotes = sNotes;
@@ -205,10 +214,47 @@ public class MainActivity extends AppCompatActivity {
 
             noteInfo.loadDataWithBaseURL("", sNotes.get(position).getFrameData(), "text/html", "UTF-8", "");
             noteInfo.setBackgroundColor(Color.parseColor("#ffffff"));
-
+            noteInfo.getSettings().setJavaScriptEnabled(true);
             noteInfo.getSettings().setDefaultTextEncodingName("UTF-8");
             WebSettings webSettings = noteInfo.getSettings();
             Resources res = getResources();
+
+            nestedScrollView = (NestedScrollView) view.findViewById(R.id.sclDetail);
+            nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                    if (scrollY > oldScrollY) {
+                        Log.i(TAG, "Scroll DOWN");
+                    }
+                    if (scrollY < oldScrollY) {
+                        Log.i(TAG, "Scroll UP");
+                    }
+
+                    if (scrollY == 0) {
+                        Log.i(TAG, "TOP SCROLL");
+                    }
+
+                    if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                        Log.i(TAG, "BOTTOM SCROLL");
+                        viewPager.setOnTouchListener(new View.OnTouchListener() {
+                            public boolean onTouch(View arg0, MotionEvent arg1) {
+                                return false;
+                            }
+                        });
+                        btnNext.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                }
+            }, sNotes.get(position).getTimeout());
+
             container.addView(view);
 
             return view;
@@ -229,27 +275,5 @@ public class MainActivity extends AppCompatActivity {
             View view = (View) object;
             container.removeView(view);
         }
-    }
-
-    boolean doubleBackToExitPressedOnce = false;
-
-    @Override
-    public void onBackPressed() {
-
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Гарах бол дахин дарна уу", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
     }
 }
