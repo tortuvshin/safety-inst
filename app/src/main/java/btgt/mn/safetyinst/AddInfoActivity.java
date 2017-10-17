@@ -131,7 +131,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onClick(View view) {
                 refreshCamera();
                 gestureView.clear(true);
-                saveBtn.setText(R.string.save);
             }
         });
 
@@ -139,7 +138,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onClick(View view) {
             try {
-                if (saveBtn.getText() == getString(R.string.save)) {
                     bm = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
                     userSigned.setId("1");
@@ -150,11 +148,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setUserSign(DbBitmap.getBytes(bm));
                     userSigned.setSendStatus("");
 
-                    Toast.makeText(AddInfoActivity.this, "Амжилттай хадгаллаа", Toast.LENGTH_LONG).show();
-                    saveBtn.setText(R.string.send);
-                } else {
+                    signDataTable.add(userSigned);
+                    if (!ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
+                        return;
+                    sendInfo();
+
                     openDialog();
-                }
+
             } catch (Exception e) {
                 Log.d("Gestures", e.getMessage());
                 Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
@@ -166,26 +166,15 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     public void openDialog(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
-
-        alertDialogBuilder.setMessage("Зааварчилгаатай танилцаж гарын үсэг зурсан");
-                alertDialogBuilder.setPositiveButton("Тийм",
+        alertDialogBuilder.setTitle("Ажлын амжилт хүсэе");
+        alertDialogBuilder.setMessage("Таны мэдээлэл хадгалагдлаа");
+                alertDialogBuilder.setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
-                                signDataTable.add(userSigned);
-                                if (!ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
-                                    return;
-                                sendInfo();
-                                Toast.makeText(AddInfoActivity.this,"Таны мэдээлэл амжилттай хадгалагдлаа",Toast.LENGTH_LONG).show();
+                                finish();
                             }
                         });
-
-        alertDialogBuilder.setNegativeButton("Буцах",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
