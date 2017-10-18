@@ -26,11 +26,12 @@ import btgt.mn.safetyinst.utils.SafConstants;
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
 
-    UserTable userTable;
-    SettingsTable settingsTable;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    UserTable userTable;
+    SettingsTable settingsTable;
     ImageLoader imageLoader;
 
     @Override
@@ -38,16 +39,15 @@ public class LoginListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_list);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        TextView compName = (TextView) findViewById(R.id.company_name);
+
         imageLoader = new ImageLoader(this);
         userTable = new UserTable(this);
         settingsTable = new SettingsTable(this);
-        mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        TextView compName = (TextView) findViewById(R.id.company_name);
 
         List<User> users = userTable.getAll();
         List<Settings> sett = settingsTable.get();

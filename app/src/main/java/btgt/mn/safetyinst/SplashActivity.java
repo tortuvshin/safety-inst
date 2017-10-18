@@ -42,8 +42,8 @@ public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private Handler mHandler;
     PrefManager prefManager;
-    String imei;
     ImageLoader imageLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +52,6 @@ public class SplashActivity extends AppCompatActivity {
         reqPermissions();
 
         final long startTime = System.currentTimeMillis();
-
-        imei = SafConstants.getImei(this);
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
@@ -91,12 +89,8 @@ public class SplashActivity extends AppCompatActivity {
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .build();
 
-        String uri = SafConstants.ApiUrl;
-
-        Log.e(TAG, uri);
-
         Request request = new Request.Builder()
-                .url(uri)
+                .url(SafConstants.ApiUrl)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("app", SafConstants.APP_NAME)
                 .addHeader("appV", SafConstants.getAppVersion(this))
@@ -124,21 +118,13 @@ public class SplashActivity extends AppCompatActivity {
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
+                            if (ob.length() < 1)
+                                return;
                             JSONObject setting = ob.getJSONObject(0);
                             JSONArray users = setting.getJSONArray("users");
                             JSONArray notes = setting.getJSONArray("notes");
 
-                            if (ob.length() < 1)
-                                return;
-
-                            Log.e(TAG, "Settings: "+setting.toString());
-                            Log.e(TAG, "Users: "+users.toString());
-                            Log.e(TAG, "Notes: "+notes.toString());
-
-                            Log.e(TAG, "Imei: "+
-                                    SafConstants.getImei(SplashActivity.this));
-
-
+                            Log.e(TAG, "Settings: "+setting.toString()+"\n"+"Users: "+users.toString()+"\n"+"Notes: "+notes.toString());
 
                             if (setting.length() > 0) {
                                 SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
@@ -205,40 +191,12 @@ public class SplashActivity extends AppCompatActivity {
                                         .show();
                             }
 
-
-
-//                            for (int i = 0; i < 20; i++) {
-//
-//                                User user = new User();
-//                                user.setName("Demo" + i);
-//                                user.setPosition("Desc "+i);
-//                                user.setPhone(1);
-//                                user.setImei(SafConstants.getImei(SplashActivity.this));
-//                                user.setEmail("");
-//                                user.setPassword("1234");
-//                                user.setAvatar("");
-//                                user.setLastSigned("");
-//                                userTable.add(user);
-//                            }
-
                             if (setting.getString("error").equals("0")) {
 
                             } else {
                                 Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
                             }
-
-//                            if (prefManager.isLoggedIn()) {
-//                                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-//                                startActivity(intent);
-//                                finish();
-//                            } else {
-//                                Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-//                                startActivity(intent);
-//                                finish();
-//                            }
-
                         } catch (JSONException e) {
-                            e.printStackTrace();
                             Log.e("ERROR : ", e.getMessage() + " ");
                         }
                     }

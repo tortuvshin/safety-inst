@@ -47,12 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private ScreenSlidePagerAdapter myViewPagerAdapter;
     private LinearLayout dotsLayout;
     private TextView[] dots;
-    private int[] layouts;
     private Button btnPrev, btnNext;
 
-    SNoteTable sNoteTable;
-    List<SNote> sNotes;
-    CollapsingToolbarLayout collapsingToolbar;
+    private SNoteTable sNoteTable;
+    private List<SNote> sNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
@@ -163,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
+            Log.e(TAG, "Scrolled");
 
         }
 
@@ -246,15 +244,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
-            Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-
-                }
-            }, sNotes.get(position).getTimeout());
-
             container.addView(view);
 
             return view;

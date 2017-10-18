@@ -40,6 +40,7 @@ import btgt.mn.safetyinst.utils.DbBitmap;
 import btgt.mn.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -268,6 +269,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         camera = null;
     }
 
+    /*
+    * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
+    **/
     public void sendInfo() {
         if (!ConnectionDetector.isNetworkAvailable(this)){
             Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
@@ -292,8 +296,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("user_id", sData.getUserId());
                 sJSON.put("note_id", sData.getsNoteId());
                 sJSON.put("view_date", sData.getViewDate());
-                sJSON.put("user_sign", sData.getUserSign());
-                sJSON.put("user_photo", sData.getPhoto());
 
                 sArray.put(sJSON);
             }
@@ -308,6 +310,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("time", Calendar.getInstance().getTime().toString())
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .addFormDataPart("json_data", sArray.toString())
+                .addFormDataPart("images", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .build();
 
         Log.e(TAG, sArray.toString());

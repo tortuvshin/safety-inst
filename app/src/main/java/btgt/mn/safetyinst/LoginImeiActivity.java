@@ -25,26 +25,29 @@ public class LoginImeiActivity extends AppCompatActivity {
     private TextView positionText;
     private TextView usernameText;
     private ImageView imageView;
+
     UserTable userTable;
-    String imei;
     PrefManager prefManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         imageView = (ImageView) findViewById(R.id.login_user_avatar);
         positionText = (TextView) findViewById(R.id.position);
         usernameText = (TextView) findViewById(R.id.username);
         passText = (EditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
+
         userTable = new UserTable(this);
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
+
         Intent iGet = getIntent();
 
         int id = Integer.parseInt(iGet.getStringExtra("user_id"));
         User user = userTable.get(id);
-        imei = SafConstants.getImei(this);
         imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+user.getAvatar(), imageView);
         positionText.setText(user.getPosition());
         usernameText.setText(user.getName());
@@ -54,7 +57,6 @@ public class LoginImeiActivity extends AppCompatActivity {
                 login();
             }
         });
-
     }
 
     public void login() {
@@ -63,12 +65,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         String username = usernameText.getText().toString();
 
         Validation.empty(passText);
-//        if (password.isEmpty() || password.length() < 4) {
-//            passText.setError("Нууц үг буруу байна");
-//            return;
-//        } else {
-//            passText.setError(null);
-//        }
+
         if (password.trim().length() > 0) {
 
             Cursor checkeduser = userTable.checkUser(password);
