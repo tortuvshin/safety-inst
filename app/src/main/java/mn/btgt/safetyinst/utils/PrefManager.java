@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst.utils;
+package mn.btgt.safetyinst.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

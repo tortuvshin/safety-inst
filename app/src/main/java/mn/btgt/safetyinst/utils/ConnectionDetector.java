@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst.utils;
+package mn.btgt.safetyinst.utils;
 
 import android.app.Activity;
 import android.content.Context;

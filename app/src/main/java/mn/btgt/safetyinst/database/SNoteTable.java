@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst.database;
+package mn.btgt.safetyinst.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import btgt.mn.safetyinst.entity.SNote;
+import mn.btgt.safetyinst.entity.SNote;
 
 /**
  * Created by turtuvshin on 10/3/17.

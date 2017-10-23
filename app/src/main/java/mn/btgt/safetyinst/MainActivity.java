@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package mn.btgt.safetyinst;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,8 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.PagerAdapter;
@@ -29,13 +27,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
-import btgt.mn.safetyinst.database.SNoteTable;
-import btgt.mn.safetyinst.entity.SNote;
+import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.SNoteTable;
+import mn.btgt.safetyinst.entity.SNote;
 
 public class MainActivity extends AppCompatActivity {
 

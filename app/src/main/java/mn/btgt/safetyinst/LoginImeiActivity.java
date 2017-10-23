@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package mn.btgt.safetyinst;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -13,11 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import agency.techstar.imageloader.ImageLoader;
-import btgt.mn.safetyinst.database.UserTable;
-import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.PrefManager;
-import btgt.mn.safetyinst.utils.SafConstants;
-import btgt.mn.safetyinst.utils.Validation;
+import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.UserTable;
+import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.utils.PrefManager;
+import mn.btgt.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.utils.Validation;
 
 public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;

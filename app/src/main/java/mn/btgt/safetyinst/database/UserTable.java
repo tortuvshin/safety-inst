@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst.database;
+package mn.btgt.safetyinst.database;
 
 /**
  * Created by turtuvshin on 9/26/17.
@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import btgt.mn.safetyinst.entity.User;
+import mn.btgt.safetyinst.entity.User;
 
 public class UserTable extends DatabaseHelper {
 

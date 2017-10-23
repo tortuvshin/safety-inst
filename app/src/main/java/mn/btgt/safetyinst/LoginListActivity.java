@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package mn.btgt.safetyinst;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,11 +17,12 @@ import android.widget.Toast;
 import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
-import btgt.mn.safetyinst.database.SettingsTable;
-import btgt.mn.safetyinst.database.UserTable;
-import btgt.mn.safetyinst.entity.Settings;
-import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.SettingsTable;
+import mn.btgt.safetyinst.database.UserTable;
+import mn.btgt.safetyinst.entity.Settings;
+import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.utils.SafConstants;
 
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";

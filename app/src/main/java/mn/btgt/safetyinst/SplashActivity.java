@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package mn.btgt.safetyinst;
 
 import android.Manifest;
 import android.content.Intent;
@@ -20,15 +20,16 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import agency.techstar.imageloader.ImageLoader;
-import btgt.mn.safetyinst.database.SNoteTable;
-import btgt.mn.safetyinst.database.SettingsTable;
-import btgt.mn.safetyinst.database.UserTable;
-import btgt.mn.safetyinst.entity.SNote;
-import btgt.mn.safetyinst.entity.Settings;
-import btgt.mn.safetyinst.entity.User;
-import btgt.mn.safetyinst.utils.ConnectionDetector;
-import btgt.mn.safetyinst.utils.PrefManager;
-import btgt.mn.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.SNoteTable;
+import mn.btgt.safetyinst.database.SettingsTable;
+import mn.btgt.safetyinst.database.UserTable;
+import mn.btgt.safetyinst.entity.SNote;
+import mn.btgt.safetyinst.entity.Settings;
+import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.utils.ConnectionDetector;
+import mn.btgt.safetyinst.utils.PrefManager;
+import mn.btgt.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;

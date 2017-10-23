@@ -1,11 +1,10 @@
-package btgt.mn.safetyinst;
+package mn.btgt.safetyinst;
 
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -33,11 +32,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import btgt.mn.safetyinst.database.SignDataTable;
-import btgt.mn.safetyinst.entity.SignData;
-import btgt.mn.safetyinst.utils.ConnectionDetector;
-import btgt.mn.safetyinst.utils.DbBitmap;
-import btgt.mn.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.SignDataTable;
+import mn.btgt.safetyinst.entity.SignData;
+import mn.btgt.safetyinst.utils.ConnectionDetector;
+import mn.btgt.safetyinst.utils.DbBitmap;
+import mn.btgt.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;

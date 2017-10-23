@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst.database;
+package mn.btgt.safetyinst.database;
 
 /**
  * Created by turtuvshin on 9/26/17.

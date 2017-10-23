@@ -1,4 +1,4 @@
-package btgt.mn.safetyinst;
+package mn.btgt.safetyinst;
 
 import android.app.Application;
 
