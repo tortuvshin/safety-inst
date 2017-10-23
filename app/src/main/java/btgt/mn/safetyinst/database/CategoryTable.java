@@ -102,6 +102,7 @@ public class CategoryTable extends DatabaseHelper {
         cursor.close();
         return categorys;
     }
+
     public int update(Category category) {
         if (category == null) {
             return -1;

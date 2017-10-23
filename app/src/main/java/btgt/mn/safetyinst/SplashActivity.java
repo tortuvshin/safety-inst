@@ -146,11 +146,9 @@ public class SplashActivity extends AppCompatActivity {
 
                             if (users.length() > 0) {
                                 UserTable userTable = new UserTable(SplashActivity.this);
-
                                 userTable.deleteAll();
 
                                 for (int i = 0; i < users.length(); i++) {
-
                                     User user = new User();
                                     user.setId(users.getJSONObject(i).getString("id"));
                                     user.setName(users.getJSONObject(i).getString("name"));

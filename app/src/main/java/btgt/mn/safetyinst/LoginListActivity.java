@@ -57,7 +57,6 @@ public class LoginListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
     public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
         List<User> users;
         String imageName;
@@ -108,7 +107,6 @@ public class LoginListActivity extends AppCompatActivity {
             return users.size();
         }
     }
-
 
     boolean doubleBackToExitPressedOnce = false;
 
