@@ -14,7 +14,6 @@ import mn.btgt.safetyinst.entity.Settings;
  * Created by turtuvshin on 10/3/17.
  */
 
-
 public class SettingsTable extends DatabaseHelper {
     
     public static final String TABLE_SETTINGS          = "settings";
