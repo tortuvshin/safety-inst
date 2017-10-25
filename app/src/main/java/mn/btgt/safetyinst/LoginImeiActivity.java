@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,9 +23,8 @@ import mn.btgt.safetyinst.utils.Validation;
 
 public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
-    private EditText passText;
-    private TextView positionText;
-    private TextView usernameText;
+    private AppCompatEditText passText;
+    private AppCompatEditText usernameText;
     private ImageView imageView;
 
     UserTable userTable;
@@ -36,9 +36,8 @@ public class LoginImeiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         imageView = (ImageView) findViewById(R.id.login_user_avatar);
-        positionText = (TextView) findViewById(R.id.position);
-        usernameText = (TextView) findViewById(R.id.username);
-        passText = (EditText) findViewById(R.id.password);
+        usernameText = (AppCompatEditText) findViewById(R.id.username);
+        passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
 
         userTable = new UserTable(this);
@@ -50,7 +49,6 @@ public class LoginImeiActivity extends AppCompatActivity {
         int id = Integer.parseInt(iGet.getStringExtra("user_id"));
         User user = userTable.get(id);
         imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+user.getAvatar(), imageView);
-        positionText.setText(user.getPosition());
         usernameText.setText(user.getName());
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
