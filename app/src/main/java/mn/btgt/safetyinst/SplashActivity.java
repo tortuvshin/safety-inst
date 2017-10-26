@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import agency.techstar.imageloader.ImageLoader;
-import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
