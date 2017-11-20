@@ -8,11 +8,11 @@ import android.content.SharedPreferences;
  */
 
 public class PrefManager {
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
-    Context _context;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private Context _context;
 
-    int PRIVATE_MODE = 0;
+    private int PRIVATE_MODE = 0;
 
     private static final String PREF_NAME = "SafetyInst";
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";

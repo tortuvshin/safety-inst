@@ -34,8 +34,7 @@
                 android:hint="Хэрэглэгчийн нэр"
                 android:drawableStart="@drawable/ic_user"
                 android:drawableLeft="@drawable/ic_user"
-                android:inputType="text"
-                app:backgroundTint="@android:color/white"/>
+                android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -50,8 +49,7 @@
                 android:hint="Нууц үг"
                 android:drawableStart="@drawable/ic_lock"
                 android:drawableLeft="@drawable/ic_lock"
-                android:inputType="textPassword"
-                app:backgroundTint="@android:color/white"/>
+                android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/login"
