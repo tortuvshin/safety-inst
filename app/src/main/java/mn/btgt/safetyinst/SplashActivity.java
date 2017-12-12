@@ -68,9 +68,6 @@ public class SplashActivity extends AppCompatActivity {
 
                 Log.e(TAG, "CONN SUCCESS: "+ Long.toString(diff) + " ms");
 
-                Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-                startActivity(intent);
-                finish();
             }
         }, 10);
     }
@@ -190,7 +187,9 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                             if (setting.getString("error").equals("0")) {
-
+                                Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
+                                startActivity(intent);
+                                finish();
                             } else {
                                 Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
                             }

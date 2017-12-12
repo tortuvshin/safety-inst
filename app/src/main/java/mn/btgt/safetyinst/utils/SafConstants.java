@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 
@@ -14,7 +16,7 @@ import android.telephony.TelephonyManager;
 
 public class SafConstants {
 
-    public static String WebURL = "http://www.mongolgps.com";
+    public static String WebURL = "http://demo.mongolgps.com";
     public static String ApiUrl = WebURL+"/phone.php/safe_settings";
     public static String SendUrl = WebURL+"/phone.php/safe_upload";
     public static String APP_NAME = "iSafe";
@@ -23,6 +25,7 @@ public class SafConstants {
         return MD5_Hash(imei + "-BTGT-" + String.valueOf(time));
     }
 
+    @Nullable
     public static String MD5_Hash(String md5) {
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
@@ -37,6 +40,7 @@ public class SafConstants {
         return null;
     }
 
+    @NonNull
     public static String getAndroiId(Context myContext){
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         return androidId.toString();
