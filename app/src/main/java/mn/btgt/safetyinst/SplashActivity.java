@@ -187,9 +187,21 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                             if (setting.getString("error").equals("0")) {
-                                Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-                                startActivity(intent);
-                                finish();
+                                Intent iGet = getIntent();
+                                String username = iGet.getStringExtra("username");
+                                if (username == null) {
+                                    Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
+                                    intent.putExtra("username", iGet.getStringExtra("username"));
+                                    intent.putExtra("password", iGet.getStringExtra("password"));
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+
                             } else {
                                 Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
                             }

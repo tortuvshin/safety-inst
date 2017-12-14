@@ -349,6 +349,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
+                            Log.d(TAG, ob.toString());
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
                         } catch (JSONException e) {

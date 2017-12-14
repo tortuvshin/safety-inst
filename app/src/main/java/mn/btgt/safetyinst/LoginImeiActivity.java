@@ -46,10 +46,19 @@ public class LoginImeiActivity extends AppCompatActivity {
 
         Intent iGet = getIntent();
 
-        int id = Integer.parseInt(iGet.getStringExtra("user_id"));
-        User user = userTable.get(id);
-        imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+user.getAvatar(), imageView);
-        usernameText.setText(user.getName());
+        if (iGet.getStringExtra("username") == null){
+            int id = Integer.parseInt(iGet.getStringExtra("user_id"));
+            User user = userTable.get(id);
+            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+user.getAvatar(), imageView);
+            usernameText.setText(user.getName());
+        } else {
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
+        }
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
