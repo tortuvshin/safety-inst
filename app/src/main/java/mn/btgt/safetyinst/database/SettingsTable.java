@@ -15,7 +15,7 @@ import mn.btgt.safetyinst.entity.Settings;
  */
 
 public class SettingsTable extends DatabaseHelper {
-    
+
     public static final String TABLE_SETTINGS          = "settings";
     public static final String SETTINGS_COMPANY_NAME    = "company_name";
     public static final String SETTINGS_DEFARTMENT_NAME = "department_name";
