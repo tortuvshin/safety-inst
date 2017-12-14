@@ -57,27 +57,27 @@ public class SplashActivity extends AppCompatActivity {
         imageLoader = new ImageLoader(this);
 
         mHandler = new Handler(Looper.getMainLooper());
-        mHandler.postDelayed(new Runnable() {
+        mHandler.post(new Runnable() {
             @Override
             public void run() {
-                Log.e(TAG, "CONN START: "+ Long.toString(System.currentTimeMillis()) + " ms");
 
-                connectServer();
+                if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
+                    Toast.makeText(SplashActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+                    openMain();
+                } else {
+                    Log.e(TAG, "CONN START: "+ Long.toString(System.currentTimeMillis()) + " ms");
 
-                long diff = System.currentTimeMillis() - startTime;
+                    connectServer();
 
-                Log.e(TAG, "CONN SUCCESS: "+ Long.toString(diff) + " ms");
+                    long diff = System.currentTimeMillis() - startTime;
 
+                    Log.e(TAG, "CONN SUCCESS: "+ Long.toString(diff) + " ms");
+                }
             }
-        }, 10);
+        });
     }
 
     public void connectServer() {
-
-        if (!ConnectionDetector.isNetworkAvailable(this)){
-            Toast.makeText(SplashActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
@@ -187,21 +187,7 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                             if (setting.getString("error").equals("0")) {
-                                Intent iGet = getIntent();
-                                String username = iGet.getStringExtra("username");
-                                if (username == null) {
-                                    Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
-                                    intent.putExtra("username", iGet.getStringExtra("username"));
-                                    intent.putExtra("password", iGet.getStringExtra("password"));
-                                    startActivity(intent);
-                                    finish();
-                                }
-
-
+                                openMain();
                             } else {
                                 Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
                             }
@@ -212,6 +198,24 @@ public class SplashActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void openMain () {
+        Intent iGet = getIntent();
+        String username = iGet.getStringExtra("username");
+
+        // Mercury-гээс хаб нээсэн бол username intent ирсэн эсэх
+        if (username == null) {
+            Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
+            intent.putExtra("username", iGet.getStringExtra("username"));
+            intent.putExtra("password", iGet.getStringExtra("password"));
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void reqPermissions(){

@@ -22,13 +22,14 @@ import mn.btgt.safetyinst.utils.SafConstants;
 import mn.btgt.safetyinst.utils.Validation;
 
 public class LoginImeiActivity extends AppCompatActivity {
+
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
     private AppCompatEditText usernameText;
     private ImageView imageView;
 
-    UserTable userTable;
-    PrefManager prefManager;
+    private UserTable userTable;
+    private PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         ImageLoader imageLoader = new ImageLoader(this);
 
         Intent iGet = getIntent();
-
+           
         if (iGet.getStringExtra("username") == null){
             int id = Integer.parseInt(iGet.getStringExtra("user_id"));
             User user = userTable.get(id);
@@ -76,12 +77,12 @@ public class LoginImeiActivity extends AppCompatActivity {
 
         if (password.trim().length() > 0) {
 
-            Cursor checkeduser = userTable.checkUser(password);
-            if(checkeduser != null){
-                startManagingCursor(checkeduser);
-                if (checkeduser.getCount() > 0){
-                    stopManagingCursor(checkeduser);
-                    checkeduser.close();
+            Cursor checkedUser = userTable.checkUser(password);
+            if(checkedUser != null){
+                startManagingCursor(checkedUser);
+                if (checkedUser.getCount() > 0){
+                    stopManagingCursor(checkedUser);
+                    checkedUser.close();
                     loginBtn.setEnabled(false);
                     final ProgressDialog progressDialog = new ProgressDialog(LoginImeiActivity.this);
                     progressDialog.setIndeterminate(true);
@@ -105,8 +106,8 @@ public class LoginImeiActivity extends AppCompatActivity {
                     Toast.makeText(LoginImeiActivity.this, "Хэрэглэгчийн нэр нууц үг буруу байна", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                stopManagingCursor(checkeduser);
-                checkeduser.close();
+                stopManagingCursor(checkedUser);
+                checkedUser.close();
 
             }else{
                 Toast.makeText(getApplicationContext(),
