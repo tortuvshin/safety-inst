@@ -53,8 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
 
     private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ SettingsTable.TABLE_SETTINGS+" (" +
-            SettingsTable.SETTINGS_KEY + " TEXT PRIMARY KEY," +
-            SettingsTable.SETTINGS_VALUE + " TEXT," +
+            SettingsTable.SETTINGS_COMPANY_NAME + " TEXT PRIMARY KEY," +
+            SettingsTable.SETTINGS_DEFARTMENT_NAME + " TEXT," +
             SettingsTable.SETTINGS_IMAGE + " TEXT," +
             SettingsTable.SETTINGS_IMEI + " TEXT," +
             SettingsTable.SETTINGS_ANDROID_ID + " TEXT," +
