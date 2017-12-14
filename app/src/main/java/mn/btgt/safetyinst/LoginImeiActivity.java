@@ -46,7 +46,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         ImageLoader imageLoader = new ImageLoader(this);
 
         Intent iGet = getIntent();
-           
+
         if (iGet.getStringExtra("username") == null){
             int id = Integer.parseInt(iGet.getStringExtra("user_id"));
             User user = userTable.get(id);

@@ -16,17 +16,17 @@ import mn.btgt.safetyinst.entity.Settings;
 
 public class SettingsTable extends DatabaseHelper {
 
-    public static final String TABLE_SETTINGS          = "settings";
+    public static final String TABLE_SETTINGS           = "settings";
     public static final String SETTINGS_COMPANY_NAME    = "company_name";
     public static final String SETTINGS_DEFARTMENT_NAME = "department_name";
-    public static final String SETTINGS_IMAGE            = "image";
+    public static final String SETTINGS_IMAGE           = "image";
     public static final String SETTINGS_IMEI            = "imei";
     public static final String SETTINGS_ANDROID_ID      = "android_id";
     public static final String SETTINGS_SNOTE_DATA      = "snote_data";
 
     private static final int SETTINGS_COMPANY_INDEX    = 0;
     private static final int SETTINGS_DEPARTMENT_INDEX = 1;
-    private static final int SETTINGS_IMAGE_INDEX = 1;
+    private static final int SETTINGS_IMAGE_INDEX      = 1;
     private static final int SETTINGS_IMEI_INDEX       = 2;
     private static final int SETTINGS_ANDROID_INDEX    = 3;
     private static final int SETTINGS_SNOTE_INDEX      = 4;
