@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 10;
+    private static final int    DATABASE_VERSION = 11;
     private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +
