@@ -110,17 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        String URL = "content://mn.btgt.safetyinst.SettingsProvider/settings";
-
-        Uri students = Uri.parse(URL);
-        Cursor c = getContentResolver().query(students, null, null, null, "name");
-
-        if (c.moveToFirst()) {
-            do{
-                Toast.makeText(this,
-                        c.toString() ,Toast.LENGTH_SHORT).show();
-            } while (c.moveToNext());
-        }
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);

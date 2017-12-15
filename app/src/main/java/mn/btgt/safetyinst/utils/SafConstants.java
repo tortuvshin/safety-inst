@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 /**
  * Created by turtuvshin on 10/11/17.
@@ -21,8 +22,8 @@ public class SafConstants {
     public static String SendUrl = WebURL+"/phone.php/safe_upload";
     public static String APP_NAME = "iSafe";
 
-    public static String getSecretCode(String imei, long time){
-        return MD5_Hash(imei + "-BTGT-" + String.valueOf(time));
+    public static String getSecretCode(String imei, String time){
+        return MD5_Hash(imei + "-BTGT-" + time);
     }
 
     @Nullable
@@ -43,7 +44,8 @@ public class SafConstants {
     @NonNull
     public static String getAndroiId(Context myContext){
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-        return androidId.toString();
+        Log.d("ANDROID ID", "ID: "+androidId.toString());
+        return (androidId.toString() == null) ? "355694060878908" : androidId.toString();
     }
 
     public static String getAppVersion(Context myContext){
@@ -64,6 +66,6 @@ public class SafConstants {
         if (ActivityCompat.checkSelfPermission(myContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return "";
         }
-        return mngr.getDeviceId();
+        return (mngr.getDeviceId() == null) ? "355694060878908" : mngr.getDeviceId();
     }
 }
