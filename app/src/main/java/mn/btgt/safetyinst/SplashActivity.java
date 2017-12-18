@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("time", Calendar.getInstance().getTime().toString())
+                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .build();
 
@@ -93,7 +93,7 @@ public class SplashActivity extends AppCompatActivity {
                 .addHeader("appV", SafConstants.getAppVersion(this))
                 .addHeader("Imei", SafConstants.getImei(this))
                 .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), System.currentTimeMillis()))
+                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), String.valueOf(System.currentTimeMillis())))
                 .post(formBody)
                 .build();
 

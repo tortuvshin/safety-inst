@@ -41,6 +41,13 @@
             android:name="mn.btgt.safetyinst.LoginListActivity"
             android:theme="@style/AppFullScreen" />
         <activity android:name="mn.btgt.safetyinst.AddInfoActivity" />
+
+        <provider
+            android:name=".SettingsProvider"
+            android:authorities="mn.btgt.safetyinst.settings"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>

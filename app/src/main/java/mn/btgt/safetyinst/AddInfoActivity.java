@@ -307,7 +307,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("time", Calendar.getInstance().getTime().toString())
+                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .addFormDataPart("json_data", sArray.toString())
                 .addFormDataPart("images", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
@@ -324,7 +324,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addHeader("appV", SafConstants.getAppVersion(this))
                 .addHeader("Imei", SafConstants.getImei(this))
                 .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), System.currentTimeMillis()))
+                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), String.valueOf(System.currentTimeMillis())))
                 .post(formBody)
                 .build();
 
