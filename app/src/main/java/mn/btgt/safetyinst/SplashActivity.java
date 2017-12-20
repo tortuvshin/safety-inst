@@ -107,11 +107,17 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, res);
-
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        Log.e(TAG, "Response body: "+res);
+                        if (Integer.parseInt(res)< 0) {
+                            Toast.makeText(SplashActivity.this,
+                                    "Таны Imei бүртгэлгүй байна",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             if (ob.length() < 1)
@@ -205,6 +211,9 @@ public class SplashActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             Log.e("ERROR : ", e.getMessage() + " ");
+                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
                     }
                 });
