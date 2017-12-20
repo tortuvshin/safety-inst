@@ -28,11 +28,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
-import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SignDataTable;
 import mn.btgt.safetyinst.entity.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
@@ -314,7 +312,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .build();
 
         Log.e(TAG, sArray.toString());
-        String uri = SafConstants.SendUrl;
+        String uri = SafConstants.SEND_URL;
         Log.e(TAG, uri + " ");
 
         Request request = new Request.Builder()

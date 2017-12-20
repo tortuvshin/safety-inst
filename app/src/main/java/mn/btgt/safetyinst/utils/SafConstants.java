@@ -17,9 +17,9 @@ import android.util.Log;
 
 public class SafConstants {
 
-    public static String WebURL = "http://demo.mongolgps.com";
-    public static String ApiUrl = WebURL+"/phone.php/safe_settings";
-    public static String SendUrl = WebURL+"/phone.php/safe_upload";
+    public static String WEB_URL = "http://demo.mongolgps.com";
+    public static String API_URL = WEB_URL +"/phone.php/safe_settings";
+    public static String SEND_URL = WEB_URL +"/phone.php/safe_upload";
     public static String APP_NAME = "iSafe";
 
     public static String getSecretCode(String imei, String time){
