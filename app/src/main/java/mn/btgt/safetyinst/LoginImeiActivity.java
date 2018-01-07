@@ -8,13 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import agency.techstar.imageloader.ImageLoader;
-import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -50,7 +47,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         if (iGet.getStringExtra("username") == null){
             int id = Integer.parseInt(iGet.getStringExtra("user_id"));
             User user = userTable.get(id);
-            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+user.getAvatar(), imageView);
+            imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
             usernameText.setText(user.getName());
         } else {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);

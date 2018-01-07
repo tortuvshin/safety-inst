@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.database.SNoteTable;
@@ -87,7 +86,7 @@ public class SplashActivity extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url(SafConstants.ApiUrl)
+                .url(SafConstants.API_URL)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("app", SafConstants.APP_NAME)
                 .addHeader("appV", SafConstants.getAppVersion(this))
@@ -108,11 +107,17 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, res);
-
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        Log.e(TAG, "Response body: "+res);
+                        if (Integer.parseInt(res)< 0) {
+                            Toast.makeText(SplashActivity.this,
+                                    "Таны Imei бүртгэлгүй байна",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             if (ob.length() < 1)
@@ -121,78 +126,94 @@ public class SplashActivity extends AppCompatActivity {
                             JSONArray users = setting.getJSONArray("users");
                             JSONArray notes = setting.getJSONArray("notes");
 
-                            Log.e(TAG, "Settings: "+setting.toString()+"\n"+"Users: "+users.toString()+"\n"+"Notes: "+notes.toString());
+                            int success = setting.getInt("success");
+                            int error = setting.getInt("error");
+                            if (success == 0 && error == -11) {
+                                Toast.makeText(SplashActivity.this,
+                                        "Таны Imei бүртгэлгүй байна",
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (success== 0 && error == 900){
+                                Toast.makeText(SplashActivity.this,
+                                        "Алдаа: " + error,
+                                        Toast.LENGTH_SHORT).show();
+                            } else if ( success == 1) {
+                                Log.e(TAG, "Settings: "+setting.toString()+"\n"+"Users: "+users.toString()+"\n"+"Notes: "+notes.toString());
 
-                            if (setting.length() > 0) {
-                                SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
+                                if (setting.length() > 0) {
+                                    SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
 
-                                settingsTable.deleteAll();
+                                    settingsTable.deleteAll();
 
-                                Settings settings = new Settings();
-                                settings.setCompanyName(setting.getString("comp"));
-                                settings.setDepartmentName("");
-                                settings.setImei(SafConstants.getImei(SplashActivity.this));
-                                settings.setAndroidId(SafConstants.getAndroiId(SplashActivity.this));
-                                settings.setImage(setting.getString("company_logo"));
+                                    Settings settings = new Settings();
+                                    settings.setCompanyName(setting.getString("comp"));
+                                    settings.setDepartmentName("");
+                                    settings.setImei(SafConstants.getImei(SplashActivity.this));
+                                    settings.setAndroidId(SafConstants.getAndroiId(SplashActivity.this));
+                                    settings.setImage(setting.getString("company_logo"));
 
-                                settingsTable.add(settings);
-                            } else {
-                                Toast.makeText(SplashActivity.this, "Тохиргооны мэдээлэл хоосон байна", Toast.LENGTH_LONG)
-                                        .show();
-                            }
-
-                            if (users.length() > 0) {
-                                UserTable userTable = new UserTable(SplashActivity.this);
-                                userTable.deleteAll();
-
-                                for (int i = 0; i < users.length(); i++) {
-                                    User user = new User();
-                                    user.setId(users.getJSONObject(i).getString("id"));
-                                    user.setName(users.getJSONObject(i).getString("name"));
-                                    user.setPosition(users.getJSONObject(i).getString("job"));
-                                    user.setPhone(1);
-                                    user.setImei(SafConstants.getImei(SplashActivity.this));
-                                    user.setEmail("");
-                                    user.setPassword("1234");
-                                    user.setAvatar(users.getJSONObject(i).getString("photo"));
-                                    user.setLastSigned("");
-                                    userTable.add(user);
-                                }
-                            } else {
-                                Toast.makeText(SplashActivity.this, "Хэрэглэгчийн мэдээлэл хоосон", Toast.LENGTH_LONG)
-                                        .show();
-                            }
-
-                            if (notes.length() > 0){
-                                SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
-
-                                sNoteTable.deleteAll();
-
-                                for (int i = 0; i < notes.length(); i++) {
-                                    SNote sNote = new SNote();
-                                    sNote.setId(notes.getJSONObject(i).getString("id"));
-                                    sNote.setCategoryId(notes.getJSONObject(i).getString("id"));
-                                    sNote.setName(notes.getJSONObject(i).getString("name"));
-                                    sNote.setOrder(notes.getJSONObject(i).getString("id"));
-                                    sNote.setFrameType(notes.getJSONObject(i).getInt("dur"));
-                                    sNote.setFrameData(notes.getJSONObject(i).getString("info"));
-                                    sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
-                                    sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
-                                    sNoteTable.add(sNote);
+                                    settingsTable.add(settings);
+                                } else {
+                                    Toast.makeText(SplashActivity.this, "Тохиргооны мэдээлэл хоосон байна", Toast.LENGTH_LONG)
+                                            .show();
                                 }
 
-                            } else {
-                                Toast.makeText(SplashActivity.this, "Зааварчилгаа хоосон байна", Toast.LENGTH_LONG)
-                                        .show();
+                                if (users.length() > 0) {
+                                    UserTable userTable = new UserTable(SplashActivity.this);
+                                    userTable.deleteAll();
+
+                                    for (int i = 0; i < users.length(); i++) {
+                                        User user = new User();
+                                        user.setId(users.getJSONObject(i).getString("id"));
+                                        user.setName(users.getJSONObject(i).getString("name"));
+                                        user.setPosition(users.getJSONObject(i).getString("job"));
+                                        user.setPhone(1);
+                                        user.setImei(SafConstants.getImei(SplashActivity.this));
+                                        user.setEmail("");
+                                        user.setPassword("1234");
+                                        user.setAvatar(users.getJSONObject(i).getString("photo"));
+                                        user.setLastSigned("");
+                                        userTable.add(user);
+                                    }
+                                } else {
+                                    Toast.makeText(SplashActivity.this, "Хэрэглэгчийн мэдээлэл хоосон", Toast.LENGTH_LONG)
+                                            .show();
+                                }
+
+                                if (notes.length() > 0){
+                                    SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
+
+                                    sNoteTable.deleteAll();
+
+                                    for (int i = 0; i < notes.length(); i++) {
+                                        SNote sNote = new SNote();
+                                        sNote.setId(notes.getJSONObject(i).getString("id"));
+                                        sNote.setCategoryId(notes.getJSONObject(i).getString("id"));
+                                        sNote.setName(notes.getJSONObject(i).getString("name"));
+                                        sNote.setOrder(notes.getJSONObject(i).getString("id"));
+                                        sNote.setFrameType(notes.getJSONObject(i).getInt("dur"));
+                                        sNote.setFrameData(notes.getJSONObject(i).getString("info"));
+                                        sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
+                                        sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
+                                        sNoteTable.add(sNote);
+                                    }
+
+                                } else {
+                                    Toast.makeText(SplashActivity.this, "Зааварчилгаа хоосон байна", Toast.LENGTH_LONG)
+                                            .show();
+                                }
+
+                                if (setting.getString("error").equals("0")) {
+                                    openMain();
+                                } else {
+                                    Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
+                                }
                             }
 
-                            if (setting.getString("error").equals("0")) {
-                                openMain();
-                            } else {
-                                Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
-                            }
                         } catch (JSONException e) {
                             Log.e("ERROR : ", e.getMessage() + " ");
+                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
                         }
                     }
                 });

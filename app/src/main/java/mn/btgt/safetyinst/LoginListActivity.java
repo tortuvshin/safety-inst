@@ -17,7 +17,6 @@ import android.widget.Toast;
 import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
-import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.entity.Settings;
@@ -99,7 +98,7 @@ public class LoginListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
             imageName = users.get(position).getAvatar();
-            imageLoader.DisplayImage(SafConstants.WebURL+"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
+            imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
             holder.mTextView.setText(users.get(position).getName());
             holder.mPosText.setText(users.get(position).getPosition());
         }
