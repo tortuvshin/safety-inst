@@ -107,6 +107,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
+                Log.e(TAG, "Response body: "+res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

@@ -43,11 +43,11 @@
         <activity android:name="mn.btgt.safetyinst.AddInfoActivity" />
 
         <provider
-            android:name=".SettingsProvider"
-            android:authorities="mn.btgt.safetyinst.settings"
+            android:name="mn.btgt.safetyinst.SettingsProvider"
+            android:authorities="mn.btgt.safetyinst.SettingsProvider"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true"
+            android:multiprocess="true">
         </provider>
     </application>
-
 </manifest>

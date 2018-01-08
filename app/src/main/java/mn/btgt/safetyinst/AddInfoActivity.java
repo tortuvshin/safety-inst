@@ -340,14 +340,14 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, res);
+                Log.e(TAG, "Response body: "+res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
-                            Log.d(TAG, ob.toString());
+                            Log.d(TAG, "JSON Object : "+resp.toString());
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
                         } catch (JSONException e) {
