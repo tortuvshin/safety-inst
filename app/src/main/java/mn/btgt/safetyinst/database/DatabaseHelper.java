@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 11;
+    private static final int    DATABASE_VERSION = 13;
     private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +
@@ -58,7 +58,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SettingsTable.SETTINGS_IMAGE + " TEXT," +
             SettingsTable.SETTINGS_IMEI + " TEXT," +
             SettingsTable.SETTINGS_ANDROID_ID + " TEXT," +
-            SettingsTable.SETTINGS_SNOTE_DATA + " TEXT)";
+            SettingsTable.SETTINGS_SNOTE_DATA + " TEXT," +
+            SettingsTable.SETTINGS_SIGNED + " TEXT)";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

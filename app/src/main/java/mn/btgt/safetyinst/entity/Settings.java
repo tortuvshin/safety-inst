@@ -11,6 +11,7 @@ public class Settings {
     private String imei;
     private String androidId;
     private String sNoteData;
+    private int isSigned;
 
     public Settings() {
 
@@ -62,5 +63,13 @@ public class Settings {
 
     public void setsNoteData(String sNoteData) {
         this.sNoteData = sNoteData;
+    }
+
+    public int getIsSigned() {
+        return isSigned;
+    }
+
+    public void setIsSigned(int isSigned) {
+        this.isSigned = isSigned;
     }
 }

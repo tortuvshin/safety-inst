@@ -147,6 +147,7 @@ public class SplashActivity extends AppCompatActivity {
                                     settings.setImei(SafConstants.getImei(SplashActivity.this));
                                     settings.setAndroidId(SafConstants.getAndroiId(SplashActivity.this));
                                     settings.setImage(setting.getString("company_logo"));
+                                    settings.setIsSigned(0);
 
                                     settingsTable.add(settings);
                                 } else {

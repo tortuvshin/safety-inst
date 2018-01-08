@@ -23,6 +23,7 @@ public class SettingsTable extends DatabaseHelper {
     public static final String SETTINGS_IMEI            = "imei";
     public static final String SETTINGS_ANDROID_ID      = "android_id";
     public static final String SETTINGS_SNOTE_DATA      = "snote_data";
+    public static final String SETTINGS_SIGNED          = "is_signed";
 
     private static final int SETTINGS_COMPANY_INDEX    = 0;
     private static final int SETTINGS_DEPARTMENT_INDEX = 1;
@@ -30,6 +31,7 @@ public class SettingsTable extends DatabaseHelper {
     private static final int SETTINGS_IMEI_INDEX       = 2;
     private static final int SETTINGS_ANDROID_INDEX    = 3;
     private static final int SETTINGS_SNOTE_INDEX      = 4;
+    private static final int SETTINGS_SIGNED_INDEX     = 5;
 
     private static final String[] PROJECTIONS_SETTINGS = {
             SETTINGS_COMPANY_NAME,
@@ -37,7 +39,8 @@ public class SettingsTable extends DatabaseHelper {
             SETTINGS_IMAGE,
             SETTINGS_IMEI,
             SETTINGS_ANDROID_ID,
-            SETTINGS_SNOTE_DATA
+            SETTINGS_SNOTE_DATA,
+            SETTINGS_SIGNED
     };
 
     public SettingsTable(Context context) {
@@ -61,6 +64,7 @@ public class SettingsTable extends DatabaseHelper {
             cv.put(SETTINGS_IMEI, settings.getImei());
             cv.put(SETTINGS_ANDROID_ID, settings.getAndroidId());
             cv.put(SETTINGS_SNOTE_DATA, settings.getsNoteData());
+            cv.put(SETTINGS_SIGNED, settings.getIsSigned());
             db.insert(TABLE_SETTINGS, null, cv);
             db.setTransactionSuccessful();
         } finally {
@@ -83,6 +87,7 @@ public class SettingsTable extends DatabaseHelper {
                 setting.setImei(cursor.getString(SETTINGS_IMEI_INDEX));
                 setting.setAndroidId(cursor.getString(SETTINGS_ANDROID_INDEX));
                 setting.setsNoteData(cursor.getString(SETTINGS_SNOTE_INDEX));
+                setting.setIsSigned(cursor.getInt(SETTINGS_SIGNED_INDEX));
                 settings.add(setting);
             } while (cursor.moveToNext());
         }
@@ -104,6 +109,7 @@ public class SettingsTable extends DatabaseHelper {
         cv.put(SETTINGS_IMEI, settings.getImei());
         cv.put(SETTINGS_ANDROID_ID, settings.getAndroidId());
         cv.put(SETTINGS_SNOTE_DATA, settings.getsNoteData());
+        cv.put(SETTINGS_SIGNED, settings.getIsSigned());
         int rowCount = db.update(TABLE_SETTINGS, cv, SETTINGS_COMPANY_NAME + "=?",
                 new String[]{String.valueOf(settings.getCompanyName())});
         db.close();
