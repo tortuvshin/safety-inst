@@ -190,6 +190,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             public void onClick(DialogInterface arg0, int arg1) {
                                 if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
                                     sendInfo();
+
                                 finish();
                             }
                         });
