@@ -17,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.database.SNoteTable;
@@ -107,17 +109,13 @@ public class SplashActivity extends AppCompatActivity {
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
+                Log.e(TAG, "Response body: "+res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
 
                         Log.e(TAG, "Response body: "+res);
-                        if (Integer.parseInt(res)< 0) {
-                            Toast.makeText(SplashActivity.this,
-                                    "Таны Imei бүртгэлгүй байна",
-                                    Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             if (ob.length() < 1)
@@ -132,6 +130,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Toast.makeText(SplashActivity.this,
                                         "Таны Imei бүртгэлгүй байна",
                                         Toast.LENGTH_SHORT).show();
+                                return;
                             } else if (success== 0 && error == 900){
                                 Toast.makeText(SplashActivity.this,
                                         "Алдаа: " + error,
@@ -143,15 +142,14 @@ public class SplashActivity extends AppCompatActivity {
                                     SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
 
                                     settingsTable.deleteAll();
+                                    List<Settings> settingsList = new ArrayList<Settings>();
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_COMPANY, setting.getString("comp")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_DEPARTMENT, setting.getString("comp")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_IMEI, SafConstants.getImei(SplashActivity.this)));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_ANDROID_ID, SafConstants.getAndroiId(SplashActivity.this)));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_LOGO, setting.getString("company_logo")));
 
-                                    Settings settings = new Settings();
-                                    settings.setCompanyName(setting.getString("comp"));
-                                    settings.setDepartmentName("");
-                                    settings.setImei(SafConstants.getImei(SplashActivity.this));
-                                    settings.setAndroidId(SafConstants.getAndroiId(SplashActivity.this));
-                                    settings.setImage(setting.getString("company_logo"));
-
-                                    settingsTable.add(settings);
+                                    settingsTable.insertList(settingsList);
                                 } else {
                                     Toast.makeText(SplashActivity.this, "Тохиргооны мэдээлэл хоосон байна", Toast.LENGTH_LONG)
                                             .show();

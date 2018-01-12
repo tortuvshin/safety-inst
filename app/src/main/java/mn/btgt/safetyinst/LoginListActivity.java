@@ -26,10 +26,6 @@ import mn.btgt.safetyinst.utils.SafConstants;
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
     UserTable userTable;
     SettingsTable settingsTable;
     ImageLoader imageLoader;
@@ -39,9 +35,9 @@ public class LoginListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_list);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         TextView compName = (TextView) findViewById(R.id.company_name);
 
@@ -50,11 +46,12 @@ public class LoginListActivity extends AppCompatActivity {
         settingsTable = new SettingsTable(this);
 
         List<User> users = userTable.getAll();
-        List<Settings> sett = settingsTable.get();
+        Settings setComp = settingsTable.get("company");
 
-        compName.setText(sett.get(0).getCompanyName());
+        if (!setComp.getKey().isEmpty())
+            compName.setText(setComp.getValue());
 
-        mAdapter = new UserListAdapter(users);
+        RecyclerView.Adapter mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -76,7 +73,7 @@ public class LoginListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
-                intent.putExtra("user_id", users.get(this.getAdapterPosition()).getId().toString());
+                intent.putExtra("user_id", users.get(this.getAdapterPosition()).getId());
                 Log.d("", users.get(this.getAdapterPosition()).getId());
                 startActivity(intent);
             }

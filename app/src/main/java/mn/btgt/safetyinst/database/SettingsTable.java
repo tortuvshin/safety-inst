@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import mn.btgt.safetyinst.entity.SNote;
 import mn.btgt.safetyinst.entity.Settings;
 
 /**
@@ -16,60 +18,64 @@ import mn.btgt.safetyinst.entity.Settings;
 
 public class SettingsTable extends DatabaseHelper {
 
-    public static final String TABLE_SETTINGS           = "settings";
-    public static final String SETTINGS_COMPANY_NAME    = "company_name";
-    public static final String SETTINGS_DEFARTMENT_NAME = "department_name";
-    public static final String SETTINGS_IMAGE           = "image";
-    public static final String SETTINGS_IMEI            = "imei";
-    public static final String SETTINGS_ANDROID_ID      = "android_id";
-    public static final String SETTINGS_SNOTE_DATA      = "snote_data";
+    public static final String TABLE_SETTINGS = "settings";
+    public static final String SETTINGS_KEY   = "settings_key";
+    public static final String SETTINGS_VALUE = "settings_value";
 
-    private static final int SETTINGS_COMPANY_INDEX    = 0;
-    private static final int SETTINGS_DEPARTMENT_INDEX = 1;
-    private static final int SETTINGS_IMAGE_INDEX      = 1;
-    private static final int SETTINGS_IMEI_INDEX       = 2;
-    private static final int SETTINGS_ANDROID_INDEX    = 3;
-    private static final int SETTINGS_SNOTE_INDEX      = 4;
+    private static final int SETTINGS_KEY_INDEX = 0;
+    private static final int SETTINGS_VALUE_INDEX = 1;
 
     private static final String[] PROJECTIONS_SETTINGS = {
-            SETTINGS_COMPANY_NAME,
-            SETTINGS_DEFARTMENT_NAME,
-            SETTINGS_IMAGE,
-            SETTINGS_IMEI,
-            SETTINGS_ANDROID_ID,
-            SETTINGS_SNOTE_DATA
+            SETTINGS_KEY,
+            SETTINGS_VALUE
     };
 
     public SettingsTable(Context context) {
         super(context);
     }
 
-    public void add(Settings settings) {
-        if (settings == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return;
-        }
-        db.beginTransaction();
-        try {
-            ContentValues cv = new ContentValues();
-            cv.put(SETTINGS_COMPANY_NAME, settings.getCompanyName());
-            cv.put(SETTINGS_DEFARTMENT_NAME, settings.getDepartmentName());
-            cv.put(SETTINGS_IMAGE, settings.getImage());
-            cv.put(SETTINGS_IMEI, settings.getImei());
-            cv.put(SETTINGS_ANDROID_ID, settings.getAndroidId());
-            cv.put(SETTINGS_SNOTE_DATA, settings.getsNoteData());
-            db.insert(TABLE_SETTINGS, null, cv);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
+    public void insert(String key, String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values;
+        values = new ContentValues();
+        values.put(SETTINGS_KEY, key);
+        values.put(SETTINGS_VALUE, value);
+        db.replace(TABLE_SETTINGS, null, values);
+        db.close();
     }
 
-    public List<Settings> get() {
+    public void insertList(List<Settings> SList){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("BEGIN TRANSACTION");
+        for( Settings iset : SList ){
+            ContentValues values = new ContentValues();
+            values.put(SETTINGS_KEY, iset.getKey());
+            values.put(SETTINGS_VALUE, iset.getValue());
+            db.replace(TABLE_SETTINGS, null, values);
+        }
+        db.execSQL("END TRANSACTION");
+        db.close();
+    }
+
+    public Settings get(String key) {
+        SQLiteDatabase db = getReadableDatabase();
+        if (db == null) {
+            return null;
+        }
+        Cursor cursor = db.query(TABLE_SETTINGS, PROJECTIONS_SETTINGS, SETTINGS_KEY + "=?",
+                new String[]{key}, null, null, null, null);
+        if (!cursor.moveToFirst()) {
+            return null;
+        }
+
+        Settings sett = new Settings();
+        sett.setKey(cursor.getString(SETTINGS_KEY_INDEX));
+        sett.setValue(cursor.getString(SETTINGS_VALUE_INDEX));
+        cursor.close();
+        return sett;
+
+    }
+    public List<Settings> getAll() {
         List<Settings> settings = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
         SQLiteDatabase db = getReadableDatabase();
@@ -77,12 +83,8 @@ public class SettingsTable extends DatabaseHelper {
         if (cursor.moveToFirst()) {
             do {
                 Settings setting = new Settings();
-                setting.setCompanyName(cursor.getString(SETTINGS_COMPANY_INDEX));
-                setting.setDepartmentName(cursor.getString(SETTINGS_DEPARTMENT_INDEX));
-                setting.setImage(cursor.getString(SETTINGS_IMAGE_INDEX));
-                setting.setImei(cursor.getString(SETTINGS_IMEI_INDEX));
-                setting.setAndroidId(cursor.getString(SETTINGS_ANDROID_INDEX));
-                setting.setsNoteData(cursor.getString(SETTINGS_SNOTE_INDEX));
+                setting.setKey(cursor.getString(SETTINGS_KEY_INDEX));
+                setting.setValue(cursor.getString(SETTINGS_VALUE_INDEX));
                 settings.add(setting);
             } while (cursor.moveToNext());
         }
@@ -98,14 +100,10 @@ public class SettingsTable extends DatabaseHelper {
             return -1;
         }
         ContentValues cv = new ContentValues();
-        cv.put(SETTINGS_COMPANY_NAME, settings.getCompanyName());
-        cv.put(SETTINGS_DEFARTMENT_NAME, settings.getDepartmentName());
-        cv.put(SETTINGS_IMAGE, settings.getImage());
-        cv.put(SETTINGS_IMEI, settings.getImei());
-        cv.put(SETTINGS_ANDROID_ID, settings.getAndroidId());
-        cv.put(SETTINGS_SNOTE_DATA, settings.getsNoteData());
-        int rowCount = db.update(TABLE_SETTINGS, cv, SETTINGS_COMPANY_NAME + "=?",
-                new String[]{String.valueOf(settings.getCompanyName())});
+        cv.put(SETTINGS_KEY, settings.getKey());
+        cv.put(SETTINGS_VALUE, settings.getValue());
+        int rowCount = db.update(TABLE_SETTINGS, cv, SETTINGS_KEY + "=?",
+                new String[]{String.valueOf(settings.getKey())});
         db.close();
         return rowCount;
     }

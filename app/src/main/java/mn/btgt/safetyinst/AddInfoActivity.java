@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
+import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
@@ -165,10 +167,12 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setViewDate(System.currentTimeMillis());
                     userSigned.setPhoto(DbBitmap.getBytes(bm));
                     userSigned.setUserSign(DbBitmap.getBytes(bm));
-                    userSigned.setSendStatus("");
+                    userSigned.setSendStatus("0");
 
                     signDataTable.add(userSigned);
 
+                    SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
+                    settingsTable.insert(SafConstants.SETTINGS_ISSIGNED, "yes");
                     openDialog();
 
             } catch (Exception e) {
@@ -190,6 +194,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             public void onClick(DialogInterface arg0, int arg1) {
                                 if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
                                     sendInfo();
+
                                 finish();
                             }
                         });
@@ -340,16 +345,18 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, res);
+                Log.e(TAG, "Response body: "+res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
-                            Log.d(TAG, ob.toString());
+                            Log.d(TAG, "JSON Object : "+resp.toString());
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
+
+                            Toast.makeText(AddInfoActivity.this, "Таны мэдээлэл амжилттай илгээгдлээ.", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("ERROR : ", e.getMessage() + " ");

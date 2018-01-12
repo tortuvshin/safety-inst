@@ -11,16 +11,24 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import mn.btgt.safetyinst.SplashActivity;
+
 /**
  * Created by turtuvshin on 10/11/17.
  */
 
 public class SafConstants {
 
-    public static String WEB_URL = "http://demo.mongolgps.com";
-    public static String API_URL = WEB_URL +"/phone.php/safe_settings";
-    public static String SEND_URL = WEB_URL +"/phone.php/safe_upload";
-    public static String APP_NAME = "iSafe";
+    public static String APP_NAME            = "iSafe";
+    public static String WEB_URL             = "http://demo.mongolgps.com";
+    public static String API_URL             = WEB_URL +"/phone.php/safe_settings";
+    public static String SEND_URL            = WEB_URL +"/phone.php/safe_upload";
+    public static String SETTINGS_COMPANY    = "company";
+    public static String SETTINGS_DEPARTMENT = "department";
+    public static String SETTINGS_IMEI       = "imei";
+    public static String SETTINGS_ANDROID_ID = "android_id";
+    public static String SETTINGS_LOGO       = "company_logo";
+    public static String SETTINGS_ISSIGNED   = "is_signed";
 
     public static String getSecretCode(String imei, String time){
         return MD5_Hash(imei + "-BTGT-" + time);

@@ -5,62 +5,30 @@ package mn.btgt.safetyinst.entity;
  */
 
 public class Settings {
-    private String companyName;
-    private String departmentName;
-    private String image;
-    private String imei;
-    private String androidId;
-    private String sNoteData;
+    private String key;
+    private String value;
 
     public Settings() {
-
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public Settings(String key, String value) {
+        this.key = key;
+        this.value = value;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public String getKey() {
+        return key;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public String getValue() {
+        return value;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public String getAndroidId() {
-        return androidId;
-    }
-
-    public void setAndroidId(String androidId) {
-        this.androidId = androidId;
-    }
-
-    public String getsNoteData() {
-        return sNoteData;
-    }
-
-    public void setsNoteData(String sNoteData) {
-        this.sNoteData = sNoteData;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
