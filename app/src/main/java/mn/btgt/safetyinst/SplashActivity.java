@@ -17,6 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.database.SNoteTable;
@@ -140,16 +142,15 @@ public class SplashActivity extends AppCompatActivity {
                                     SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
 
                                     settingsTable.deleteAll();
+                                    List<Settings> settingsList = new ArrayList<Settings>();
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_COMPANY, setting.getString("comp")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_DEPARTMENT, setting.getString("comp")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_IMEI, SafConstants.getImei(SplashActivity.this)));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_ANDROID_ID, SafConstants.getAndroiId(SplashActivity.this)));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_LOGO, setting.getString("company_logo")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
 
-                                    Settings settings = new Settings();
-                                    settings.setCompanyName(setting.getString("comp"));
-                                    settings.setDepartmentName("");
-                                    settings.setImei(SafConstants.getImei(SplashActivity.this));
-                                    settings.setAndroidId(SafConstants.getAndroiId(SplashActivity.this));
-                                    settings.setImage(setting.getString("company_logo"));
-                                    settings.setIsSigned(0);
-
-                                    settingsTable.add(settings);
+                                    settingsTable.addList(settingsList);
                                 } else {
                                     Toast.makeText(SplashActivity.this, "Тохиргооны мэдээлэл хоосон байна", Toast.LENGTH_LONG)
                                             .show();

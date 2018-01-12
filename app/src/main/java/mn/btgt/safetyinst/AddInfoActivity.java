@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
+import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
@@ -165,7 +167,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setViewDate(System.currentTimeMillis());
                     userSigned.setPhoto(DbBitmap.getBytes(bm));
                     userSigned.setUserSign(DbBitmap.getBytes(bm));
-                    userSigned.setSendStatus("");
+                    userSigned.setSendStatus("0");
 
                     signDataTable.add(userSigned);
 
@@ -351,6 +353,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             Log.d(TAG, "JSON Object : "+resp.toString());
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
+
+                            SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
+                            settingsTable.update(new Settings(SafConstants.SETTINGS_ISSIGNED, "no"));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("ERROR : ", e.getMessage() + " ");

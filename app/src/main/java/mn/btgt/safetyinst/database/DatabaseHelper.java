@@ -7,13 +7,14 @@ package mn.btgt.safetyinst.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 14;
+    private static final int    DATABASE_VERSION = 18;
     private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +
@@ -53,13 +54,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
 
     private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ SettingsTable.TABLE_SETTINGS+" (" +
-            SettingsTable.SETTINGS_COMPANY_NAME + " TEXT PRIMARY KEY," +
-            SettingsTable.SETTINGS_DEFARTMENT_NAME + " TEXT," +
-            SettingsTable.SETTINGS_IMAGE + " TEXT," +
-            SettingsTable.SETTINGS_IMEI + " TEXT," +
-            SettingsTable.SETTINGS_ANDROID_ID + " TEXT," +
-            SettingsTable.SETTINGS_SNOTE_DATA + " TEXT," +
-            SettingsTable.SETTINGS_SIGNED + " INT)";
+            SettingsTable.SETTINGS_KEY + " TEXT PRIMARY KEY," +
+            SettingsTable.SETTINGS_VALUE + " TEXT)";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -84,5 +80,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SignDataTable.TABLE_SIGNDATAS);
         db.execSQL("DROP TABLE IF EXISTS " + SettingsTable.TABLE_SETTINGS);
         onCreate(db);
+        Log.e(TAG, "Upgrade database version: "+DATABASE_VERSION);
     }
 }

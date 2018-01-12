@@ -63,7 +63,7 @@ public class SettingsProvider extends ContentProvider{
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
         if (sortOrder == null || sortOrder == "") {
-            sortOrder = SettingsTable.SETTINGS_ANDROID_ID;
+            sortOrder = SettingsTable.SETTINGS_KEY;
         }
         Cursor c = qb.query(database, projection, selection, selectionArgs, null,
                 null, sortOrder);
