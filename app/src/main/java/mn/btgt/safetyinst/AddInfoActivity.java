@@ -171,6 +171,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                     signDataTable.add(userSigned);
 
+                    SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
+                    settingsTable.insert(SafConstants.SETTINGS_ISSIGNED, "yes");
                     openDialog();
 
             } catch (Exception e) {
@@ -354,9 +356,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
 
-                            SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
-                            settingsTable.update(new Settings(SafConstants.SETTINGS_ISSIGNED, "no"));
-
+                            Toast.makeText(AddInfoActivity.this, "Таны мэдээлэл амжилттай илгээгдлээ.", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Log.e("ERROR : ", e.getMessage() + " ");

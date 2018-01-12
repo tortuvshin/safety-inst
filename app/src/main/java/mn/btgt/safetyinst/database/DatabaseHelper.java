@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 18;
+    private static final int    DATABASE_VERSION = 21;
     private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +
@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             UserTable.USER_EMAIL + " TEXT," +
             UserTable.USER_PASS + " TEXT," +
             UserTable.USER_AVATAR + " TEXT," +
-            UserTable.USER_LAST_SIGNED + " TEXT)";
+            UserTable.USER_LAST_SIGNED + " TEXT);";
 
     private static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ SNoteTable.TABLE_SNOTE+" (" +
             SNoteTable.SNOTE_ID + " TEXT PRIMARY KEY," +
@@ -36,13 +36,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SNoteTable.SNOTE_FRAME_TYPE + " INT," +
             SNoteTable.SNOTE_FRAME_DATA + " TEXT," +
             SNoteTable.SNOTE_VOICE_DATA + " TEXT," +
-            SNoteTable.SNOTE_TIMEOUT + " INT)";
+            SNoteTable.SNOTE_TIMEOUT + " INT);";
 
     private static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ CategoryTable.TABLE_CATEGORYS+" (" +
             CategoryTable.CATEGORY_ID + " TEXT PRIMARY KEY," +
             CategoryTable.CATEGORY_NAME + " TEXT," +
             CategoryTable.CATEGORY_ICON + " TEXT," +
-            CategoryTable.CATEGORY_ORDER + " TEXT)";
+            CategoryTable.CATEGORY_ORDER + " TEXT);";
 
     private static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ SignDataTable.TABLE_SIGNDATAS+" (" +
             SignDataTable.SIGNDATA_ID + " TEXT PRIMARY KEY," +
@@ -51,11 +51,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SignDataTable.SIGNDATA_VIEWDATE + " TEXT," +
             SignDataTable.SIGNDATA_USERSIGN + " BLOB," +
             SignDataTable.SIGNDATA_PHOTO + " BLOB," +
-            SignDataTable.SIGNDATA_SENDSTATUS + " TEXT)";
+            SignDataTable.SIGNDATA_SENDSTATUS + " TEXT);";
 
     private static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ SettingsTable.TABLE_SETTINGS+" (" +
             SettingsTable.SETTINGS_KEY + " TEXT PRIMARY KEY," +
-            SettingsTable.SETTINGS_VALUE + " TEXT)";
+            SettingsTable.SETTINGS_VALUE + " TEXT NOT NULL);";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -19,8 +19,8 @@ import mn.btgt.safetyinst.entity.Settings;
 public class SettingsTable extends DatabaseHelper {
 
     public static final String TABLE_SETTINGS = "settings";
-    public static final String SETTINGS_KEY   = "key";
-    public static final String SETTINGS_VALUE = "value";
+    public static final String SETTINGS_KEY   = "settings_key";
+    public static final String SETTINGS_VALUE = "settings_value";
 
     private static final int SETTINGS_KEY_INDEX = 0;
     private static final int SETTINGS_VALUE_INDEX = 1;
@@ -34,28 +34,17 @@ public class SettingsTable extends DatabaseHelper {
         super(context);
     }
 
-    public void add(Settings settings) {
-        if (settings == null) {
-            return;
-        }
-        SQLiteDatabase db = getWritableDatabase();
-        if (db == null) {
-            return;
-        }
-        db.beginTransaction();
-        try {
-            ContentValues cv = new ContentValues();
-            cv.put(SETTINGS_KEY, settings.getKey());
-            cv.put(SETTINGS_VALUE, settings.getValue());
-            db.insert(TABLE_SETTINGS, null, cv);
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
+    public void insert(String key, String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values;
+        values = new ContentValues();
+        values.put(SETTINGS_KEY, key);
+        values.put(SETTINGS_VALUE, value);
+        db.replace(TABLE_SETTINGS, null, values);
+        db.close();
     }
 
-    public void addList(List<Settings> SList){
+    public void insertList(List<Settings> SList){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("BEGIN TRANSACTION");
         for( Settings iset : SList ){
@@ -68,27 +57,24 @@ public class SettingsTable extends DatabaseHelper {
         db.close();
     }
 
-    public String get(String key) {
-        String settings = "";
+    public Settings get(String key) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
         }
-        String selectQuery = "SELECT value FROM settings WHERE " + SETTINGS_KEY + "='" + key + "'";
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                settings = cursor.getString(0);
-            } while (cursor.moveToNext());
+        Cursor cursor = db.query(TABLE_SETTINGS, PROJECTIONS_SETTINGS, SETTINGS_KEY + "=?",
+                new String[]{key}, null, null, null, null);
+        if (!cursor.moveToFirst()) {
+            return null;
         }
+
+        Settings sett = new Settings();
+        sett.setKey(cursor.getString(SETTINGS_KEY_INDEX));
+        sett.setValue(cursor.getString(SETTINGS_VALUE_INDEX));
         cursor.close();
-        db.close();
-        return settings;
+        return sett;
 
     }
-
     public List<Settings> getAll() {
         List<Settings> settings = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
