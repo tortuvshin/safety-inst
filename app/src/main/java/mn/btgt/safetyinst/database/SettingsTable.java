@@ -57,7 +57,7 @@ public class SettingsTable extends DatabaseHelper {
         db.close();
     }
 
-    public Settings get(String key) {
+    public String get(String key) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -67,12 +67,9 @@ public class SettingsTable extends DatabaseHelper {
         if (!cursor.moveToFirst()) {
             return null;
         }
-
-        Settings sett = new Settings();
-        sett.setKey(cursor.getString(SETTINGS_KEY_INDEX));
-        sett.setValue(cursor.getString(SETTINGS_VALUE_INDEX));
+        String value = cursor.getString(SETTINGS_VALUE_INDEX);
         cursor.close();
-        return sett;
+        return value;
 
     }
     public List<Settings> getAll() {

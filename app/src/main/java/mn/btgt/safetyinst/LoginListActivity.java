@@ -46,10 +46,9 @@ public class LoginListActivity extends AppCompatActivity {
         settingsTable = new SettingsTable(this);
 
         List<User> users = userTable.getAll();
-        Settings setComp = settingsTable.get("company");
 
-        if (!setComp.getKey().isEmpty())
-            compName.setText(setComp.getValue());
+        if (settingsTable.get("company")!=null)
+            compName.setText(settingsTable.get("company"));
 
         RecyclerView.Adapter mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);

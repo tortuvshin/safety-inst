@@ -59,7 +59,7 @@ public class SafConstants {
         @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("ANDROID ID", "ID: "+ androidId);
-        return (androidId == null) ? "355694060878908" : androidId;
+        return (APP_ENV.equals("development")) ? "355694060878908" : androidId;
     }
 
     public static String getAppVersion(Context myContext){
@@ -81,6 +81,6 @@ public class SafConstants {
             return "";
         }
         assert mngr != null;
-        return (mngr.getDeviceId() == null) ? "355694060878908" : mngr.getDeviceId();
+        return (APP_ENV.equals("development")) ? "355694060878908" : mngr.getDeviceId();
     }
 }

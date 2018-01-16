@@ -130,6 +130,8 @@ public class SplashActivity extends AppCompatActivity {
                                 Toast.makeText(SplashActivity.this,
                                         "Таны Imei бүртгэлгүй байна",
                                         Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
+                                finish();
                                 return;
                             } else if (success== 0 && error == 900){
                                 Toast.makeText(SplashActivity.this,
@@ -209,6 +211,9 @@ public class SplashActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             Log.e("ERROR : ", e.getMessage() + " ");
+                            Toast.makeText(SplashActivity.this, "Таны Imei бүртгэлгүй байна", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
+                            finish();
                             e.printStackTrace();
                         } catch (Exception ex) {
                             ex.printStackTrace();
