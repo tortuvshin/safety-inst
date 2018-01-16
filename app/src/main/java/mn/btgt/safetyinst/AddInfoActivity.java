@@ -66,7 +66,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
@@ -105,7 +107,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
         };
 
-        final GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
+        final GestureOverlayView gestureView = findViewById(R.id.signaturePad);
         gestureView.setDrawingCacheEnabled(true);
         gestureView.addOnGestureListener(new GestureOverlayView.OnGestureListener() {
             @Override
@@ -137,11 +139,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             }
 
-            private boolean processing = false;
-
-            public void setProcessing(boolean processing) {
-                this.processing = processing;
-            }
         };
 
         clearBtn.setOnClickListener(new View.OnClickListener() {
