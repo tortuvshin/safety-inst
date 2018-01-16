@@ -11,17 +11,18 @@ import java.util.List;
 import mn.btgt.safetyinst.entity.Category;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * safety-inst
+ * Created by turtuvshin on 2018.
  */
 
 
 public class CategoryTable extends DatabaseHelper {
 
-    public static final String TABLE_CATEGORYS       = "categorys";
-    public static final String CATEGORY_ID          = "id";
-    public static final String CATEGORY_NAME        = "name";
-    public static final String CATEGORY_ICON        = "icon";
-    public static final String CATEGORY_ORDER       = "sorder";
+    static final String TABLE_CATEGORYS       = "categorys";
+    static final String CATEGORY_ID          = "id";
+    static final String CATEGORY_NAME        = "name";
+    static final String CATEGORY_ICON        = "icon";
+    static final String CATEGORY_ORDER       = "sorder";
 
     private static final int CATEGORY_ID_INDEX         = 0;
     private static final int CATEGORY_NAME_INDEX       = 1;
@@ -56,7 +57,7 @@ public class CategoryTable extends DatabaseHelper {
             cv.put(CATEGORY_ORDER, category.getOrder());
             db.insert(TABLE_CATEGORYS, null, cv);
         } catch (Exception ex){
-
+            ex.printStackTrace();
         }
         finally {
             db.endTransaction();

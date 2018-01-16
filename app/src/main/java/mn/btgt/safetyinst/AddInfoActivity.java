@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
@@ -33,7 +34,6 @@ import java.util.UUID;
 
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
-import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
@@ -57,8 +57,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
     SignData userSigned;
-    Camera.PictureCallback rawCallback;
-    Camera.ShutterCallback shutterCallback;
     Camera.PictureCallback jpegCallback;
     SignDataTable signDataTable;
 
@@ -73,21 +71,22 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
-        final AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
-        AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
-        final TextView textView = (TextView) findViewById(R.id.gestureTextView);
+        final AppCompatButton saveBtn = findViewById(R.id.save);
+        AppCompatButton clearBtn = findViewById(R.id.clear);
+        final TextView textView = findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
         
-        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
 
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         jpegCallback = new PictureCallback() {
 
+            @SuppressLint({"DefaultLocale", "SdCardPath"})
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-            FileOutputStream outStream = null;
+            FileOutputStream outStream;
             try {
                 outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
 
@@ -102,9 +101,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             catch (IOException e) {
                 e.printStackTrace();
-            }
-
-            finally {
             }
             }
         };
@@ -217,6 +213,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
 
         catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {
@@ -224,6 +221,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             camera.startPreview();
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -240,7 +238,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
 
         catch (RuntimeException e) {
-            System.err.println(e);
+            e.printStackTrace();
             return;
         }
 
@@ -255,8 +253,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
 
         catch (Exception e) {
-            System.err.println(e);
-            return;
+            e.printStackTrace();
         }
     }
 

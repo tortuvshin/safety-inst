@@ -1,9 +1,5 @@
 package mn.btgt.safetyinst.database;
 
-/**
- * Created by turtuvshin on 9/26/17.
- */
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

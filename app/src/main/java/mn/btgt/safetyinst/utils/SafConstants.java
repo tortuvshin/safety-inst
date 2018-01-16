@@ -20,10 +20,10 @@ import mn.btgt.safetyinst.SplashActivity;
 
 public class SafConstants {
 
-    public static String APP_NAME            = "iSafe";
     public static int    APP_USER_TYPE       = 1;
-    public static String APP_ENV             = "development";
+    public static int    APP_ENV             = 1;
     public static boolean APP_DEBUG          = true;
+    public static String APP_NAME            = "iSafe";
     public static String WEB_URL             = "http://demo.mongolgps.com";
     public static String API_URL             = WEB_URL +"/phone.php/safe_settings";
     public static String SEND_URL            = WEB_URL +"/phone.php/safe_upload";
@@ -59,7 +59,7 @@ public class SafConstants {
         @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("ANDROID ID", "ID: "+ androidId);
-        return (APP_ENV.equals("development")) ? "355694060878908" : androidId;
+        return androidId == null ? "355694060878908" : androidId;
     }
 
     public static String getAppVersion(Context myContext){
@@ -81,6 +81,6 @@ public class SafConstants {
             return "";
         }
         assert mngr != null;
-        return (APP_ENV.equals("development")) ? "355694060878908" : mngr.getDeviceId();
+        return mngr.getDeviceId() == null ? "355694060878908" : mngr.getDeviceId();
     }
 }

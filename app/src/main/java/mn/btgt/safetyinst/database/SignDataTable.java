@@ -17,14 +17,14 @@ import mn.btgt.safetyinst.entity.SignData;
 
 public class SignDataTable extends DatabaseHelper {
 
-    public static final String TABLE_SIGNDATAS     = "sign_data";
-    public static final String SIGNDATA_ID    = "id";
-    public static final String SIGNDATA_USER_ID    = "user_id";
-    public static final String SIGNDATA_SNOTE_ID   = "snote_id";
-    public static final String SIGNDATA_VIEWDATE   = "view_date";
-    public static final String SIGNDATA_USERSIGN   = "user_sign";
-    public static final String SIGNDATA_PHOTO      = "photo";
-    public static final String SIGNDATA_SENDSTATUS = "send_status";
+    static final String TABLE_SIGNDATAS     = "sign_data";
+    static final String SIGNDATA_ID    = "id";
+    static final String SIGNDATA_USER_ID    = "user_id";
+    static final String SIGNDATA_SNOTE_ID   = "snote_id";
+    static final String SIGNDATA_VIEWDATE   = "view_date";
+    static final String SIGNDATA_USERSIGN   = "user_sign";
+    static final String SIGNDATA_PHOTO      = "photo";
+    static final String SIGNDATA_SENDSTATUS = "send_status";
 
     private static final int SIGNDATA_ID_INDEX         = 0;
     private static final int SIGNDATA_USER_ID_INDEX    = 1;
