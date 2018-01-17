@@ -1,11 +1,13 @@
 package mn.btgt.safetyinst;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -35,6 +37,7 @@ import java.util.UUID;
 
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
+import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
@@ -172,14 +175,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     signDataTable.add(userSigned);
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
-                    settingsTable.insert(SafConstants.SETTINGS_ISSIGNED, "yes");
-                    Logger.e(settingsTable.get(SafConstants.SETTINGS_ISSIGNED));
+                    settingsTable.insert(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
+                    Logger.e(settingsTable.getAll().toString());
                     openDialog();
 
             } catch (Exception e) {
-                Logger.d(e.getMessage());
+                Logger.d(e);
                 Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
             }
         });

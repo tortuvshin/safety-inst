@@ -36,26 +36,23 @@ public class SettingsTable extends DatabaseHelper {
         super(context);
     }
 
-    public void insert(String key, String value) {
+    public void insert(Settings settings) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values;
-        values = new ContentValues();
-        values.put(SETTINGS_KEY, key);
-        values.put(SETTINGS_VALUE, value);
-        db.replace(TABLE_SETTINGS, null, values);
+        ContentValues cv = new ContentValues();
+        cv.put(SETTINGS_KEY, settings.getKey());
+        cv.put(SETTINGS_VALUE, settings.getValue());
+        db.replace(TABLE_SETTINGS, null, cv);
         db.close();
     }
 
     public void insertList(List<Settings> SList){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("BEGIN TRANSACTION");
         for( Settings iset : SList ){
             ContentValues values = new ContentValues();
             values.put(SETTINGS_KEY, iset.getKey());
             values.put(SETTINGS_VALUE, iset.getValue());
             db.replace(TABLE_SETTINGS, null, values);
         }
-        db.execSQL("END TRANSACTION");
         db.close();
     }
 
@@ -112,4 +109,6 @@ public class SettingsTable extends DatabaseHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_SETTINGS, null, null);
     }
+
+
 }

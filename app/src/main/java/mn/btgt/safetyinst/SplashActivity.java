@@ -156,6 +156,7 @@ public class SplashActivity extends AppCompatActivity {
                                     settingsList.add(new Settings(SafConstants.SETTINGS_IMEI, SafConstants.getImei(SplashActivity.this)));
                                     settingsList.add(new Settings(SafConstants.SETTINGS_ANDROID_ID, SafConstants.getAndroiId(SplashActivity.this)));
                                     settingsList.add(new Settings(SafConstants.SETTINGS_LOGO, setting.getString("company_logo")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_ISSIGNED, "no"));
 
                                     settingsTable.insertList(settingsList);
                                 } else {
