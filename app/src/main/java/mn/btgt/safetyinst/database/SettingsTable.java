@@ -13,7 +13,9 @@ import mn.btgt.safetyinst.entity.SNote;
 import mn.btgt.safetyinst.entity.Settings;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class SettingsTable extends DatabaseHelper {
@@ -34,30 +36,27 @@ public class SettingsTable extends DatabaseHelper {
         super(context);
     }
 
-    public void insert(String key, String value) {
+    public void insert(Settings settings) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values;
-        values = new ContentValues();
-        values.put(SETTINGS_KEY, key);
-        values.put(SETTINGS_VALUE, value);
-        db.replace(TABLE_SETTINGS, null, values);
+        ContentValues cv = new ContentValues();
+        cv.put(SETTINGS_KEY, settings.getKey());
+        cv.put(SETTINGS_VALUE, settings.getValue());
+        db.replace(TABLE_SETTINGS, null, cv);
         db.close();
     }
 
     public void insertList(List<Settings> SList){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("BEGIN TRANSACTION");
         for( Settings iset : SList ){
             ContentValues values = new ContentValues();
             values.put(SETTINGS_KEY, iset.getKey());
             values.put(SETTINGS_VALUE, iset.getValue());
             db.replace(TABLE_SETTINGS, null, values);
         }
-        db.execSQL("END TRANSACTION");
         db.close();
     }
 
-    public Settings get(String key) {
+    public String get(String key) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -67,12 +66,9 @@ public class SettingsTable extends DatabaseHelper {
         if (!cursor.moveToFirst()) {
             return null;
         }
-
-        Settings sett = new Settings();
-        sett.setKey(cursor.getString(SETTINGS_KEY_INDEX));
-        sett.setValue(cursor.getString(SETTINGS_VALUE_INDEX));
+        String value = cursor.getString(SETTINGS_VALUE_INDEX);
         cursor.close();
-        return sett;
+        return value;
 
     }
     public List<Settings> getAll() {
@@ -113,4 +109,6 @@ public class SettingsTable extends DatabaseHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_SETTINGS, null, null);
     }
+
+
 }

@@ -18,6 +18,12 @@ import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SafConstants;
 import mn.btgt.safetyinst.utils.Validation;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class LoginImeiActivity extends AppCompatActivity {
 
     private AppCompatButton loginBtn;
@@ -45,10 +51,13 @@ public class LoginImeiActivity extends AppCompatActivity {
         Intent iGet = getIntent();
 
         if (iGet.getStringExtra("username") == null){
-            int id = Integer.parseInt(iGet.getStringExtra("user_id"));
-            User user = userTable.get(id);
-            imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
-            usernameText.setText(user.getName());
+            if (iGet.getStringExtra("user_id") != null){
+                int id = Integer.parseInt(iGet.getStringExtra("user_id"));
+                User user = userTable.get(id);
+                imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
+                usernameText.setText(user.getName());
+            }
+
         } else {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -56,6 +65,7 @@ public class LoginImeiActivity extends AppCompatActivity {
             startActivity(i);
             finish();
         }
+
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -9,8 +9,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
+
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,10 +39,18 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
     private Handler mHandler;
+    private Handler handler;
+
     PrefManager prefManager;
     ImageLoader imageLoader;
 
@@ -58,7 +67,8 @@ public class SplashActivity extends AppCompatActivity {
         imageLoader = new ImageLoader(this);
 
         mHandler = new Handler(Looper.getMainLooper());
-        mHandler.post(new Runnable() {
+        handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
             @Override
             public void run() {
 
@@ -66,13 +76,11 @@ public class SplashActivity extends AppCompatActivity {
                     Toast.makeText(SplashActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
                     openMain();
                 } else {
-                    Log.e(TAG, "CONN START: "+ Long.toString(System.currentTimeMillis()) + " ms");
 
                     connectServer();
-
                     long diff = System.currentTimeMillis() - startTime;
 
-                    Log.e(TAG, "CONN SUCCESS: "+ Long.toString(diff) + " ms");
+                    Logger.d("Сэрвэрээс өгөгдөл татсан хугацаа: "+ Long.toString(diff) + " ms");
                 }
             }
         });
@@ -102,19 +110,16 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Server connection failed : " + e.getMessage());
+                Logger.e("Server connection failed : " + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, "Response body: "+res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-
-                        Log.e(TAG, "Response body: "+res);
 
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
@@ -130,13 +135,16 @@ public class SplashActivity extends AppCompatActivity {
                                 Toast.makeText(SplashActivity.this,
                                         "Таны Imei бүртгэлгүй байна",
                                         Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
+                                finish();
                                 return;
                             } else if (success== 0 && error == 900){
                                 Toast.makeText(SplashActivity.this,
                                         "Алдаа: " + error,
                                         Toast.LENGTH_SHORT).show();
                             } else if ( success == 1) {
-                                Log.e(TAG, "Settings: "+setting.toString()+"\n"+"Users: "+users.toString()+"\n"+"Notes: "+notes.toString());
+
+                                Logger.json(setting.toString());
 
                                 if (setting.length() > 0) {
                                     SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
@@ -148,6 +156,7 @@ public class SplashActivity extends AppCompatActivity {
                                     settingsList.add(new Settings(SafConstants.SETTINGS_IMEI, SafConstants.getImei(SplashActivity.this)));
                                     settingsList.add(new Settings(SafConstants.SETTINGS_ANDROID_ID, SafConstants.getAndroiId(SplashActivity.this)));
                                     settingsList.add(new Settings(SafConstants.SETTINGS_LOGO, setting.getString("company_logo")));
+                                    settingsList.add(new Settings(SafConstants.SETTINGS_ISSIGNED, "no"));
 
                                     settingsTable.insertList(settingsList);
                                 } else {
@@ -208,8 +217,10 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                         } catch (JSONException e) {
-                            Log.e("ERROR : ", e.getMessage() + " ");
-                            e.printStackTrace();
+                            Logger.e(e.getMessage());
+                            Toast.makeText(SplashActivity.this, "Таны Imei бүртгэлгүй байна", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
+                            finish();
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }

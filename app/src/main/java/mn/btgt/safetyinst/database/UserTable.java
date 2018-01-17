@@ -1,9 +1,5 @@
 package mn.btgt.safetyinst.database;
 
-/**
- * Created by turtuvshin on 9/26/17.
- */
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,19 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.entity.User;
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
 
 public class UserTable extends DatabaseHelper {
 
-    public static final String TABLE_USERS      = "users";
-    public static final String USER_ID          = "id";
-    public static final String USER_NAME        = "name";
-    public static final String USER_POSITION    = "position";
-    public static final String USER_PHONE       = "phone";
-    public static final String USER_IMEI        = "imei";
-    public static final String USER_EMAIL       = "email";
-    public static final String USER_PASS        = "pass";
-    public static final String USER_AVATAR     = "profile";
-    public static final String USER_LAST_SIGNED = "lastSigned";
+    static final String TABLE_USERS      = "users";
+    static final String USER_ID          = "id";
+    static final String USER_NAME        = "name";
+    static final String USER_POSITION    = "position";
+    static final String USER_PHONE       = "phone";
+    static final String USER_IMEI        = "imei";
+    static final String USER_EMAIL       = "email";
+    static final String USER_PASS        = "pass";
+    static final String USER_AVATAR      = "profile";
+    static final String USER_LAST_SIGNED = "lastSigned";
 
     private static final int USER_ID_INDEX       = 0;
     private static final int USER_NAME_INDEX     = 1;

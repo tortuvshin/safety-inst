@@ -23,6 +23,12 @@ import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.SafConstants;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
 
@@ -46,10 +52,9 @@ public class LoginListActivity extends AppCompatActivity {
         settingsTable = new SettingsTable(this);
 
         List<User> users = userTable.getAll();
-        Settings setComp = settingsTable.get("company");
 
-        if (!setComp.getKey().isEmpty())
-            compName.setText(setComp.getValue());
+        if (settingsTable.get("company")!=null)
+            compName.setText(settingsTable.get("company"));
 
         RecyclerView.Adapter mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);

@@ -1,20 +1,22 @@
 package mn.btgt.safetyinst.database;
 
-/**
- * Created by turtuvshin on 9/26/17.
- */
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context myContext;
 
     private static final String TAG = "DatabaseHelper : ";
-    private static final int    DATABASE_VERSION = 21;
+    private static final int    DATABASE_VERSION = 23;
     private static final String DATABASE_NAME    = "safety.db";
 
     private static final String CREATE_TABLE_USERS = "CREATE TABLE "+UserTable.TABLE_USERS+" (" +

@@ -1,7 +1,9 @@
 package mn.btgt.safetyinst.entity;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class Category {
@@ -43,5 +45,15 @@ public class Category {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", order='" + order + '\'' +
+                '}';
     }
 }

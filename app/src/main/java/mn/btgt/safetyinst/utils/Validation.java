@@ -3,7 +3,9 @@ package mn.btgt.safetyinst.utils;
 import android.widget.EditText;
 
 /**
- * Created by turtuvshin on 10/16/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class Validation {

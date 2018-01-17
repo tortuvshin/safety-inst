@@ -1,8 +1,11 @@
 package mn.btgt.safetyinst.entity;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
+
 
 public class Settings {
     private String key;
@@ -30,5 +33,13 @@ public class Settings {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "Settings{" +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

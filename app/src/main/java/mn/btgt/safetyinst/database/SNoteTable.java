@@ -11,20 +11,22 @@ import java.util.List;
 import mn.btgt.safetyinst.entity.SNote;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class SNoteTable extends DatabaseHelper {
    
-    public static final String TABLE_SNOTE       = "snote";
-    public static final String SNOTE_ID          = "id";
-    public static final String SNOTE_CAT_ID      = "category_id";
-    public static final String SNOTE_NAME        = "name";
-    public static final String SNOTE_ORDER       = "sorder";
-    public static final String SNOTE_FRAME_TYPE  = "frame_type";
-    public static final String SNOTE_FRAME_DATA  = "frame_data";
-    public static final String SNOTE_VOICE_DATA  = "voice_data";
-    public static final String SNOTE_TIMEOUT     = "timeout";
+    static final String TABLE_SNOTE       = "snote";
+    static final String SNOTE_ID          = "id";
+    static final String SNOTE_CAT_ID      = "category_id";
+    static final String SNOTE_NAME        = "name";
+    static final String SNOTE_ORDER       = "sorder";
+    static final String SNOTE_FRAME_TYPE  = "frame_type";
+    static final String SNOTE_FRAME_DATA  = "frame_data";
+    static final String SNOTE_VOICE_DATA  = "voice_data";
+    static final String SNOTE_TIMEOUT     = "timeout";
 
     private static final int SNOTE_ID_INDEX         = 0;
     private static final int SNOTE_CAT_ID_INDEX     = 1;

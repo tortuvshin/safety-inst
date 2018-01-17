@@ -1,17 +1,19 @@
 package mn.btgt.safetyinst;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -19,6 +21,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +51,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
@@ -57,8 +67,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
     SignData userSigned;
-    Camera.PictureCallback rawCallback;
-    Camera.ShutterCallback shutterCallback;
     Camera.PictureCallback jpegCallback;
     SignDataTable signDataTable;
 
@@ -68,26 +76,29 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
-        final AppCompatButton saveBtn = (AppCompatButton) findViewById(R.id.save);
-        AppCompatButton clearBtn = (AppCompatButton) findViewById(R.id.clear);
-        final TextView textView = (TextView) findViewById(R.id.gestureTextView);
+        final AppCompatButton saveBtn = findViewById(R.id.save);
+        AppCompatButton clearBtn = findViewById(R.id.clear);
+        final TextView textView = findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
         
-        surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
 
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         jpegCallback = new PictureCallback() {
 
+            @SuppressLint({"DefaultLocale", "SdCardPath"})
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-            FileOutputStream outStream = null;
+            FileOutputStream outStream;
             try {
                 outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
 
@@ -103,13 +114,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             catch (IOException e) {
                 e.printStackTrace();
             }
-
-            finally {
-            }
             }
         };
 
-        final GestureOverlayView gestureView = (GestureOverlayView) findViewById(R.id.signaturePad);
+        final GestureOverlayView gestureView = findViewById(R.id.signaturePad);
         gestureView.setDrawingCacheEnabled(true);
         gestureView.addOnGestureListener(new GestureOverlayView.OnGestureListener() {
             @Override
@@ -141,11 +149,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             }
 
-            private boolean processing = false;
-
-            public void setProcessing(boolean processing) {
-                this.processing = processing;
-            }
         };
 
         clearBtn.setOnClickListener(new View.OnClickListener() {
@@ -172,13 +175,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     signDataTable.add(userSigned);
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
-                    settingsTable.insert(SafConstants.SETTINGS_ISSIGNED, "yes");
+                    settingsTable.insert(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
+                    Logger.e(settingsTable.getAll().toString());
                     openDialog();
 
             } catch (Exception e) {
-                Log.d("Gestures", e.getMessage());
+                Logger.d(e);
                 Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
             }
             }
         });
@@ -217,6 +220,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
 
         catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {
@@ -224,6 +228,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             camera.startPreview();
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -240,7 +245,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
 
         catch (RuntimeException e) {
-            System.err.println(e);
+            e.printStackTrace();
             return;
         }
 
@@ -255,8 +260,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
 
         catch (Exception e) {
-            System.err.println(e);
-            return;
+            e.printStackTrace();
         }
     }
 
@@ -302,7 +306,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                 sArray.put(sJSON);
             }
-            Log.e(TAG, sArray.toString());
+            Logger.e(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
         }
@@ -316,9 +320,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("images", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .build();
 
-        Log.e(TAG, sArray.toString());
         String uri = SafConstants.SEND_URL;
-        Log.e(TAG, uri + " ");
 
         Request request = new Request.Builder()
                 .url(uri)
@@ -331,35 +333,33 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .post(formBody)
                 .build();
 
-        Log.e(TAG, request.toString());
-        Log.e(TAG, "Headers : "+request.headers().toString());
-
         client.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Server connection failed : " + e.getMessage());
+                Logger.e("Server connection failed : " + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, "Response body: "+res);
+                Logger.json(res);
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
-                            Log.d(TAG, "JSON Object : "+resp.toString());
+
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
 
                             Toast.makeText(AddInfoActivity.this, "Таны мэдээлэл амжилттай илгээгдлээ.", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("ERROR : ", e.getMessage() + " ");
+                            Logger.e("ERROR : ", e.getMessage() + " ");
                         }
                     }
                 });
@@ -378,5 +378,4 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
         return false;
     }
-
 }

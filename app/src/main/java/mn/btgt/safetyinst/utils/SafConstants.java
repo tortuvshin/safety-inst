@@ -1,6 +1,7 @@
 package mn.btgt.safetyinst.utils;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,11 +15,17 @@ import android.util.Log;
 import mn.btgt.safetyinst.SplashActivity;
 
 /**
- * Created by turtuvshin on 10/11/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
+
 
 public class SafConstants {
 
+    public static int    APP_USER_TYPE       = 1;
+    public static int    APP_ENV             = 1;
+    public static boolean APP_DEBUG          = true;
     public static String APP_NAME            = "iSafe";
     public static String WEB_URL             = "http://demo.mongolgps.com";
     public static String API_URL             = WEB_URL +"/phone.php/safe_settings";
@@ -35,45 +42,48 @@ public class SafConstants {
     }
 
     @Nullable
-    public static String MD5_Hash(String md5) {
+    private static String MD5_Hash(String md5) {
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
             byte[] array = md.digest(md5.getBytes());
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+            StringBuilder sb = new StringBuilder();
+            for (byte anArray : array) {
+                sb.append(Integer.toHexString((anArray & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString();
         } catch (java.security.NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     @NonNull
     public static String getAndroiId(Context myContext){
+        @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.d("ANDROID ID", "ID: "+androidId.toString());
-        return (androidId.toString() == null) ? "355694060878908" : androidId.toString();
+        Log.d("ANDROID ID", "ID: "+ androidId);
+        return androidId == null ? "355694060878908" : androidId;
     }
 
     public static String getAppVersion(Context myContext){
         PackageInfo pi;
         try {
             pi = myContext.getPackageManager().getPackageInfo(myContext.getPackageName(), 0);
-            String appV = "v" + pi.versionName + "." + pi.versionCode ;
-            return appV;
+            return "v" + pi.versionName + "." + pi.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return "00";
         }
     }
 
+    @SuppressLint("HardwareIds")
     public static String getImei(Context myContext) {
         TelephonyManager mngr = (TelephonyManager) myContext.getSystemService(Context.TELEPHONY_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(myContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             return "";
         }
-        return (mngr.getDeviceId() == null) ? "355694060878908" : mngr.getDeviceId();
+        assert mngr != null;
+        return mngr.getDeviceId() == null ? "355694060878908" : mngr.getDeviceId();
     }
 }

@@ -1,7 +1,9 @@
 package mn.btgt.safetyinst.entity;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class SNote {
@@ -80,5 +82,19 @@ public class SNote {
 
     public void setTimeout(int timeout) {
         this.timeout = timeout;
+    }
+
+    @Override
+    public String toString() {
+        return "SNote{" +
+                "id='" + id + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", name='" + name + '\'' +
+                ", order='" + order + '\'' +
+                ", frameType=" + frameType +
+                ", frameData='" + frameData + '\'' +
+                ", voiceData='" + voiceData + '\'' +
+                ", timeout=" + timeout +
+                '}';
     }
 }
