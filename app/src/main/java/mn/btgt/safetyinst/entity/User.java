@@ -93,4 +93,19 @@ public class User {
     public void setLastSigned(String lastSigned) {
         this.lastSigned = lastSigned;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", position='" + position + '\'' +
+                ", phone=" + phone +
+                ", imei='" + imei + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", lastSigned='" + lastSigned + '\'' +
+                '}';
+    }
 }

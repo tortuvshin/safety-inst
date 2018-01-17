@@ -1,5 +1,7 @@
 package mn.btgt.safetyinst.entity;
 
+import java.util.Arrays;
+
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -73,5 +75,18 @@ public class SignData {
 
     public void setSendStatus(String sendStatus) {
         this.sendStatus = sendStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "SignData{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", sNoteId='" + sNoteId + '\'' +
+                ", viewDate=" + viewDate +
+                ", userSign=" + Arrays.toString(userSign) +
+                ", photo=" + Arrays.toString(photo) +
+                ", sendStatus='" + sendStatus + '\'' +
+                '}';
     }
 }

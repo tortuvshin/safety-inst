@@ -83,4 +83,18 @@ public class SNote {
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
+
+    @Override
+    public String toString() {
+        return "SNote{" +
+                "id='" + id + '\'' +
+                ", categoryId='" + categoryId + '\'' +
+                ", name='" + name + '\'' +
+                ", order='" + order + '\'' +
+                ", frameType=" + frameType +
+                ", frameData='" + frameData + '\'' +
+                ", voiceData='" + voiceData + '\'' +
+                ", timeout=" + timeout +
+                '}';
+    }
 }

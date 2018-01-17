@@ -46,4 +46,14 @@ public class Category {
     public void setOrder(String order) {
         this.order = order;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", order='" + order + '\'' +
+                '}';
+    }
 }

@@ -2,6 +2,9 @@ package mn.btgt.safetyinst;
 
 import android.app.Application;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
+
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -13,5 +16,6 @@ public class AppMain extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        Logger.addLogAdapter(new AndroidLogAdapter());
     }
 }

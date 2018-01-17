@@ -28,7 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             UserTable.USER_EMAIL + " TEXT," +
             UserTable.USER_PASS + " TEXT," +
             UserTable.USER_AVATAR + " TEXT," +
-            UserTable.USER_LAST_SIGNED + " TEXT);";
+            UserTable.USER_LAST_SIGNED + " TEXT";
 
     private static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ SNoteTable.TABLE_SNOTE+" (" +
             SNoteTable.SNOTE_ID + " TEXT PRIMARY KEY," +

@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,6 +19,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -172,10 +173,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(SafConstants.SETTINGS_ISSIGNED, "yes");
+                    Logger.e(settingsTable.get(SafConstants.SETTINGS_ISSIGNED));
                     openDialog();
 
             } catch (Exception e) {
-                Log.d("Gestures", e.getMessage());
+                Logger.d(e.getMessage());
                 Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
@@ -302,7 +304,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                 sArray.put(sJSON);
             }
-            Log.e(TAG, sArray.toString());
+            Logger.e(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
         }
@@ -316,9 +318,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("images", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
                 .build();
 
-        Log.e(TAG, sArray.toString());
         String uri = SafConstants.SEND_URL;
-        Log.e(TAG, uri + " ");
 
         Request request = new Request.Builder()
                 .url(uri)
@@ -331,35 +331,33 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .post(formBody)
                 .build();
 
-        Log.e(TAG, request.toString());
-        Log.e(TAG, "Headers : "+request.headers().toString());
-
         client.newCall(request).enqueue(new Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e(TAG, "Server connection failed : " + e.getMessage());
+                Logger.e("Server connection failed : " + e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Log.e(TAG, "Response body: "+res);
+                Logger.json(res);
+
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
-                            Log.d(TAG, "JSON Object : "+resp.toString());
+
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
 
                             Toast.makeText(AddInfoActivity.this, "Таны мэдээлэл амжилттай илгээгдлээ.", Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Log.e("ERROR : ", e.getMessage() + " ");
+                            Logger.e("ERROR : ", e.getMessage() + " ");
                         }
                     }
                 });
