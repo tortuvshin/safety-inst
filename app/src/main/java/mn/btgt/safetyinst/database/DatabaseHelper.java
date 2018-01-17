@@ -5,6 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context myContext;

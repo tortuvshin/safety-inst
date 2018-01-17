@@ -23,6 +23,12 @@ import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.SafConstants;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class LoginListActivity extends AppCompatActivity {
     private static final String TAG = "LoginList";
 

@@ -11,10 +11,10 @@ import java.util.List;
 import mn.btgt.safetyinst.entity.Category;
 
 /**
- * safety-inst
- * Created by turtuvshin on 2018.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
-
 
 public class CategoryTable extends DatabaseHelper {
 

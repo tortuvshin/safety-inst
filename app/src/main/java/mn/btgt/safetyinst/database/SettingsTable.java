@@ -13,7 +13,9 @@ import mn.btgt.safetyinst.entity.SNote;
 import mn.btgt.safetyinst.entity.Settings;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class SettingsTable extends DatabaseHelper {

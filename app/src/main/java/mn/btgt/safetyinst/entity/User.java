@@ -1,8 +1,11 @@
 package mn.btgt.safetyinst.entity;
 
 /**
- * Created by turtuvshin on 9/28/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
+
 
 public class User {
     private String id;

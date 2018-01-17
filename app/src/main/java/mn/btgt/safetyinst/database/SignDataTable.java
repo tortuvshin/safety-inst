@@ -11,9 +11,10 @@ import java.util.List;
 import mn.btgt.safetyinst.entity.SignData;
 
 /**
- * Created by turtuvshin on 10/3/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
-
 
 public class SignDataTable extends DatabaseHelper {
 

@@ -37,6 +37,12 @@ import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.entity.SNote;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();

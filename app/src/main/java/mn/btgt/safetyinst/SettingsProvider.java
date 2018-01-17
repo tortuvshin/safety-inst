@@ -17,7 +17,9 @@ import java.util.HashMap;
 import mn.btgt.safetyinst.database.SettingsTable;
 
 /**
- * Created by turtuvshin on 12/14/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class SettingsProvider extends ContentProvider{

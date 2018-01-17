@@ -15,8 +15,11 @@ import android.util.Log;
 import mn.btgt.safetyinst.SplashActivity;
 
 /**
- * Created by turtuvshin on 10/11/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
+
 
 public class SafConstants {
 

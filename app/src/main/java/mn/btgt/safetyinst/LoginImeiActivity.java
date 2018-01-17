@@ -18,6 +18,12 @@ import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SafConstants;
 import mn.btgt.safetyinst.utils.Validation;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class LoginImeiActivity extends AppCompatActivity {
 
     private AppCompatButton loginBtn;

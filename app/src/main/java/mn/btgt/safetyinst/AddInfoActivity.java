@@ -47,6 +47,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
+
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
@@ -372,5 +378,4 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
         return false;
     }
-
 }

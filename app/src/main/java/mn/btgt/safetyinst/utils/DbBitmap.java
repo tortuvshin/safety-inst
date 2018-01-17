@@ -12,8 +12,11 @@ import android.graphics.RectF;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Created by turtuvshin on 10/6/17.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
+
 
 public class DbBitmap {
 

@@ -1,9 +1,5 @@
 package mn.btgt.safetyinst.database;
 
-/**
- * Created by turtuvshin on 9/26/17.
- */
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.entity.User;
+/**
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
+ */
 
 public class UserTable extends DatabaseHelper {
 
