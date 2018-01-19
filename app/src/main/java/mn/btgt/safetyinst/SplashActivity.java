@@ -194,13 +194,13 @@ public class SplashActivity extends AppCompatActivity {
                                     for (int i = 0; i < notes.length(); i++) {
                                         SNote sNote = new SNote();
                                         sNote.setId(notes.getJSONObject(i).getString("id"));
-                                        sNote.setCategoryId(notes.getJSONObject(i).getString("id"));
+                                        sNote.setCategoryId(notes.getJSONObject(i).getString("category_id"));
                                         sNote.setName(notes.getJSONObject(i).getString("name"));
-                                        sNote.setOrder(notes.getJSONObject(i).getString("id"));
-                                        sNote.setFrameType(notes.getJSONObject(i).getInt("dur"));
-                                        sNote.setFrameData(notes.getJSONObject(i).getString("info"));
-                                        sNote.setVoiceData(notes.getJSONObject(i).getString("photo"));
-                                        sNote.setTimeout(notes.getJSONObject(i).getInt("dur"));
+                                        sNote.setOrder(notes.getJSONObject(i).getString("orderx"));
+                                        sNote.setFrameType(notes.getJSONObject(i).getInt("frame_type"));
+                                        sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
+                                        sNote.setVoiceData("");
+                                        sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
                                         sNoteTable.add(sNote);
                                     }
 
@@ -210,7 +210,8 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (setting.getString("error").equals("0")) {
-                                    openMain();
+//                                    openMain();
+                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
                                 } else {
                                     Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
                                 }
