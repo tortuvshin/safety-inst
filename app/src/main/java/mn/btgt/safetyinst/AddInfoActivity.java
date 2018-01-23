@@ -32,7 +32,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import mn.btgt.safetyinst.database.SettingsTable;
@@ -163,11 +166,14 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onClick(View view) {
             try {
+                    Calendar c = Calendar.getInstance();
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     bm = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
                     userSigned.setsNoteId("1");
                     userSigned.setUserId("1");
-                    userSigned.setViewDate(System.currentTimeMillis());
+                    userSigned.setViewDate(df.format(c.getTime()));
                     userSigned.setPhoto(DbBitmap.getBytes(bm));
                     userSigned.setUserSign(DbBitmap.getBytes(bm));
                     userSigned.setSendStatus("0");
@@ -181,7 +187,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             } catch (Exception e) {
                 Logger.d(e);
-                Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
             }
             }
         });
@@ -189,9 +195,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     public void openDialog(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
-        alertDialogBuilder.setTitle("Ажлын амжилт хүсэе");
-        alertDialogBuilder.setMessage("Таны мэдээлэл хадгалагдлаа");
-                alertDialogBuilder.setPositiveButton("OK",
+        alertDialogBuilder.setTitle(R.string.work_success);
+        alertDialogBuilder.setMessage(R.string.has_been_saved);
+                alertDialogBuilder.setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
@@ -281,7 +287,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     **/
     public void sendInfo() {
         if (!ConnectionDetector.isNetworkAvailable(this)){
-            Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddInfoActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
             return;
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -356,7 +362,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
 
-                            Toast.makeText(AddInfoActivity.this, "Таны мэдээлэл амжилттай илгээгдлээ.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddInfoActivity.this, R.string.send_info_success, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Logger.e("ERROR : ", e.getMessage() + " ");

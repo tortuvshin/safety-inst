@@ -122,7 +122,7 @@ public class LoginListActivity extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Гарах бол дахин дарна уу", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.click_to_again, Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 

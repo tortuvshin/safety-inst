@@ -66,7 +66,6 @@ public class LoginImeiActivity extends AppCompatActivity {
             finish();
         }
 
-
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,8 +79,6 @@ public class LoginImeiActivity extends AppCompatActivity {
         String password = passText.getText().toString();
         String username = usernameText.getText().toString();
 
-        Validation.empty(passText);
-
         if (password.trim().length() > 0) {
 
             Cursor checkedUser = userTable.checkUser(password);
@@ -93,14 +90,14 @@ public class LoginImeiActivity extends AppCompatActivity {
                     loginBtn.setEnabled(false);
                     final ProgressDialog progressDialog = new ProgressDialog(LoginImeiActivity.this);
                     progressDialog.setIndeterminate(true);
-                    progressDialog.setMessage("Уншиж байна...");
+                    progressDialog.setMessage(getString(R.string.loading));
                     progressDialog.show();
                     new android.os.Handler().post(
                             new Runnable() {
                                 public void run() {
-                                    Toast.makeText(LoginImeiActivity.this, "Тавтай морилно уу", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginImeiActivity.this, R.string.welcome, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
-//                                    prefManager.setLogin(true);
+                                    prefManager.setLogin(true);
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -110,7 +107,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                             });
                 }
                 else{
-                    Toast.makeText(LoginImeiActivity.this, "Хэрэглэгчийн нэр нууц үг буруу байна", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginImeiActivity.this, R.string.username_pass_incorrect, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 stopManagingCursor(checkedUser);
@@ -118,12 +115,12 @@ public class LoginImeiActivity extends AppCompatActivity {
 
             }else{
                 Toast.makeText(getApplicationContext(),
-                        "Database query error",
+                        R.string.error_database_query,
                         Toast.LENGTH_SHORT).show();
                 return;
             }
         } else {
-            Toast.makeText(LoginImeiActivity.this,"Хэрэглэгчийн нэр нууц үгээ оруулна уу",Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginImeiActivity.this, R.string.enter_username_pass,Toast.LENGTH_SHORT).show();
             return;
         }
     }

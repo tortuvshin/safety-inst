@@ -73,7 +73,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
 
                 if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
-                    Toast.makeText(SplashActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
                     openMain();
                 } else {
 
@@ -133,14 +133,14 @@ public class SplashActivity extends AppCompatActivity {
                             int error = setting.getInt("error");
                             if (success == 0 && error == -11) {
                                 Toast.makeText(SplashActivity.this,
-                                        "Таны Imei бүртгэлгүй байна",
+                                        R.string.imei_unlisted,
                                         Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
                                 finish();
                                 return;
                             } else if (success== 0 && error == 900){
                                 Toast.makeText(SplashActivity.this,
-                                        "Алдаа: " + error,
+                                        getString(R.string.error) + error,
                                         Toast.LENGTH_SHORT).show();
                             } else if ( success == 1) {
 
@@ -160,7 +160,7 @@ public class SplashActivity extends AppCompatActivity {
 
                                     settingsTable.insertList(settingsList);
                                 } else {
-                                    Toast.makeText(SplashActivity.this, "Тохиргооны мэдээлэл хоосон байна", Toast.LENGTH_LONG)
+                                    Toast.makeText(SplashActivity.this, R.string.empty_config, Toast.LENGTH_LONG)
                                             .show();
                                 }
 
@@ -182,7 +182,7 @@ public class SplashActivity extends AppCompatActivity {
                                         userTable.add(user);
                                     }
                                 } else {
-                                    Toast.makeText(SplashActivity.this, "Хэрэглэгчийн мэдээлэл хоосон", Toast.LENGTH_LONG)
+                                    Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
                                 }
 
@@ -205,21 +205,20 @@ public class SplashActivity extends AppCompatActivity {
                                     }
 
                                 } else {
-                                    Toast.makeText(SplashActivity.this, "Зааварчилгаа хоосон байна", Toast.LENGTH_LONG)
+                                    Toast.makeText(SplashActivity.this, R.string.empty_note, Toast.LENGTH_LONG)
                                             .show();
                                 }
 
                                 if (setting.getString("error").equals("0")) {
-//                                    openMain();
-                                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                                    openMain();
                                 } else {
-                                    Toast.makeText(SplashActivity.this, "Сэрвэртэй холбогдоход алдаа гарлаа", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SplashActivity.this, R.string.error_server_connection, Toast.LENGTH_LONG).show();
                                 }
                             }
 
                         } catch (JSONException e) {
                             Logger.e(e.getMessage());
-                            Toast.makeText(SplashActivity.this, "Таны Imei бүртгэлгүй байна", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SplashActivity.this, R.string.imei_unlisted, Toast.LENGTH_LONG).show();
                             startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
                             finish();
                         } catch (Exception ex) {
@@ -234,7 +233,7 @@ public class SplashActivity extends AppCompatActivity {
     public void openMain () {
         Intent iGet = getIntent();
         String username = iGet.getStringExtra("username");
-
+        String password = iGet.getStringExtra("password");
         // Mercury-гээс хаб нээсэн бол username intent ирсэн эсэх
         if (username == null) {
             Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
@@ -242,8 +241,7 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         } else {
             Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
-            intent.putExtra("username", iGet.getStringExtra("username"));
-            intent.putExtra("password", iGet.getStringExtra("password"));
+            prefManager.setUser(username, password);
             startActivity(intent);
             finish();
         }
