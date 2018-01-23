@@ -44,10 +44,7 @@ public class SettingsProvider extends ContentProvider{
     public boolean onCreate() {
         sTable = new SettingsTable(getContext());
         database = sTable.getWritableDatabase();
-        if (database != null) {
-            return true;
-        }
-        return false;
+        return database != null;
     }
 
     @Nullable

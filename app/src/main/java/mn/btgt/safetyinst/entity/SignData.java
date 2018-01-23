@@ -13,7 +13,7 @@ public class SignData {
     private String id;
     private String userId;
     private String sNoteId;
-    private long viewDate;
+    private String viewDate;
     private byte[] userSign;
     private byte[] photo;
     private String sendStatus;
@@ -45,11 +45,11 @@ public class SignData {
         this.sNoteId = sNoteId;
     }
 
-    public long getViewDate() {
+    public String getViewDate() {
         return viewDate;
     }
 
-    public void setViewDate(long viewDate) {
+    public void setViewDate(String viewDate) {
         this.viewDate = viewDate;
     }
 

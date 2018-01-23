@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -9,21 +10,23 @@ import android.content.SharedPreferences;
  * URL: https://www.github.com/tortuvshin
  */
 
-
 public class PrefManager {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private Context _context;
+    private Context context;
 
     private int PRIVATE_MODE = 0;
 
     private static final String PREF_NAME = "SafetyInst";
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String LOGGED_IN = "isLoggedIn";
+    private static final String LOGGED_IN_USERNAME = "loggedUsername";
+    private static final String LOGGED_IN_PASS = "loggedPass";
 
+    @SuppressLint("CommitPrefEdits")
     public PrefManager(Context context) {
-        this._context = context;
-        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        this.context = context;
+        pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
     /**
@@ -31,26 +34,32 @@ public class PrefManager {
      *
      * @param isFirstTime анх програм нээхэд true
      */
-    public void setFirstTimeLaunch(boolean isFirstTime) {
+    public void setLaunch(boolean isFirstTime) {
         editor.putBoolean(IS_FIRST_TIME_LAUNCH, isFirstTime);
         editor.commit();
     }
 
-    /**
-     * Application хамгийн анх ачааллаж байгаа эсэх
-     */
     public boolean isFirstTimeLaunch() {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
 
-    /**
-     * Хэрэглэгч нэвтрэх болон гарах үед ашиглана
-     *
-     * @param isLoggedIn нэвтрэх үед true гарах үед false
-     */
     public void setLogin(boolean isLoggedIn) {
         editor.putBoolean(LOGGED_IN, isLoggedIn);
         editor.commit();
+    }
+
+    public void setUser(String username, String pass) {
+        editor.putString(LOGGED_IN_USERNAME, username);
+        editor.putString(LOGGED_IN_PASS, pass);
+        editor.commit();
+    }
+
+    public String getUserName () {
+        return pref.getString(LOGGED_IN_USERNAME, "");
+    }
+
+    public String getUserPass () {
+        return pref.getString(LOGGED_IN_PASS, "");
     }
 
     /**

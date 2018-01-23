@@ -16,7 +16,6 @@ import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SafConstants;
-import mn.btgt.safetyinst.utils.Validation;
 
 /**
  * Author: Turtuvshin Byambaa.

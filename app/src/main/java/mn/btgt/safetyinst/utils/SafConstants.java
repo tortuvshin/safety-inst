@@ -12,8 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import mn.btgt.safetyinst.SplashActivity;
-
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -62,7 +60,7 @@ public class SafConstants {
         @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("ANDROID ID", "ID: "+ androidId);
-        return androidId == null ? "355694060878908" : androidId;
+        return androidId == null ? "915d19ef8b0e30b2" : androidId;
     }
 
     public static String getAppVersion(Context myContext){
