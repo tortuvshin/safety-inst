@@ -74,12 +74,10 @@ public class SplashActivity extends AppCompatActivity {
 
                 if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
                     Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-                    openMain();
+                    openSomeActivity(LoginImeiActivity.class, true);
                 } else {
-
                     connectServer();
                     long diff = System.currentTimeMillis() - startTime;
-
                     Logger.d("Сэрвэрээс өгөгдөл татсан хугацаа: "+ Long.toString(diff) + " ms");
                 }
             }
@@ -136,8 +134,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Toast.makeText(SplashActivity.this,
                                         R.string.imei_unlisted,
                                         Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
-                                finish();
+                                openSomeActivity(LoginImeiActivity.class, true);
                                 return;
                             } else if (success== 0 && error == 900){
                                 Toast.makeText(SplashActivity.this,
@@ -187,9 +184,8 @@ public class SplashActivity extends AppCompatActivity {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
                                     if ( userTable.getUserCount() == 0) {
-                                        Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        openSomeActivity(LoginImeiActivity.class, true);
+                                        return;
                                     }
 
                                 }
@@ -218,7 +214,7 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (setting.getString("error").equals("0")) {
-                                    openMain();
+                                    openSomeActivity(LoginImeiActivity.class, true);
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.error_server_connection, Toast.LENGTH_LONG).show();
                                 }
@@ -227,8 +223,7 @@ public class SplashActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             Logger.e(e.getMessage());
                             Toast.makeText(SplashActivity.this, R.string.imei_unlisted, Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(SplashActivity.this, LoginImeiActivity.class));
-                            finish();
+                            openSomeActivity(LoginImeiActivity.class, true);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -238,26 +233,8 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    public void openMain () {
-        Intent iGet = getIntent();
-        String username = iGet.getStringExtra("username");
-        String password = iGet.getStringExtra("password");
-        // Mercury-гээс хаб нээсэн бол username intent ирсэн эсэх
-        if (username == null) {
-            Intent intent = new Intent(SplashActivity.this, LoginListActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
-            prefManager.setUser(username, password);
-            startActivity(intent);
-            finish();
-        }
-    }
-
     public void openSomeActivity(Class<?> otherActivityClass, boolean isFinish){
-        Intent intent = new Intent(getApplicationContext(), otherActivityClass);
-        startActivity(intent);
+        startActivity(new Intent(getApplicationContext(), otherActivityClass));
         if (isFinish)
             finish();
     }

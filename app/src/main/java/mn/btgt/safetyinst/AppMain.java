@@ -11,7 +11,6 @@ import com.orhanobut.logger.Logger;
  * URL: https://www.github.com/tortuvshin
  */
 
-
 public class AppMain extends Application{
     @Override
     public void onCreate() {

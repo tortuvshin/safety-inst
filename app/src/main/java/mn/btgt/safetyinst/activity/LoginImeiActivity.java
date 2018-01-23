@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -56,7 +57,6 @@ public class LoginImeiActivity extends AppCompatActivity {
                 imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
                 usernameText.setText(user.getName());
             }
-
         } else {
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
