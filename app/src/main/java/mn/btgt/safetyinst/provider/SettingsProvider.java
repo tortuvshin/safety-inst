@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -24,7 +24,7 @@ import mn.btgt.safetyinst.database.SettingsTable;
 
 public class SettingsProvider extends ContentProvider{
     private SQLiteDatabase database;
-    static final String PROVIDER_NAME = "mn.btgt.safetyinst.SettingsProvider";
+    static final String PROVIDER_NAME = "mn.btgt.safetyinst.provider.SettingsProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/isafe";
     static final Uri CONTENT_URI = Uri.parse(URL);
 

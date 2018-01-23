@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
 import mn.btgt.safetyinst.entity.Settings;
@@ -61,7 +62,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
 
-    Bitmap bm;
+    Bitmap bmSignature;
 
     Camera camera;
     SurfaceView surfaceView;
@@ -166,13 +167,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     Calendar c = Calendar.getInstance();
                     @SuppressLint("SimpleDateFormat")
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    bm = Bitmap.createBitmap(gestureView.getDrawingCache());
+                    bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
                     userSigned.setsNoteId("1");
                     userSigned.setUserId("1");
                     userSigned.setViewDate(df.format(c.getTime()));
-                    userSigned.setPhoto(DbBitmap.getBytes(bm));
-                    userSigned.setUserSign(DbBitmap.getBytes(bm));
+                    userSigned.setPhoto(DbBitmap.getBytes(bmSignature));
+                    userSigned.setUserSign(DbBitmap.getBytes(bmSignature));
                     userSigned.setSendStatus("0");
 
                     signDataTable.add(userSigned);
@@ -200,7 +201,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             public void onClick(DialogInterface arg0, int arg1) {
                                 if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
                                     sendInfo();
-
                                 finish();
                             }
                         });
@@ -288,7 +288,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             return;
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        bmSignature.compress(Bitmap.CompressFormat.JPEG, 85, baos);
         byte[] imageBytes = baos.toByteArray();
 
         String randomChunk = UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");

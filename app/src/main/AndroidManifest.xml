@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="mn.btgt.safetyinst">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,13 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="mn.btgt.safetyinst.MainActivity"
+            android:name="mn.btgt.safetyinst.activity.MainActivity"
             android:theme="@style/AppFullScreen"/>
         <activity
-            android:name="mn.btgt.safetyinst.LoginImeiActivity"
+            android:name="mn.btgt.safetyinst.activity.LoginImeiActivity"
             android:theme="@style/AppFullScreen" />
         <activity
-            android:name="mn.btgt.safetyinst.SplashActivity"
+            android:name="mn.btgt.safetyinst.activity.SplashActivity"
             android:theme="@style/AppFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,13 +37,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="mn.btgt.safetyinst.LoginListActivity"
+            android:name="mn.btgt.safetyinst.activity.LoginListActivity"
             android:theme="@style/AppFullScreen" />
-        <activity android:name="mn.btgt.safetyinst.AddInfoActivity" />
+        <activity android:name="mn.btgt.safetyinst.activity.AddInfoActivity" />
 
         <provider
-            android:name="mn.btgt.safetyinst.SettingsProvider"
-            android:authorities="mn.btgt.safetyinst.SettingsProvider"
+            android:name="mn.btgt.safetyinst.provider.SettingsProvider"
+            android:authorities="mn.btgt.safetyinst.provider.SettingsProvider"
             android:enabled="true"
             android:exported="true"
             android:multiprocess="true">

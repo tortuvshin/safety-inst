@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
+import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
@@ -49,7 +50,6 @@ public class SplashActivity extends AppCompatActivity {
 
     private static final String TAG = SplashActivity.class.getSimpleName();
     private Handler mHandler;
-    private Handler handler;
 
     PrefManager prefManager;
     ImageLoader imageLoader;
@@ -67,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
         imageLoader = new ImageLoader(this);
 
         mHandler = new Handler(Looper.getMainLooper());
-        handler = new Handler(Looper.getMainLooper());
+        Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -125,6 +125,7 @@ public class SplashActivity extends AppCompatActivity {
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             if (ob.length() < 1)
                                 return;
+
                             JSONObject setting = ob.getJSONObject(0);
                             JSONArray users = setting.getJSONArray("users");
                             JSONArray notes = setting.getJSONArray("notes");
@@ -164,8 +165,9 @@ public class SplashActivity extends AppCompatActivity {
                                             .show();
                                 }
 
+                                UserTable userTable = new UserTable(SplashActivity.this);
+
                                 if (users.length() > 0) {
-                                    UserTable userTable = new UserTable(SplashActivity.this);
                                     userTable.deleteAll();
 
                                     for (int i = 0; i < users.length(); i++) {
@@ -184,6 +186,12 @@ public class SplashActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
+                                    if ( userTable.getUserCount() == 0) {
+                                        Intent intent = new Intent(SplashActivity.this, LoginImeiActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
                                 }
 
                                 if (notes.length() > 0){
@@ -245,6 +253,13 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }
+
+    public void openSomeActivity(Class<?> otherActivityClass, boolean isFinish){
+        Intent intent = new Intent(getApplicationContext(), otherActivityClass);
+        startActivity(intent);
+        if (isFinish)
+            finish();
     }
 
     public void reqPermissions(){

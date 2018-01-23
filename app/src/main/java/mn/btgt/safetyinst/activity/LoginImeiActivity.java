@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import agency.techstar.imageloader.ImageLoader;
+import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -28,7 +29,6 @@ public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
     private AppCompatEditText usernameText;
-    private ImageView imageView;
 
     private UserTable userTable;
     private PrefManager prefManager;
@@ -38,7 +38,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        imageView = (ImageView) findViewById(R.id.login_user_avatar);
+        ImageView imageView = (ImageView) findViewById(R.id.login_user_avatar);
         usernameText = (AppCompatEditText) findViewById(R.id.username);
         passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
