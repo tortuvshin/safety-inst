@@ -22,6 +22,7 @@ public class PrefManager {
     private static final String LOGGED_IN = "isLoggedIn";
     private static final String LOGGED_IN_USERNAME = "loggedUsername";
     private static final String LOGGED_IN_PASS = "loggedPass";
+    private static final String SUBMIT_SNOTE = "submitSnote";
 
     @SuppressLint("CommitPrefEdits")
     public PrefManager(Context context) {
@@ -48,9 +49,8 @@ public class PrefManager {
         editor.commit();
     }
 
-    public void setUser(String username, String pass) {
+    public void setUser(String username) {
         editor.putString(LOGGED_IN_USERNAME, username);
-        editor.putString(LOGGED_IN_PASS, pass);
         editor.commit();
     }
 
@@ -58,8 +58,13 @@ public class PrefManager {
         return pref.getString(LOGGED_IN_USERNAME, "");
     }
 
-    public String getUserPass () {
-        return pref.getString(LOGGED_IN_PASS, "");
+    public void setSnote(String snote) {
+        editor.putString(SUBMIT_SNOTE, snote);
+        editor.commit();
+    }
+
+    public String getSnote () {
+        return pref.getString(SUBMIT_SNOTE, "");
     }
 
     /**

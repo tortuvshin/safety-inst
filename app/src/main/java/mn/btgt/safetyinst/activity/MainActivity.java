@@ -36,6 +36,7 @@ import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.model.SNote;
+import mn.btgt.safetyinst.utils.PrefManager;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private LinearLayout dotsLayout;
     private Button btnPrev, btnNext;
-
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        prefManager = new PrefManager(this);
         viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
@@ -207,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
             collapsingToolbar.setTitle(sNotes.get(position).getName());
-
+            prefManager.setSnote(sNotes.get(position).getName());
             noteInfo.loadDataWithBaseURL("", sNotes.get(position).getFrameData(), "text/html", "UTF-8", "");
             noteInfo.setBackgroundColor(Color.parseColor("#ffffff"));
             noteInfo.getSettings().setJavaScriptEnabled(true);

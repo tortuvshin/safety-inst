@@ -42,6 +42,7 @@ import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.model.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
+import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SafConstants;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -63,6 +64,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     private static final String TAG = AddInfoActivity.class.getSimpleName();
 
     Bitmap bmSignature;
+    byte[] btUserPhoto;
 
     Camera camera;
     SurfaceView surfaceView;
@@ -72,7 +74,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SignDataTable signDataTable;
 
     private Handler mHandler;
-
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +86,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
+        prefManager = new PrefManager(this);
         final AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
@@ -100,6 +103,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
             FileOutputStream outStream;
+            btUserPhoto = data;
             try {
                 outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
 
@@ -164,12 +168,12 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onClick(View view) {
             try {
                     Calendar c = Calendar.getInstance();
-                    @SuppressLint("SimpleDateFormat")
+
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
-                    userSigned.setsNoteId("1");
-                    userSigned.setUserId("1");
+                    userSigned.setsNoteId(prefManager.getSnote());
+                    userSigned.setUserId(prefManager.getUserName());
                     userSigned.setViewDate(df.format(c.getTime()));
                     userSigned.setPhoto(DbBitmap.getBytes(bmSignature));
                     userSigned.setUserSign(DbBitmap.getBytes(bmSignature));
@@ -288,10 +292,12 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bmSignature.compress(Bitmap.CompressFormat.JPEG, 85, baos);
-        byte[] imageBytes = baos.toByteArray();
+        byte[] signBytes = baos.toByteArray();
 
-        String randomChunk = UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
-        String imageName = randomChunk.concat(".jpg");
+        String singStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "");
+        String photoStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "");
+        String signName = singStr.concat(".jpg");
+        String photoName = photoStr.concat(".jpg");
 
         List<SignData> sDataList = signDataTable.getAll();
 
@@ -319,7 +325,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .addFormDataPart("json_data", sArray.toString())
-                .addFormDataPart("images", imageName, RequestBody.create(MediaType.parse("image/*"), imageBytes))
+                .addFormDataPart("signature", signName, RequestBody.create(MediaType.parse("image/*"), signBytes))
+                .addFormDataPart("photo", photoName, RequestBody.create(MediaType.parse("image/*"), btUserPhoto))
                 .build();
 
         String uri = SafConstants.SEND_URL;
@@ -346,6 +353,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
+                Logger.e(res);
                 Logger.json(res);
 
                 mHandler.post(new Runnable() {
