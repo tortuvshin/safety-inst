@@ -149,7 +149,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onFaceDetection(Camera.Face[] faces, Camera camera) {
 
             }
-
         };
 
         clearBtn.setOnClickListener(new View.OnClickListener() {
@@ -180,7 +179,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
-                    Logger.e(settingsTable.selectAll().toString());
+                    Logger.d(settingsTable.selectAll().toString());
                     openDialog();
 
             } catch (Exception e) {
@@ -309,7 +308,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                 sArray.put(sJSON);
             }
-            Logger.e(sArray.toString());
+            Logger.d(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
         }
