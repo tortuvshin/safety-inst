@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         btnNext = (Button) findViewById(R.id.btn_next);
         SNoteTable sNoteTable = new SNoteTable(this);
 
-        List<SNote> sNotes = sNoteTable.getAll();
+        List<SNote> sNotes = sNoteTable.selectAll();
 
         NUM_PAGES = sNoteTable.count();
         addBottomDots(0);
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
             noteInfo = (WebView) view.findViewById(R.id.noteInfo);
             imageLoader = new ImageLoader(MainActivity.this);
-//            imageLoader.DisplayImage(SafConstants.WEB_URL+"/upload/300x300/"+sNotes.get(position).getVoiceData(), imgPreview);
+//            imageLoader.DisplayImage(SafConstants.WEB_URL+"/upload/300x300/"+sNotes.select(position).getVoiceData(), imgPreview);
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
             collapsingToolbar.setTitle(sNotes.get(position).getName());

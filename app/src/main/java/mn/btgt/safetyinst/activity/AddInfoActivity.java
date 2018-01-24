@@ -180,7 +180,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
-                    Logger.e(settingsTable.getAll().toString());
+                    Logger.e(settingsTable.selectAll().toString());
                     openDialog();
 
             } catch (Exception e) {

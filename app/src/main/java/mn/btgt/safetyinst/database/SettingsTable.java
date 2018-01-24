@@ -54,7 +54,7 @@ public class SettingsTable extends DatabaseHelper {
         db.close();
     }
 
-    public String get(String key) {
+    public String select(String key) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -69,7 +69,7 @@ public class SettingsTable extends DatabaseHelper {
         return value;
 
     }
-    public List<Settings> getAll() {
+    public List<Settings> selectAll() {
         List<Settings> settings = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
         SQLiteDatabase db = getReadableDatabase();

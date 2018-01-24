@@ -178,12 +178,12 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setPassword("1234");
                                         user.setAvatar(users.getJSONObject(i).getString("photo"));
                                         user.setLastSigned("");
-                                        userTable.add(user);
+                                        userTable.create(user);
                                     }
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
-                                    if ( userTable.getUserCount() == 0) {
+                                    if ( userTable.count() == 0) {
                                         openSomeActivity(LoginImeiActivity.class, true);
                                         return;
                                     }
@@ -205,7 +205,7 @@ public class SplashActivity extends AppCompatActivity {
                                         sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
                                         sNote.setVoiceData("");
                                         sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
-                                        sNoteTable.add(sNote);
+                                        sNoteTable.create(sNote);
                                     }
 
                                 } else {

@@ -28,11 +28,10 @@ public class SettingsProvider extends ContentProvider{
     static final String URL = "content://" + PROVIDER_NAME + "/isafe";
     static final Uri CONTENT_URI = Uri.parse(URL);
 
-    private SettingsTable sTable;
-
     static final int uriCode = 1;
     static final UriMatcher uriMatcher;
-    private static HashMap<String, String> values;
+
+    static HashMap<String, String> values;
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -42,7 +41,7 @@ public class SettingsProvider extends ContentProvider{
 
     @Override
     public boolean onCreate() {
-        sTable = new SettingsTable(getContext());
+        SettingsTable sTable = new SettingsTable(getContext());
         database = sTable.getWritableDatabase();
         return database != null;
     }
@@ -93,12 +92,12 @@ public class SettingsProvider extends ContentProvider{
             getContext().getContentResolver().notifyChange(_uri, null);
             return _uri;
         }
-        throw new SQLException("Failed to add record into" + uri);
+        throw new SQLException("Failed to create record into" + uri);
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int count = 0;// Count to tell how many rows deleted
+        int count = 0;
         switch (uriMatcher.match(uri)) {
             case uriCode:
                 count = database.delete(SettingsTable.TABLE_SETTINGS, selection, selectionArgs);
@@ -113,7 +112,7 @@ public class SettingsProvider extends ContentProvider{
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int count = 0;// Count to tell number of rows updated
+        int count = 0;
         switch (uriMatcher.match(uri)) {
             case uriCode:
                 count = database.update(SettingsTable.TABLE_SETTINGS, contentValues, selection, selectionArgs);
