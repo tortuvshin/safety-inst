@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.entity;
+package mn.btgt.safetyinst.model;
 
 import java.util.Arrays;
 

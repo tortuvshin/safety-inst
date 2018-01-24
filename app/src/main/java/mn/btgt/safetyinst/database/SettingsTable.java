@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.Settings;
+import mn.btgt.safetyinst.model.Settings;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -20,10 +20,14 @@ public class SettingsTable extends DatabaseHelper {
 
     public static final String TABLE_SETTINGS = "settings";
     public static final String SETTINGS_KEY   = "settings_key";
-    public static final String SETTINGS_VALUE = "settings_value";
+    private static final String SETTINGS_VALUE = "settings_value";
 
     private static final int SETTINGS_KEY_INDEX = 0;
     private static final int SETTINGS_VALUE_INDEX = 1;
+
+    static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS+" (" +
+            SETTINGS_KEY + " TEXT PRIMARY KEY," +
+            SETTINGS_VALUE + " TEXT NOT NULL);";
 
     private static final String[] PROJECTIONS_SETTINGS = {
             SETTINGS_KEY,
@@ -67,8 +71,8 @@ public class SettingsTable extends DatabaseHelper {
         String value = cursor.getString(SETTINGS_VALUE_INDEX);
         cursor.close();
         return value;
-
     }
+
     public List<Settings> selectAll() {
         List<Settings> settings = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
@@ -107,6 +111,4 @@ public class SettingsTable extends DatabaseHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_SETTINGS, null, null);
     }
-
-
 }

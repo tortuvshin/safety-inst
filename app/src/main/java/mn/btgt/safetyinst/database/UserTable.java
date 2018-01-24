@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.model.User;
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst

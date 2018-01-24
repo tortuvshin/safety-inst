@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.SignData;
+import mn.btgt.safetyinst.model.SignData;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -19,13 +19,13 @@ import mn.btgt.safetyinst.entity.SignData;
 public class SignDataTable extends DatabaseHelper {
 
     static final String TABLE_SIGNDATAS     = "sign_data";
-    static final String SIGNDATA_ID         = "id";
-    static final String SIGNDATA_USER_ID    = "user_id";
-    static final String SIGNDATA_SNOTE_ID   = "snote_id";
-    static final String SIGNDATA_VIEWDATE   = "view_date";
-    static final String SIGNDATA_USERSIGN   = "user_sign";
-    static final String SIGNDATA_PHOTO      = "photo";
-    static final String SIGNDATA_SENDSTATUS = "send_status";
+    private static final String SIGNDATA_ID         = "id";
+    private static final String SIGNDATA_USER_ID    = "user_id";
+    private static final String SIGNDATA_SNOTE_ID   = "snote_id";
+    private static final String SIGNDATA_VIEWDATE   = "view_date";
+    private static final String SIGNDATA_USERSIGN   = "user_sign";
+    private static final String SIGNDATA_PHOTO      = "photo";
+    private static final String SIGNDATA_SENDSTATUS = "send_status";
 
     private static final int SIGNDATA_ID_INDEX         = 0;
     private static final int SIGNDATA_USER_ID_INDEX    = 1;
@@ -34,6 +34,15 @@ public class SignDataTable extends DatabaseHelper {
     private static final int SIGNDATA_USERSIGN_INDEX   = 4;
     private static final int SIGNDATA_PHOTO_INDEX      = 5;
     private static final int SIGNDATA_SENDSTATUS_INDEX = 6;
+
+    static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ TABLE_SIGNDATAS+" (" +
+            SIGNDATA_ID + " TEXT PRIMARY KEY," +
+            SIGNDATA_USER_ID + " TEXT," +
+            SIGNDATA_SNOTE_ID + " TEXT," +
+            SIGNDATA_VIEWDATE + " TEXT," +
+            SIGNDATA_USERSIGN + " BLOB," +
+            SIGNDATA_PHOTO + " BLOB," +
+            SIGNDATA_SENDSTATUS + " TEXT);";
 
     private static final String[] PROJECTIONS_SIGNDATAS = {
             SIGNDATA_ID,

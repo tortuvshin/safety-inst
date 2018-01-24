@@ -20,7 +20,7 @@ import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.model.User;
 import mn.btgt.safetyinst.utils.SafConstants;
 
 /**

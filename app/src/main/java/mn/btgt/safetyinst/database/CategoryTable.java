@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.Category;
+import mn.btgt.safetyinst.model.Category;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -19,15 +19,21 @@ import mn.btgt.safetyinst.entity.Category;
 public class CategoryTable extends DatabaseHelper {
 
     static final String TABLE_CATEGORYS       = "categorys";
-    static final String CATEGORY_ID          = "id";
-    static final String CATEGORY_NAME        = "name";
-    static final String CATEGORY_ICON        = "icon";
-    static final String CATEGORY_ORDER       = "sorder";
+    private static final String CATEGORY_ID          = "id";
+    private static final String CATEGORY_NAME        = "name";
+    private static final String CATEGORY_ICON        = "icon";
+    private static final String CATEGORY_ORDER       = "sorder";
 
     private static final int CATEGORY_ID_INDEX         = 0;
     private static final int CATEGORY_NAME_INDEX       = 1;
     private static final int CATEGORY_ICON_INDEX       = 2;
     private static final int CATEGORY_ORDER_INDEX      = 3;
+
+    static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
+            CATEGORY_ID + " TEXT PRIMARY KEY," +
+            CATEGORY_NAME + " TEXT," +
+            CATEGORY_ICON + " TEXT," +
+            CATEGORY_ORDER + " TEXT);";
 
     private static final String[] PROJECTIONS_CATEGORYS = {
             CATEGORY_ID,
