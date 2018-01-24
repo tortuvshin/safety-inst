@@ -190,4 +190,12 @@ public class UserTable extends DatabaseHelper {
         db.delete(TABLE_USERS, null, null);
     }
 
+    public int getUserCount() {
+        String query = "SELECT * FROM  " + TABLE_USERS;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
 }

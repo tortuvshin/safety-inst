@@ -31,7 +31,7 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Хэрэглэгчийн нэр"
+                android:hint="@string/username"
                 android:drawableStart="@drawable/ic_user"
                 android:drawableLeft="@drawable/ic_user"
                 android:inputType="text"/>
@@ -46,7 +46,7 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Нууц үг"
+                android:hint="@string/password"
                 android:drawableStart="@drawable/ic_lock"
                 android:drawableLeft="@drawable/ic_lock"
                 android:inputType="textPassword"/>

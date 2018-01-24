@@ -7,9 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import mn.btgt.safetyinst.entity.SNote;
 import mn.btgt.safetyinst.entity.Settings;
 
 /**

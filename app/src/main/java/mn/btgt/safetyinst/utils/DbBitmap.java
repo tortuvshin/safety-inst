@@ -17,7 +17,6 @@ import java.io.ByteArrayOutputStream;
  * URL: https://www.github.com/tortuvshin
  */
 
-
 public class DbBitmap {
 
     public static byte[] getBytes(Bitmap bitmap) {

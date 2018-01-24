@@ -20,4 +20,23 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="loading">Уншиж байна</string>
+    <string name="welcome">Тавтай морилно уу</string>
+    <string name="username_pass_incorrect">Хэрэглэгчийн нэр нууц үг буруу байна</string>
+    <string name="enter_username_pass">Хэрэглэгчийн нэр нууц үгээ оруулна уу</string>
+    <string name="error_occurred">Алдаа гарлаа</string>
+    <string name="work_success">Ажлын амжилт хүсэе</string>
+    <string name="has_been_saved">Таны мэдээлэл хадгалагдлаа</string>
+    <string name="ok">OK</string>
+    <string name="send_info_success">Таны мэдээлэл амжилттай илгээгдлээ.</string>
+    <string name="error_database_query">Database query error</string>
+    <string name="click_to_again">Гарах бол дахин дарна уу</string>
+    <string name="imei_unlisted">Таны Imei бүртгэлгүй байна</string>
+    <string name="error">Алдаа</string>
+    <string name="empty_config">Тохиргооны мэдээлэл хоосон байна</string>
+    <string name="empty_user">Хэрэглэгчийн мэдээлэл хоосон</string>
+    <string name="empty_note">Зааварчилгаа хоосон байна</string>
+    <string name="error_server_connection">Сэрвэртэй холбогдоход алдаа гарлаа</string>
+    <string name="draw_signature">Гарын үсэгээ зурна уу</string>
+    <string name="app_name_splash">Х.А.Б</string>
 </resources>

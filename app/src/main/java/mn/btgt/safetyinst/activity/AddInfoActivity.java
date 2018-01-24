@@ -1,13 +1,11 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,9 +30,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
 import mn.btgt.safetyinst.entity.Settings;
@@ -61,7 +62,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
 
-    Bitmap bm;
+    Bitmap bmSignature;
 
     Camera camera;
     SurfaceView surfaceView;
@@ -163,13 +164,16 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onClick(View view) {
             try {
-                    bm = Bitmap.createBitmap(gestureView.getDrawingCache());
+                    Calendar c = Calendar.getInstance();
+                    @SuppressLint("SimpleDateFormat")
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
                     userSigned.setsNoteId("1");
                     userSigned.setUserId("1");
-                    userSigned.setViewDate(System.currentTimeMillis());
-                    userSigned.setPhoto(DbBitmap.getBytes(bm));
-                    userSigned.setUserSign(DbBitmap.getBytes(bm));
+                    userSigned.setViewDate(df.format(c.getTime()));
+                    userSigned.setPhoto(DbBitmap.getBytes(bmSignature));
+                    userSigned.setUserSign(DbBitmap.getBytes(bmSignature));
                     userSigned.setSendStatus("0");
 
                     signDataTable.add(userSigned);
@@ -181,7 +185,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
             } catch (Exception e) {
                 Logger.d(e);
-                Toast.makeText(AddInfoActivity.this, "Алдаа гарлаа", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
             }
             }
         });
@@ -189,15 +193,14 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     public void openDialog(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
-        alertDialogBuilder.setTitle("Ажлын амжилт хүсэе");
-        alertDialogBuilder.setMessage("Таны мэдээлэл хадгалагдлаа");
-                alertDialogBuilder.setPositiveButton("OK",
+        alertDialogBuilder.setTitle(R.string.work_success);
+        alertDialogBuilder.setMessage(R.string.has_been_saved);
+                alertDialogBuilder.setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
                                     sendInfo();
-
                                 finish();
                             }
                         });
@@ -281,11 +284,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     **/
     public void sendInfo() {
         if (!ConnectionDetector.isNetworkAvailable(this)){
-            Toast.makeText(AddInfoActivity.this, "Интернетэд холбогдоогүй байна!!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(AddInfoActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
             return;
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 85, baos);
+        bmSignature.compress(Bitmap.CompressFormat.JPEG, 85, baos);
         byte[] imageBytes = baos.toByteArray();
 
         String randomChunk = UUID.randomUUID().toString().substring(0, 8).replaceAll("-", "");
@@ -356,7 +359,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             if (resp.getString("success").equals("1"))
                                 signDataTable.deleteAll();
 
-                            Toast.makeText(AddInfoActivity.this, "Таны мэдээлэл амжилттай илгээгдлээ.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddInfoActivity.this, R.string.send_info_success, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Logger.e("ERROR : ", e.getMessage() + " ");

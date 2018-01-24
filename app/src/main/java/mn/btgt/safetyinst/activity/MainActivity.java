@@ -1,13 +1,13 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.PagerAdapter;
@@ -29,11 +29,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
+import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.entity.SNote;
 
@@ -50,13 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private int NUM_PAGES = 1;
 
     private ViewPager viewPager;
-    private ScreenSlidePagerAdapter myViewPagerAdapter;
     private LinearLayout dotsLayout;
-    private TextView[] dots;
     private Button btnPrev, btnNext;
-
-    private SNoteTable sNoteTable;
-    private List<SNote> sNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,24 +70,19 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-//        btnNext.setVisibility(View.INVISIBLE);
-        sNoteTable = new SNoteTable(this);
+        SNoteTable sNoteTable = new SNoteTable(this);
 
-        sNotes = sNoteTable.getAll();
+        List<SNote> sNotes = sNoteTable.getAll();
 
         NUM_PAGES = sNoteTable.count();
         addBottomDots(0);
 
         changeStatusBarColor();
 
-        myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
+        ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-//        viewPager.setOnTouchListener(new View.OnTouchListener() {
-//            public boolean onTouch(View arg0, MotionEvent arg1) {
-//                return true;
-//            }
-//        });
+
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[NUM_PAGES];
+        TextView[] dots = new TextView[NUM_PAGES];
 
         int colorsActive = getResources().getColor(R.color.active);
         int colorsInactive = getResources().getColor(R.color.inactive);
@@ -196,14 +186,17 @@ public class MainActivity extends AppCompatActivity {
         WebView noteInfo;
         NestedScrollView nestedScrollView;
 
-        public ScreenSlidePagerAdapter(List<SNote> sNotes) {
+        ScreenSlidePagerAdapter(List<SNote> sNotes) {
             this.sNotes = sNotes;
         }
 
+        @NonNull
+        @SuppressLint("SetJavaScriptEnabled")
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+            assert layoutInflater != null;
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
             collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
@@ -224,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.sclDetail);
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+                @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
@@ -260,12 +254,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public boolean isViewFromObject(View view, Object obj) {
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object obj) {
             return view == obj;
         }
 
         @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             View view = (View) object;
             container.removeView(view);
         }

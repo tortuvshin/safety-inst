@@ -11,6 +11,7 @@ import android.util.Log;
  * URL: https://www.github.com/tortuvshin
  */
 
+@SuppressWarnings("ALL")
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context myContext;

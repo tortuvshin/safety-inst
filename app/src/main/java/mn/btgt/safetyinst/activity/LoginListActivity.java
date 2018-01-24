@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst;
+package mn.btgt.safetyinst.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +17,9 @@ import android.widget.Toast;
 import java.util.List;
 
 import agency.techstar.imageloader.ImageLoader;
+import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.entity.Settings;
 import mn.btgt.safetyinst.entity.User;
 import mn.btgt.safetyinst.utils.SafConstants;
 
@@ -122,7 +122,7 @@ public class LoginListActivity extends AppCompatActivity {
         }
 
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Гарах бол дахин дарна уу", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.click_to_again, Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 
