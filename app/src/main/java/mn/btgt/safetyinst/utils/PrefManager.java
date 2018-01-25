@@ -20,9 +20,10 @@ public class PrefManager {
     private static final String PREF_NAME = "SafetyInst";
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String LOGGED_IN = "isLoggedIn";
-    private static final String LOGGED_IN_USERNAME = "loggedUsername";
-    private static final String LOGGED_IN_PASS = "loggedPass";
-    private static final String SUBMIT_SNOTE = "submitSnote";
+    private static final String LOGGED_USER_ID = "loggedUserId";
+    private static final String LOGGED_USERNAME = "loggedUsername";
+    private static final String SUBMIT_SNOTE_ID = "submitSnoteId";
+    private static final String SUBMIT_SNOTE_NAME = "submitSnoteName";
 
     @SuppressLint("CommitPrefEdits")
     public PrefManager(Context context) {
@@ -49,22 +50,40 @@ public class PrefManager {
         editor.commit();
     }
 
-    public void setUser(String username) {
-        editor.putString(LOGGED_IN_USERNAME, username);
+    public void setUserId(String userid) {
+        editor.putString(LOGGED_USER_ID, userid);
+        editor.commit();
+    }
+
+    public String getUserId () {
+        return pref.getString(LOGGED_USER_ID, "");
+    }
+
+    public void setUsername(String username) {
+        editor.putString(LOGGED_USERNAME, username);
         editor.commit();
     }
 
     public String getUserName () {
-        return pref.getString(LOGGED_IN_USERNAME, "");
+        return pref.getString(LOGGED_USERNAME, "");
     }
 
-    public void setSnote(String snote) {
-        editor.putString(SUBMIT_SNOTE, snote);
+    public void setSnoteId(String snoteid) {
+        editor.putString(SUBMIT_SNOTE_ID, snoteid);
         editor.commit();
     }
 
-    public String getSnote () {
-        return pref.getString(SUBMIT_SNOTE, "");
+    public String getSnoteId () {
+        return pref.getString(SUBMIT_SNOTE_ID, "");
+    }
+
+    public void setSnoteName(String snotename) {
+        editor.putString(SUBMIT_SNOTE_NAME, snotename);
+        editor.commit();
+    }
+
+    public String getSnoteName () {
+        return pref.getString(SUBMIT_SNOTE_NAME, "");
     }
 
     /**

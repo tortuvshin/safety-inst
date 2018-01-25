@@ -17,11 +17,9 @@ import mn.btgt.safetyinst.activity.LoginImeiActivity;
 @SuppressWarnings("ALL")
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = DatabaseHelper.class.getSimpleName();
-
     private Context myContext;
 
-    private static final int    DATABASE_VERSION = 26;
+    private static final int    DATABASE_VERSION = 27;
     private static final String DATABASE_NAME    = "safety.db";
 
     public DatabaseHelper(Context context) {
@@ -47,6 +45,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SignDataTable.TABLE_SIGNDATAS);
         db.execSQL("DROP TABLE IF EXISTS " + SettingsTable.TABLE_SETTINGS);
         onCreate(db);
-        Logger.e(TAG, "Upgrade database version: "+DATABASE_VERSION);
+        Logger.e("Upgrade database version: "+DATABASE_VERSION);
     }
 }

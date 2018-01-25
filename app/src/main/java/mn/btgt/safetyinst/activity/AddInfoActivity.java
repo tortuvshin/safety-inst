@@ -75,6 +75,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     private Handler mHandler;
     PrefManager prefManager;
+
+    String signName, photoName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +166,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
 
+        String singStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "").replaceAll("_", "");
+        String photoStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "").replaceAll("_", "");
+        signName = "hub_si_".concat(singStr).concat(".jpg");
+        photoName = "hub_pn_".concat(photoStr).concat(".jpg");
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -172,11 +180,14 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
                     captureImage(view);
-                    userSigned.setsNoteId(prefManager.getSnote());
-                    userSigned.setUserId(prefManager.getUserName());
+                    userSigned.setsNoteId(prefManager.getSnoteId());
+                    userSigned.setUserId(prefManager.getUserId());
                     userSigned.setViewDate(df.format(c.getTime()));
-                    userSigned.setPhoto(DbBitmap.getBytes(bmSignature));
-                    userSigned.setUserSign(DbBitmap.getBytes(bmSignature));
+                    userSigned.setUserName(prefManager.getUserName());
+                    userSigned.setsNoteName(prefManager.getSnoteName());
+                    userSigned.setPhoto(btUserPhoto);
+                    userSigned.setUserSign(signName);
+                    userSigned.setUserSignData(DbBitmap.getBytes(bmSignature));
                     userSigned.setSendStatus("0");
 
                     signDataTable.add(userSigned);
@@ -290,14 +301,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             Toast.makeText(AddInfoActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
             return;
         }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmSignature.compress(Bitmap.CompressFormat.JPEG, 85, baos);
-        byte[] signBytes = baos.toByteArray();
-
-        String singStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "");
-        String photoStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "");
-        String signName = singStr.concat(".jpg");
-        String photoName = photoStr.concat(".jpg");
 
         List<SignData> sDataList = signDataTable.getAll();
 
@@ -310,6 +313,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("id", sData.getId());
                 sJSON.put("user_id", sData.getUserId());
                 sJSON.put("note_id", sData.getsNoteId());
+                sJSON.put("user_name", sData.getUserName());
+                sJSON.put("note_name", sData.getsNoteName());
                 sJSON.put("view_date", sData.getViewDate());
 
                 sArray.put(sJSON);
@@ -325,7 +330,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
                 .addFormDataPart("imei", SafConstants.getImei(this))
                 .addFormDataPart("json_data", sArray.toString())
-                .addFormDataPart("signature", signName, RequestBody.create(MediaType.parse("image/*"), signBytes))
+                .addFormDataPart("signature", signName, RequestBody.create(MediaType.parse("image/*"), DbBitmap.getBytes(bmSignature)))
                 .addFormDataPart("photo", photoName, RequestBody.create(MediaType.parse("image/*"), btUserPhoto))
                 .build();
 

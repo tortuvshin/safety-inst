@@ -57,10 +57,11 @@ public class LoginImeiActivity extends AppCompatActivity {
                 User user = userTable.select(id);
                 imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
                 usernameText.setText(user.getName());
-                prefManager.setUser(user.getName());
+                prefManager.setUserId(iGet.getStringExtra("user_id"));
+                prefManager.setUsername(user.getName());
             }
         } else {
-            prefManager.setUser(iGet.getStringExtra("username"));
+            prefManager.setUsername(iGet.getStringExtra("username"));
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

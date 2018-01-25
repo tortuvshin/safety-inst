@@ -208,13 +208,12 @@ public class MainActivity extends AppCompatActivity {
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
             collapsingToolbar.setTitle(sNotes.get(position).getName());
-            prefManager.setSnote(sNotes.get(position).getName());
+            prefManager.setSnoteId(sNotes.get(position).getId());
+            prefManager.setSnoteName(sNotes.get(position).getName());
             noteInfo.loadDataWithBaseURL("", sNotes.get(position).getFrameData(), "text/html", "UTF-8", "");
             noteInfo.setBackgroundColor(Color.parseColor("#ffffff"));
             noteInfo.getSettings().setJavaScriptEnabled(true);
             noteInfo.getSettings().setDefaultTextEncodingName("UTF-8");
-            WebSettings webSettings = noteInfo.getSettings();
-            Resources res = getResources();
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.sclDetail);
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

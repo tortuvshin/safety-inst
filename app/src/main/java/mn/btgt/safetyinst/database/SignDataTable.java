@@ -26,7 +26,7 @@ public class SignDataTable extends DatabaseHelper {
     private static final String SIGNDATA_SNOTE_NAME = "snote_name";
     private static final String SIGNDATA_VIEWDATE   = "view_date";
     private static final String SIGNDATA_USERSIGN   = "user_sign";
-    private static final String SIGNDATA_USERSIGNDATA   = "user_signdata";
+    private static final String SIGNDATA_USERSIGNDATA = "user_signdata";
     private static final String SIGNDATA_PHOTO      = "photo";
     private static final String SIGNDATA_SENDSTATUS = "send_status";
 
