@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.orhanobut.logger.Logger;
 
+import mn.btgt.safetyinst.activity.LoginImeiActivity;
+
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -15,9 +17,10 @@ import com.orhanobut.logger.Logger;
 @SuppressWarnings("ALL")
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
+
     private Context myContext;
 
-    private static final String TAG = "DatabaseHelper : ";
     private static final int    DATABASE_VERSION = 26;
     private static final String DATABASE_NAME    = "safety.db";
 

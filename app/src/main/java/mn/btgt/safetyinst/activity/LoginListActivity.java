@@ -30,7 +30,8 @@ import mn.btgt.safetyinst.utils.SafConstants;
  */
 
 public class LoginListActivity extends AppCompatActivity {
-    private static final String TAG = "LoginList";
+
+    private static final String TAG = LoginListActivity.class.getSimpleName();
 
     UserTable userTable;
     SettingsTable settingsTable;

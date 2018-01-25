@@ -26,6 +26,8 @@ import mn.btgt.safetyinst.utils.SafConstants;
 
 public class LoginImeiActivity extends AppCompatActivity {
 
+    private static final String TAG = LoginImeiActivity.class.getSimpleName();
+
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
     private AppCompatEditText usernameText;

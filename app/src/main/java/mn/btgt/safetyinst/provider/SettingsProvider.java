@@ -9,11 +9,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
+import mn.btgt.safetyinst.activity.LoginImeiActivity;
 import mn.btgt.safetyinst.database.SettingsTable;
 
 /**
@@ -23,6 +25,9 @@ import mn.btgt.safetyinst.database.SettingsTable;
  */
 
 public class SettingsProvider extends ContentProvider{
+
+    private static final String TAG = SettingsProvider.class.getSimpleName();
+
     private SQLiteDatabase database;
     static final String PROVIDER_NAME = "mn.btgt.safetyinst.provider.SettingsProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/isafe";
