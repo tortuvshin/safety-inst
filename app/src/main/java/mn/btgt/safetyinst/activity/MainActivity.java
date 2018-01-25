@@ -35,7 +35,8 @@ import java.util.List;
 import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
-import mn.btgt.safetyinst.entity.SNote;
+import mn.btgt.safetyinst.model.SNote;
+import mn.btgt.safetyinst.utils.PrefManager;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private LinearLayout dotsLayout;
     private Button btnPrev, btnNext;
-
+    PrefManager prefManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
+        prefManager = new PrefManager(this);
         viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
         SNoteTable sNoteTable = new SNoteTable(this);
 
-        List<SNote> sNotes = sNoteTable.getAll();
+        List<SNote> sNotes = sNoteTable.selectAll();
 
         NUM_PAGES = sNoteTable.count();
         addBottomDots(0);
@@ -203,17 +204,16 @@ public class MainActivity extends AppCompatActivity {
 
             noteInfo = (WebView) view.findViewById(R.id.noteInfo);
             imageLoader = new ImageLoader(MainActivity.this);
-//            imageLoader.DisplayImage(SafConstants.WEB_URL+"/upload/300x300/"+sNotes.get(position).getVoiceData(), imgPreview);
+//            imageLoader.DisplayImage(SafConstants.WEB_URL+"/upload/300x300/"+sNotes.select(position).getVoiceData(), imgPreview);
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
             collapsingToolbar.setTitle(sNotes.get(position).getName());
-
+            prefManager.setSnoteId(sNotes.get(position).getId());
+            prefManager.setSnoteName(sNotes.get(position).getName());
             noteInfo.loadDataWithBaseURL("", sNotes.get(position).getFrameData(), "text/html", "UTF-8", "");
             noteInfo.setBackgroundColor(Color.parseColor("#ffffff"));
             noteInfo.getSettings().setJavaScriptEnabled(true);
             noteInfo.getSettings().setDefaultTextEncodingName("UTF-8");
-            WebSettings webSettings = noteInfo.getSettings();
-            Resources res = getResources();
 
             nestedScrollView = (NestedScrollView) view.findViewById(R.id.sclDetail);
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {

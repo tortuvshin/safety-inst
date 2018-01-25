@@ -13,9 +13,8 @@ import android.widget.Toast;
 
 import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.model.User;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SafConstants;
 
@@ -26,6 +25,8 @@ import mn.btgt.safetyinst.utils.SafConstants;
  */
 
 public class LoginImeiActivity extends AppCompatActivity {
+
+    private static final String TAG = LoginImeiActivity.class.getSimpleName();
 
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
@@ -53,11 +54,14 @@ public class LoginImeiActivity extends AppCompatActivity {
         if (iGet.getStringExtra("username") == null){
             if (iGet.getStringExtra("user_id") != null){
                 int id = Integer.parseInt(iGet.getStringExtra("user_id"));
-                User user = userTable.get(id);
+                User user = userTable.select(id);
                 imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
                 usernameText.setText(user.getName());
+                prefManager.setUserId(iGet.getStringExtra("user_id"));
+                prefManager.setUsername(user.getName());
             }
         } else {
+            prefManager.setUsername(iGet.getStringExtra("username"));
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

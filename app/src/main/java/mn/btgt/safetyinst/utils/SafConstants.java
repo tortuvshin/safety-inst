@@ -18,7 +18,6 @@ import android.util.Log;
  * URL: https://www.github.com/tortuvshin
  */
 
-
 public class SafConstants {
 
     public static int    APP_USER_TYPE       = 1;

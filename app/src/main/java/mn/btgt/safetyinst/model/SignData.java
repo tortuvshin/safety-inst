@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.entity;
+package mn.btgt.safetyinst.model;
 
 import java.util.Arrays;
 
@@ -8,13 +8,15 @@ import java.util.Arrays;
  * URL: https://www.github.com/tortuvshin
  */
 
-
 public class SignData {
     private String id;
     private String userId;
     private String sNoteId;
+    private String userName;
+    private String sNoteName;
     private String viewDate;
-    private byte[] userSign;
+    private String userSign;
+    private byte[] userSignData;
     private byte[] photo;
     private String sendStatus;
 
@@ -45,6 +47,22 @@ public class SignData {
         this.sNoteId = sNoteId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getsNoteName() {
+        return sNoteName;
+    }
+
+    public void setsNoteName(String sNoteName) {
+        this.sNoteName = sNoteName;
+    }
+
     public String getViewDate() {
         return viewDate;
     }
@@ -53,12 +71,20 @@ public class SignData {
         this.viewDate = viewDate;
     }
 
-    public byte[] getUserSign() {
+    public String getUserSign() {
         return userSign;
     }
 
-    public void setUserSign(byte[] userSign) {
+    public void setUserSign(String userSign) {
         this.userSign = userSign;
+    }
+
+    public byte[] getUserSignData() {
+        return userSignData;
+    }
+
+    public void setUserSignData(byte[] userSignData) {
+        this.userSignData = userSignData;
     }
 
     public byte[] getPhoto() {
@@ -83,8 +109,11 @@ public class SignData {
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", sNoteId='" + sNoteId + '\'' +
-                ", viewDate=" + viewDate +
-                ", userSign=" + Arrays.toString(userSign) +
+                ", userName='" + userName + '\'' +
+                ", sNoteName='" + sNoteName + '\'' +
+                ", viewDate='" + viewDate + '\'' +
+                ", userSign='" + userSign + '\'' +
+                ", userSignData=" + Arrays.toString(userSignData) +
                 ", photo=" + Arrays.toString(photo) +
                 ", sendStatus='" + sendStatus + '\'' +
                 '}';

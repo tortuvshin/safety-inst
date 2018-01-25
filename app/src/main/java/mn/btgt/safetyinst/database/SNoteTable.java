@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.SNote;
+import mn.btgt.safetyinst.model.SNote;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -19,14 +19,14 @@ import mn.btgt.safetyinst.entity.SNote;
 public class SNoteTable extends DatabaseHelper {
    
     static final String TABLE_SNOTE       = "snote";
-    static final String SNOTE_ID          = "id";
-    static final String SNOTE_CAT_ID      = "category_id";
-    static final String SNOTE_NAME        = "name";
-    static final String SNOTE_ORDER       = "sorder";
-    static final String SNOTE_FRAME_TYPE  = "frame_type";
-    static final String SNOTE_FRAME_DATA  = "frame_data";
-    static final String SNOTE_VOICE_DATA  = "voice_data";
-    static final String SNOTE_TIMEOUT     = "timeout";
+    private static final String SNOTE_ID          = "id";
+    private static final String SNOTE_CAT_ID      = "category_id";
+    private static final String SNOTE_NAME        = "name";
+    private static final String SNOTE_ORDER       = "sorder";
+    private static final String SNOTE_FRAME_TYPE  = "frame_type";
+    private static final String SNOTE_FRAME_DATA  = "frame_data";
+    private static final String SNOTE_VOICE_DATA  = "voice_data";
+    private static final String SNOTE_TIMEOUT     = "timeout";
 
     private static final int SNOTE_ID_INDEX         = 0;
     private static final int SNOTE_CAT_ID_INDEX     = 1;
@@ -36,7 +36,17 @@ public class SNoteTable extends DatabaseHelper {
     private static final int SNOTE_FRAME_DATA_INDEX = 5;
     private static final int SNOTE_VOICE_DATA_INDEX = 6;
     private static final int SNOTE_TIMEOUT_INDEX    = 7;
-    
+
+    static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ TABLE_SNOTE+" (" +
+            SNOTE_ID + " TEXT PRIMARY KEY," +
+            SNOTE_CAT_ID + " INT," +
+            SNOTE_NAME + " TEXT," +
+            SNOTE_ORDER + " TEXT," +
+            SNOTE_FRAME_TYPE + " INT," +
+            SNOTE_FRAME_DATA + " TEXT," +
+            SNOTE_VOICE_DATA + " TEXT," +
+            SNOTE_TIMEOUT + " INT);";
+
     private static final String[] PROJECTIONS_SNOTES = {
             SNOTE_ID,
             SNOTE_CAT_ID,
@@ -52,7 +62,7 @@ public class SNoteTable extends DatabaseHelper {
         super(context);
     }
 
-    public void add(SNote sNote) {
+    public void create(SNote sNote) {
         if (sNote == null) {
             return;
         }
@@ -79,7 +89,7 @@ public class SNoteTable extends DatabaseHelper {
         }
     }
 
-    public SNote get(int id) {
+    public SNote select(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -103,7 +113,7 @@ public class SNoteTable extends DatabaseHelper {
         return sNote;
     }
 
-    public List<SNote> getAll() {
+    public List<SNote> selectAll() {
         List<SNote> sNotes = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_SNOTE;
         SQLiteDatabase db = getReadableDatabase();
@@ -161,6 +171,12 @@ public class SNoteTable extends DatabaseHelper {
         db.close();
     }
 
+    public void deleteAll()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLE_SNOTE, null, null);
+    }
+
     public int count() {
         String query = "SELECT * FROM  " + TABLE_SNOTE;
         SQLiteDatabase db = getReadableDatabase();
@@ -168,11 +184,5 @@ public class SNoteTable extends DatabaseHelper {
         int count = cursor.getCount();
         cursor.close();
         return count;
-    }
-
-    public void deleteAll()
-    {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_SNOTE, null, null);
     }
 }

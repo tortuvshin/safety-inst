@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.Category;
+import mn.btgt.safetyinst.model.Category;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -19,15 +19,21 @@ import mn.btgt.safetyinst.entity.Category;
 public class CategoryTable extends DatabaseHelper {
 
     static final String TABLE_CATEGORYS       = "categorys";
-    static final String CATEGORY_ID          = "id";
-    static final String CATEGORY_NAME        = "name";
-    static final String CATEGORY_ICON        = "icon";
-    static final String CATEGORY_ORDER       = "sorder";
+    private static final String CATEGORY_ID          = "id";
+    private static final String CATEGORY_NAME        = "name";
+    private static final String CATEGORY_ICON        = "icon";
+    private static final String CATEGORY_ORDER       = "sorder";
 
     private static final int CATEGORY_ID_INDEX         = 0;
     private static final int CATEGORY_NAME_INDEX       = 1;
     private static final int CATEGORY_ICON_INDEX       = 2;
     private static final int CATEGORY_ORDER_INDEX      = 3;
+
+    static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
+            CATEGORY_ID + " TEXT PRIMARY KEY," +
+            CATEGORY_NAME + " TEXT," +
+            CATEGORY_ICON + " TEXT," +
+            CATEGORY_ORDER + " TEXT);";
 
     private static final String[] PROJECTIONS_CATEGORYS = {
             CATEGORY_ID,
@@ -40,7 +46,7 @@ public class CategoryTable extends DatabaseHelper {
         super(context);
     }
 
-    public void add(Category category) {
+    public void create(Category category) {
         if (category == null) {
             return;
         }
@@ -65,7 +71,7 @@ public class CategoryTable extends DatabaseHelper {
         }
     }
 
-    public Category get(int id) {
+    public Category select(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -85,7 +91,7 @@ public class CategoryTable extends DatabaseHelper {
         return category;
     }
 
-    public List<Category> getAll() {
+    public List<Category> selectAll() {
         List<Category> categorys = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_CATEGORYS;
         SQLiteDatabase db = getReadableDatabase();
@@ -139,5 +145,14 @@ public class CategoryTable extends DatabaseHelper {
     {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_CATEGORYS, null, null);
+    }
+
+    public int count() {
+        String query = "SELECT * FROM  " + TABLE_CATEGORYS;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
     }
 }

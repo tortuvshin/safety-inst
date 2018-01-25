@@ -26,9 +26,9 @@ import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.entity.SNote;
-import mn.btgt.safetyinst.entity.Settings;
-import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.model.SNote;
+import mn.btgt.safetyinst.model.Settings;
+import mn.btgt.safetyinst.model.User;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SafConstants;
@@ -162,34 +162,6 @@ public class SplashActivity extends AppCompatActivity {
                                             .show();
                                 }
 
-                                UserTable userTable = new UserTable(SplashActivity.this);
-
-                                if (users.length() > 0) {
-                                    userTable.deleteAll();
-
-                                    for (int i = 0; i < users.length(); i++) {
-                                        User user = new User();
-                                        user.setId(users.getJSONObject(i).getString("id"));
-                                        user.setName(users.getJSONObject(i).getString("name"));
-                                        user.setPosition(users.getJSONObject(i).getString("job"));
-                                        user.setPhone(1);
-                                        user.setImei(SafConstants.getImei(SplashActivity.this));
-                                        user.setEmail("");
-                                        user.setPassword("1234");
-                                        user.setAvatar(users.getJSONObject(i).getString("photo"));
-                                        user.setLastSigned("");
-                                        userTable.add(user);
-                                    }
-                                } else {
-                                    Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
-                                            .show();
-                                    if ( userTable.getUserCount() == 0) {
-                                        openSomeActivity(LoginImeiActivity.class, true);
-                                        return;
-                                    }
-
-                                }
-
                                 if (notes.length() > 0){
                                     SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
 
@@ -205,12 +177,42 @@ public class SplashActivity extends AppCompatActivity {
                                         sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
                                         sNote.setVoiceData("");
                                         sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
-                                        sNoteTable.add(sNote);
+                                        sNoteTable.create(sNote);
                                     }
 
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_note, Toast.LENGTH_LONG)
                                             .show();
+                                }
+
+                                UserTable userTable = new UserTable(SplashActivity.this);
+
+                                if (users.length() > 0) {
+                                    userTable.deleteAll();
+
+                                    for (int i = 0; i < users.length(); i++) {
+                                        User user = new User();
+                                        user.setId(users.getJSONObject(i).getString("id"));
+                                        user.setName(users.getJSONObject(i).getString("name"));
+                                        user.setPosition(users.getJSONObject(i).getString("job"));
+                                        user.setPhone(1);
+                                        user.setImei(SafConstants.getImei(SplashActivity.this));
+                                        user.setEmail("");
+                                        user.setPassword(users.getJSONObject(i).getString("pass"));
+                                        user.setAvatar(users.getJSONObject(i).getString("photo"));
+                                        user.setLastSigned("");
+                                        userTable.create(user);
+                                    }
+                                    if (users.length() > 1)
+                                        openSomeActivity(LoginListActivity.class, true);
+                                        return;
+                                } else {
+                                    Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
+                                            .show();
+                                    if ( userTable.count() == 0) {
+                                        openSomeActivity(LoginImeiActivity.class, true);
+                                        return;
+                                    }
                                 }
 
                                 if (setting.getString("error").equals("0")) {

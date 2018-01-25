@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 
 import java.io.ByteArrayOutputStream;
+import java.util.UUID;
 
 /**
  * Author: Turtuvshin Byambaa.

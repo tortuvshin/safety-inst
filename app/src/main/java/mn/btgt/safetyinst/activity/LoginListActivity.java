@@ -20,7 +20,7 @@ import agency.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.model.User;
 import mn.btgt.safetyinst.utils.SafConstants;
 
 /**
@@ -30,7 +30,8 @@ import mn.btgt.safetyinst.utils.SafConstants;
  */
 
 public class LoginListActivity extends AppCompatActivity {
-    private static final String TAG = "LoginList";
+
+    private static final String TAG = LoginListActivity.class.getSimpleName();
 
     UserTable userTable;
     SettingsTable settingsTable;
@@ -51,10 +52,10 @@ public class LoginListActivity extends AppCompatActivity {
         userTable = new UserTable(this);
         settingsTable = new SettingsTable(this);
 
-        List<User> users = userTable.getAll();
+        List<User> users = userTable.selectAll();
 
-        if (settingsTable.get("company")!=null)
-            compName.setText(settingsTable.get("company"));
+        if (settingsTable.select("company")!=null)
+            compName.setText(settingsTable.select("company"));
 
         RecyclerView.Adapter mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.entity.User;
+import mn.btgt.safetyinst.model.User;
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -18,15 +18,15 @@ import mn.btgt.safetyinst.entity.User;
 public class UserTable extends DatabaseHelper {
 
     static final String TABLE_USERS      = "users";
-    static final String USER_ID          = "id";
-    static final String USER_NAME        = "name";
-    static final String USER_POSITION    = "position";
-    static final String USER_PHONE       = "phone";
-    static final String USER_IMEI        = "imei";
-    static final String USER_EMAIL       = "email";
-    static final String USER_PASS        = "pass";
-    static final String USER_AVATAR      = "profile";
-    static final String USER_LAST_SIGNED = "lastSigned";
+    private static final String USER_ID          = "id";
+    private static final String USER_NAME        = "name";
+    private static final String USER_POSITION    = "position";
+    private static final String USER_PHONE       = "phone";
+    private static final String USER_IMEI        = "imei";
+    private static final String USER_EMAIL       = "email";
+    private static final String USER_PASS        = "pass";
+    private static final String USER_AVATAR      = "profile";
+    private static final String USER_LAST_SIGNED = "lastSigned";
 
     private static final int USER_ID_INDEX       = 0;
     private static final int USER_NAME_INDEX     = 1;
@@ -35,9 +35,19 @@ public class UserTable extends DatabaseHelper {
     private static final int USER_IMEI_INDEX     = 4;
     private static final int USER_EMAIL_INDEX    = 5;
     private static final int USER_PASS_INDEX     = 6;
-    private static final int USER_AVATAR_INDEX  = 7;
+    private static final int USER_AVATAR_INDEX   = 7;
     private static final int USER_LASTS_INDEX    = 8;
 
+    static final String CREATE_TABLE_USERS = "CREATE TABLE "+TABLE_USERS+" (" +
+            USER_ID + " TEXT PRIMARY KEY," +
+            USER_NAME + " TEXT," +
+            USER_POSITION + " TEXT," +
+            USER_PHONE + " INT," +
+            USER_IMEI + " TEXT," +
+            USER_EMAIL + " TEXT," +
+            USER_PASS + " TEXT," +
+            USER_AVATAR + " TEXT," +
+            USER_LAST_SIGNED + " TEXT);";
 
     private static final String[] PROJECTIONS_USERS = {
             USER_ID,
@@ -55,7 +65,7 @@ public class UserTable extends DatabaseHelper {
         super(context);
     }
 
-    public void add(User user) {
+    public void create(User user) {
         if (user == null) {
             return;
         }
@@ -78,7 +88,7 @@ public class UserTable extends DatabaseHelper {
         db.close();
     }
 
-    public User get(int id) {
+    public User select(int id) {
         SQLiteDatabase db = getReadableDatabase();
         if (db == null) {
             return null;
@@ -125,7 +135,7 @@ public class UserTable extends DatabaseHelper {
         return cursor;
     }
 
-    public List<User> getAll() {
+    public List<User> selectAll() {
         List<User> users = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TABLE_USERS;
         SQLiteDatabase db = getReadableDatabase();
@@ -190,7 +200,7 @@ public class UserTable extends DatabaseHelper {
         db.delete(TABLE_USERS, null, null);
     }
 
-    public int getUserCount() {
+    public int count() {
         String query = "SELECT * FROM  " + TABLE_USERS;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
