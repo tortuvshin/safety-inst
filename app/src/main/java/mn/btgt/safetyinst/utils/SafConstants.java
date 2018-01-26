@@ -56,7 +56,6 @@ public class SafConstants {
 
     @NonNull
     public static String getAndroiId(Context myContext){
-        @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("ANDROID ID", "ID: "+ androidId);
         return androidId == null ? "915d19ef8b0e30b2" : androidId;
@@ -73,7 +72,6 @@ public class SafConstants {
         }
     }
 
-    @SuppressLint("HardwareIds")
     public static String getImei(Context myContext) {
         TelephonyManager mngr = (TelephonyManager) myContext.getSystemService(Context.TELEPHONY_SERVICE);
 

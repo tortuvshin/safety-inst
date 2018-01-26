@@ -53,6 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
     PrefManager prefManager;
     ImageLoader imageLoader;
+    UserTable userTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class SplashActivity extends AppCompatActivity {
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
+        userTable = new UserTable(SplashActivity.this);
 
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
@@ -74,7 +76,11 @@ public class SplashActivity extends AppCompatActivity {
 
                 if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
                     Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-                    openSomeActivity(LoginImeiActivity.class, true);
+                    if (userTable.count() > 1){
+                        openSomeActivity(LoginListActivity.class, true);
+                    } else {
+                        openSomeActivity(LoginImeiActivity.class, true);
+                    }
                 } else {
                     connectServer();
                     long diff = System.currentTimeMillis() - startTime;
@@ -91,6 +97,7 @@ public class SplashActivity extends AppCompatActivity {
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
                 .addFormDataPart("imei", SafConstants.getImei(this))
+                .addFormDataPart("AndroidId", SafConstants.getAndroiId(this))
                 .build();
 
         Request request = new Request.Builder()
@@ -185,8 +192,6 @@ public class SplashActivity extends AppCompatActivity {
                                             .show();
                                 }
 
-                                UserTable userTable = new UserTable(SplashActivity.this);
-
                                 if (users.length() > 0) {
                                     userTable.deleteAll();
 
@@ -223,7 +228,7 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                         } catch (JSONException e) {
-                            Logger.e(e.getMessage());
+                            e.printStackTrace();
                             Toast.makeText(SplashActivity.this, R.string.imei_unlisted, Toast.LENGTH_LONG).show();
                             openSomeActivity(LoginImeiActivity.class, true);
                         } catch (Exception ex) {
