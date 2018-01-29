@@ -13,9 +13,7 @@ import com.orhanobut.logger.Logger;
  */
 
 public class AppMain extends Application{
-    static {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-    }
+
     @Override
     public void onCreate() {
         super.onCreate();

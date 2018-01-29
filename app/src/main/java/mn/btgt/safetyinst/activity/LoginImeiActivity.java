@@ -39,7 +39,6 @@ public class LoginImeiActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_login);
 
         ImageView imageView = (ImageView) findViewById(R.id.login_user_avatar);

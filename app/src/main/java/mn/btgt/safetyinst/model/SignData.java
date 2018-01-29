@@ -15,8 +15,9 @@ public class SignData {
     private String userName;
     private String sNoteName;
     private String viewDate;
-    private String userSign;
-    private byte[] userSignData;
+    private String signName;
+    private byte[] signData;
+    private String photoName;
     private byte[] photo;
     private String sendStatus;
 
@@ -71,20 +72,28 @@ public class SignData {
         this.viewDate = viewDate;
     }
 
-    public String getUserSign() {
-        return userSign;
+    public String getSignName() {
+        return signName;
     }
 
-    public void setUserSign(String userSign) {
-        this.userSign = userSign;
+    public void setSignName(String signName) {
+        this.signName = signName;
     }
 
-    public byte[] getUserSignData() {
-        return userSignData;
+    public byte[] getSignData() {
+        return signData;
     }
 
-    public void setUserSignData(byte[] userSignData) {
-        this.userSignData = userSignData;
+    public void setSignData(byte[] signData) {
+        this.signData = signData;
+    }
+
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 
     public byte[] getPhoto() {
@@ -112,8 +121,8 @@ public class SignData {
                 ", userName='" + userName + '\'' +
                 ", sNoteName='" + sNoteName + '\'' +
                 ", viewDate='" + viewDate + '\'' +
-                ", userSign='" + userSign + '\'' +
-                ", userSignData=" + Arrays.toString(userSignData) +
+                ", signName='" + signName + '\'' +
+                ", signData=" + Arrays.toString(signData) +
                 ", photo=" + Arrays.toString(photo) +
                 ", sendStatus='" + sendStatus + '\'' +
                 '}';
