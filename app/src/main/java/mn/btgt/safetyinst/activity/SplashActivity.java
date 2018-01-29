@@ -31,7 +31,7 @@ import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.model.User;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
-import mn.btgt.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
-        userTable = new UserTable(SplashActivity.this);
+        userTable = new UserTable(this);
 
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
@@ -96,18 +96,18 @@ public class SplashActivity extends AppCompatActivity {
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
-                .addFormDataPart("imei", SafConstants.getImei(this))
-                .addFormDataPart("AndroidId", SafConstants.getAndroiId(this))
+                .addFormDataPart("imei", SAFCONSTANT.getImei(this))
+                .addFormDataPart("AndroidId", SAFCONSTANT.getAndroiId(this))
                 .build();
 
         Request request = new Request.Builder()
-                .url(SafConstants.API_URL)
+                .url(SAFCONSTANT.API_URL)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("app", SafConstants.APP_NAME)
-                .addHeader("appV", SafConstants.getAppVersion(this))
-                .addHeader("Imei", SafConstants.getImei(this))
-                .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), String.valueOf(System.currentTimeMillis())))
+                .addHeader("app", SAFCONSTANT.APP_NAME)
+                .addHeader("appV", SAFCONSTANT.getAppVersion(this))
+                .addHeader("Imei", SAFCONSTANT.getImei(this))
+                .addHeader("AndroidId", SAFCONSTANT.getAndroiId(this))
+                .addHeader("nuuts", SAFCONSTANT.getSecretCode(SAFCONSTANT.getImei(this), String.valueOf(System.currentTimeMillis())))
                 .post(formBody)
                 .build();
 
@@ -156,12 +156,12 @@ public class SplashActivity extends AppCompatActivity {
 
                                     settingsTable.deleteAll();
                                     List<Settings> settingsList = new ArrayList<Settings>();
-                                    settingsList.add(new Settings(SafConstants.SETTINGS_COMPANY, setting.getString("comp")));
-                                    settingsList.add(new Settings(SafConstants.SETTINGS_DEPARTMENT, setting.getString("comp")));
-                                    settingsList.add(new Settings(SafConstants.SETTINGS_IMEI, SafConstants.getImei(SplashActivity.this)));
-                                    settingsList.add(new Settings(SafConstants.SETTINGS_ANDROID_ID, SafConstants.getAndroiId(SplashActivity.this)));
-                                    settingsList.add(new Settings(SafConstants.SETTINGS_LOGO, setting.getString("company_logo")));
-                                    settingsList.add(new Settings(SafConstants.SETTINGS_ISSIGNED, "no"));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_DEPARTMENT, setting.getString("comp")));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_IMEI, SAFCONSTANT.getImei(SplashActivity.this)));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ANDROID_ID, SAFCONSTANT.getAndroiId(SplashActivity.this)));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_LOGO, setting.getString("company_logo")));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "no"));
 
                                     settingsTable.insertList(settingsList);
                                 } else {
@@ -201,7 +201,7 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setName(users.getJSONObject(i).getString("name"));
                                         user.setPosition(users.getJSONObject(i).getString("job"));
                                         user.setPhone(1);
-                                        user.setImei(SafConstants.getImei(SplashActivity.this));
+                                        user.setImei(SAFCONSTANT.getImei(SplashActivity.this));
                                         user.setEmail("");
                                         user.setPassword(users.getJSONObject(i).getString("pass"));
                                         user.setAvatar(users.getJSONObject(i).getString("photo"));

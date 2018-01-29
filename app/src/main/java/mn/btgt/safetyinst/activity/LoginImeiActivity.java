@@ -17,7 +17,7 @@ import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.model.User;
 import mn.btgt.safetyinst.utils.PrefManager;
-import mn.btgt.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -57,7 +57,7 @@ public class LoginImeiActivity extends AppCompatActivity {
             if (iGet.getStringExtra("user_id") != null){
                 int id = Integer.parseInt(iGet.getStringExtra("user_id"));
                 User user = userTable.select(id);
-                imageLoader.DisplayImage(SafConstants.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
+                imageLoader.DisplayImage(SAFCONSTANT.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
                 usernameText.setText(user.getName());
                 prefManager.setUserId(iGet.getStringExtra("user_id"));
                 prefManager.setUsername(user.getName());

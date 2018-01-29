@@ -26,7 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,7 +42,7 @@ import mn.btgt.safetyinst.model.SignData;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.PrefManager;
-import mn.btgt.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -107,6 +106,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onPictureTaken(byte[] data, Camera camera) {
             FileOutputStream outStream;
             btUserPhoto = data;
+
             try {
                 outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
 
@@ -193,7 +193,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     signDataTable.add(userSigned);
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
-                    settingsTable.insert(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
+                    settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
                     Logger.d(settingsTable.selectAll().toString());
                     openDialog();
 
@@ -328,22 +328,22 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
-                .addFormDataPart("imei", SafConstants.getImei(this))
+                .addFormDataPart("imei", SAFCONSTANT.getImei(this))
                 .addFormDataPart("json_data", sArray.toString())
                 .addFormDataPart("signature", signName, RequestBody.create(MediaType.parse("image/*"), DbBitmap.getBytes(bmSignature)))
                 .addFormDataPart("photo", photoName, RequestBody.create(MediaType.parse("image/*"), btUserPhoto))
                 .build();
 
-        String uri = SafConstants.SEND_URL;
+        String uri = SAFCONSTANT.SEND_URL;
 
         Request request = new Request.Builder()
                 .url(uri)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("app", SafConstants.APP_NAME)
-                .addHeader("appV", SafConstants.getAppVersion(this))
-                .addHeader("Imei", SafConstants.getImei(this))
-                .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), String.valueOf(System.currentTimeMillis())))
+                .addHeader("app", SAFCONSTANT.APP_NAME)
+                .addHeader("appV", SAFCONSTANT.getAppVersion(this))
+                .addHeader("Imei", SAFCONSTANT.getImei(this))
+                .addHeader("AndroidId", SAFCONSTANT.getAndroiId(this))
+                .addHeader("nuuts", SAFCONSTANT.getSecretCode(SAFCONSTANT.getImei(this), String.valueOf(System.currentTimeMillis())))
                 .post(formBody)
                 .build();
 
