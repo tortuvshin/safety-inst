@@ -32,8 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/username"
-                android:drawableStart="@drawable/ic_user"
-                android:drawableLeft="@drawable/ic_user"
                 android:inputType="text"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -47,8 +45,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
-                android:drawableStart="@drawable/ic_lock"
-                android:drawableLeft="@drawable/ic_lock"
                 android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.v7.widget.AppCompatButton

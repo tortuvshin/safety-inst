@@ -39,4 +39,5 @@
     <string name="error_server_connection">Сэрвэртэй холбогдоход алдаа гарлаа</string>
     <string name="draw_signature">Гарын үсэгээ зурна уу</string>
     <string name="app_name_splash">Х.А.Б</string>
+    <string name="photo_or_signature_not_found">Зураг эсвэл гарын үсэг байхгүй байна</string>
 </resources>

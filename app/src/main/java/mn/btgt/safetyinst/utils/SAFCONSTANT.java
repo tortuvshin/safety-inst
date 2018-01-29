@@ -18,15 +18,15 @@ import android.util.Log;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SafConstants {
+public class SAFCONSTANT {
 
     public static int    APP_USER_TYPE       = 1;
     public static int    APP_ENV             = 1;
     public static boolean APP_DEBUG          = true;
     public static String APP_NAME            = "iSafe";
     public static String WEB_URL             = "http://demo.mongolgps.com";
-    public static String API_URL             = WEB_URL +"/phone.php/safe_settings";
-    public static String SEND_URL            = WEB_URL +"/phone.php/safe_upload";
+    public static String API_URL             = WEB_URL.concat("/phone.php/safe_settings");
+    public static String SEND_URL            = WEB_URL.concat("/phone.php/safe_upload");
     public static String SETTINGS_COMPANY    = "company";
     public static String SETTINGS_DEPARTMENT = "department";
     public static String SETTINGS_IMEI       = "imei";
@@ -56,7 +56,6 @@ public class SafConstants {
 
     @NonNull
     public static String getAndroiId(Context myContext){
-        @SuppressLint("HardwareIds")
         String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("ANDROID ID", "ID: "+ androidId);
         return androidId == null ? "915d19ef8b0e30b2" : androidId;
@@ -73,7 +72,6 @@ public class SafConstants {
         }
     }
 
-    @SuppressLint("HardwareIds")
     public static String getImei(Context myContext) {
         TelephonyManager mngr = (TelephonyManager) myContext.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -81,6 +79,6 @@ public class SafConstants {
             return "";
         }
         assert mngr != null;
-        return mngr.getDeviceId() == null ? "355694060878908" : mngr.getDeviceId();
+        return mngr.getDeviceId() == null ? "35451605332605" : mngr.getDeviceId();
     }
 }

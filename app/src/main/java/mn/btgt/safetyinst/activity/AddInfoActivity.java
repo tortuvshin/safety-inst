@@ -26,7 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,16 +33,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.DataFormatException;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.SignDataTable;
 import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.model.SignData;
+import mn.btgt.safetyinst.utils.CompressionUtils;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.PrefManager;
-import mn.btgt.safetyinst.utils.SafConstants;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -94,7 +95,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
-        
+
         surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
 
@@ -105,23 +106,23 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @SuppressLint({"DefaultLocale", "SdCardPath"})
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-            FileOutputStream outStream;
-            btUserPhoto = data;
-            try {
-                outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
+                FileOutputStream outStream;
+                btUserPhoto = data;
 
-                outStream.write(data);
-                outStream.close();
-                userSigned.setPhoto(data);
-            }
+                try {
+                    outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
 
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+                    outStream.write(data);
+                    outStream.close();
+                }
 
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -174,7 +175,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            try {
+                try {
                     Calendar c = Calendar.getInstance();
 
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -185,22 +186,22 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setViewDate(df.format(c.getTime()));
                     userSigned.setUserName(prefManager.getUserName());
                     userSigned.setsNoteName(prefManager.getSnoteName());
-                    userSigned.setPhoto(btUserPhoto);
-                    userSigned.setUserSign(signName);
-                    userSigned.setUserSignData(DbBitmap.getBytes(bmSignature));
+                    userSigned.setPhotoName(photoName);
+                    userSigned.setPhoto(CompressionUtils.compress(btUserPhoto));
+                    userSigned.setSignName(signName);
+                    userSigned.setSignData(DbBitmap.getBytes(bmSignature));
                     userSigned.setSendStatus("0");
 
-                    signDataTable.add(userSigned);
+                    signDataTable.create(userSigned);
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
-                    settingsTable.insert(new Settings(SafConstants.SETTINGS_ISSIGNED, "yes"));
-                    Logger.d(settingsTable.selectAll().toString());
+                    settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
                     openDialog();
 
-            } catch (Exception e) {
-                Logger.d(e);
-                Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
-            }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -209,15 +210,15 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
         alertDialogBuilder.setTitle(R.string.work_success);
         alertDialogBuilder.setMessage(R.string.has_been_saved);
-                alertDialogBuilder.setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
-                                    sendInfo();
-                                finish();
-                            }
-                        });
+        alertDialogBuilder.setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
+                            sendInfo();
+                        finish();
+                    }
+                });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -302,9 +303,16 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             return;
         }
 
-        List<SignData> sDataList = signDataTable.getAll();
+        List<SignData> sDataList = signDataTable.selectAll();
 
         JSONArray sArray = new JSONArray();
+
+        OkHttpClient client = new OkHttpClient();
+        MultipartBody.Builder formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
+                .addFormDataPart("imei", SAFCONSTANT.getImei(this));
+
         try
         {
             for (SignData sData : sDataList)
@@ -315,36 +323,34 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("note_id", sData.getsNoteId());
                 sJSON.put("user_name", sData.getUserName());
                 sJSON.put("note_name", sData.getsNoteName());
+                sJSON.put("signature_name", sData.getSignName());
+                sJSON.put("photo_name", sData.getPhotoName());
                 sJSON.put("view_date", sData.getViewDate());
-
                 sArray.put(sJSON);
+                formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), CompressionUtils.decompress(sData.getPhoto())));
             }
+            formBody.addFormDataPart("json_data", sArray.toString());
             Logger.d(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (DataFormatException e) {
+            e.printStackTrace();
         }
 
-        OkHttpClient client = new OkHttpClient();
-        RequestBody formBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
-                .addFormDataPart("imei", SafConstants.getImei(this))
-                .addFormDataPart("json_data", sArray.toString())
-                .addFormDataPart("signature", signName, RequestBody.create(MediaType.parse("image/*"), DbBitmap.getBytes(bmSignature)))
-                .addFormDataPart("photo", photoName, RequestBody.create(MediaType.parse("image/*"), btUserPhoto))
-                .build();
-
-        String uri = SafConstants.SEND_URL;
+        MultipartBody requestBody = formBody.build();
 
         Request request = new Request.Builder()
-                .url(uri)
+                .url(SAFCONSTANT.SEND_URL)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("app", SafConstants.APP_NAME)
-                .addHeader("appV", SafConstants.getAppVersion(this))
-                .addHeader("Imei", SafConstants.getImei(this))
-                .addHeader("AndroidId", SafConstants.getAndroiId(this))
-                .addHeader("nuuts", SafConstants.getSecretCode(SafConstants.getImei(this), String.valueOf(System.currentTimeMillis())))
-                .post(formBody)
+                .addHeader("app", SAFCONSTANT.APP_NAME)
+                .addHeader("appV", SAFCONSTANT.getAppVersion(this))
+                .addHeader("Imei", SAFCONSTANT.getImei(this))
+                .addHeader("AndroidId", SAFCONSTANT.getAndroiId(this))
+                .addHeader("nuuts", SAFCONSTANT.getSecretCode(SAFCONSTANT.getImei(this), String.valueOf(System.currentTimeMillis())))
+                .post(requestBody)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -358,7 +364,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Logger.e(res);
                 Logger.json(res);
 
                 mHandler.post(new Runnable() {
