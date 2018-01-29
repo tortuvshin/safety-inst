@@ -84,13 +84,15 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
         prefManager = new PrefManager(this);
-        AppCompatButton saveBtn = findViewById(R.id.save);
+        final AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
+        final SignDataTable signDataTable = new SignDataTable(this);
 
         surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
@@ -104,9 +106,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream;
                 btUserPhoto = data;
-                userSigned.setPhoto(data);
+
                 try {
                     outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
+
                     outStream.write(data);
                     outStream.close();
                 }
@@ -181,9 +184,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setViewDate(df.format(c.getTime()));
                     userSigned.setUserName(prefManager.getUserName());
                     userSigned.setsNoteName(prefManager.getSnoteName());
+                    userSigned.setPhotoName(photoName);
+                    userSigned.setPhoto(btUserPhoto);
                     userSigned.setSignName(signName);
                     userSigned.setSignData(DbBitmap.getBytes(bmSignature));
-                    userSigned.setPhotoName(photoName);
                     userSigned.setSendStatus("0");
 
                     signDataTable.create(userSigned);
@@ -307,8 +311,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
                 .addFormDataPart("imei", SAFCONSTANT.getImei(this));
 
-        Logger.d(sArray);
-
         try
         {
             for (SignData sData : sDataList)
@@ -322,26 +324,20 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("signature_name", sData.getSignName());
                 sJSON.put("photo_name", sData.getPhotoName());
                 sJSON.put("view_date", sData.getViewDate());
-                formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
-                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
                 sArray.put(sJSON);
+                formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), btUserPhoto));
             }
             formBody.addFormDataPart("json_data", sArray.toString());
-
             Logger.d(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            Toast.makeText(AddInfoActivity.this, R.string.photo_or_signature_not_found, Toast.LENGTH_SHORT).show();
         }
-
-        String uri = SAFCONSTANT.SEND_URL;
 
         MultipartBody requestBody = formBody.build();
 
         Request request = new Request.Builder()
-                .url(uri)
+                .url(SAFCONSTANT.SEND_URL)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("app", SAFCONSTANT.APP_NAME)
                 .addHeader("appV", SAFCONSTANT.getAppVersion(this))
