@@ -84,16 +84,14 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
         signDataTable = new SignDataTable(this);
         prefManager = new PrefManager(this);
-        final AppCompatButton saveBtn = findViewById(R.id.save);
+        AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
-        final SignDataTable signDataTable = new SignDataTable(this);
-        
+
         surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
 
@@ -104,24 +102,22 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @SuppressLint({"DefaultLocale", "SdCardPath"})
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-            FileOutputStream outStream;
-            btUserPhoto = data;
-
-            try {
-                outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
-
-                outStream.write(data);
-                outStream.close();
+                FileOutputStream outStream;
+                btUserPhoto = data;
                 userSigned.setPhoto(data);
-            }
+                try {
+                    outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
+                    outStream.write(data);
+                    outStream.close();
+                }
 
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+                catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -174,7 +170,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            try {
+                try {
                     Calendar c = Calendar.getInstance();
 
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -185,22 +181,21 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setViewDate(df.format(c.getTime()));
                     userSigned.setUserName(prefManager.getUserName());
                     userSigned.setsNoteName(prefManager.getSnoteName());
-                    userSigned.setPhoto(btUserPhoto);
-                    userSigned.setUserSign(signName);
-                    userSigned.setUserSignData(DbBitmap.getBytes(bmSignature));
+                    userSigned.setSignName(signName);
+                    userSigned.setSignData(DbBitmap.getBytes(bmSignature));
+                    userSigned.setPhotoName(photoName);
                     userSigned.setSendStatus("0");
 
-                    signDataTable.add(userSigned);
+                    signDataTable.create(userSigned);
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
-                    Logger.d(settingsTable.selectAll().toString());
                     openDialog();
 
-            } catch (Exception e) {
-                Logger.d(e);
-                Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
-            }
+                } catch (Exception e) {
+                    Logger.d(e);
+                    Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -209,15 +204,15 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AlertDialog);
         alertDialogBuilder.setTitle(R.string.work_success);
         alertDialogBuilder.setMessage(R.string.has_been_saved);
-                alertDialogBuilder.setPositiveButton(R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
-                                    sendInfo();
-                                finish();
-                            }
-                        });
+        alertDialogBuilder.setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
+                            sendInfo();
+                        finish();
+                    }
+                });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
@@ -302,9 +297,18 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             return;
         }
 
-        List<SignData> sDataList = signDataTable.getAll();
+        List<SignData> sDataList = signDataTable.selectAll();
 
         JSONArray sArray = new JSONArray();
+
+        OkHttpClient client = new OkHttpClient();
+        MultipartBody.Builder formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
+                .addFormDataPart("imei", SAFCONSTANT.getImei(this));
+
+        Logger.d(sArray);
+
         try
         {
             for (SignData sData : sDataList)
@@ -315,26 +319,26 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("note_id", sData.getsNoteId());
                 sJSON.put("user_name", sData.getUserName());
                 sJSON.put("note_name", sData.getsNoteName());
+                sJSON.put("signature_name", sData.getSignName());
+                sJSON.put("photo_name", sData.getPhotoName());
                 sJSON.put("view_date", sData.getViewDate());
-
+                formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
                 sArray.put(sJSON);
             }
+            formBody.addFormDataPart("json_data", sArray.toString());
+
             Logger.d(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+            Toast.makeText(AddInfoActivity.this, R.string.photo_or_signature_not_found, Toast.LENGTH_SHORT).show();
         }
 
-        OkHttpClient client = new OkHttpClient();
-        RequestBody formBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
-                .addFormDataPart("imei", SAFCONSTANT.getImei(this))
-                .addFormDataPart("json_data", sArray.toString())
-                .addFormDataPart("signature", signName, RequestBody.create(MediaType.parse("image/*"), DbBitmap.getBytes(bmSignature)))
-                .addFormDataPart("photo", photoName, RequestBody.create(MediaType.parse("image/*"), btUserPhoto))
-                .build();
-
         String uri = SAFCONSTANT.SEND_URL;
+
+        MultipartBody requestBody = formBody.build();
 
         Request request = new Request.Builder()
                 .url(uri)
@@ -344,7 +348,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 .addHeader("Imei", SAFCONSTANT.getImei(this))
                 .addHeader("AndroidId", SAFCONSTANT.getAndroiId(this))
                 .addHeader("nuuts", SAFCONSTANT.getSecretCode(SAFCONSTANT.getImei(this), String.valueOf(System.currentTimeMillis())))
-                .post(formBody)
+                .post(requestBody)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -358,7 +362,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
 
-                Logger.e(res);
                 Logger.json(res);
 
                 mHandler.post(new Runnable() {
