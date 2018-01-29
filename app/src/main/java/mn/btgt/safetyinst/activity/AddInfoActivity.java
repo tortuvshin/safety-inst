@@ -107,13 +107,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream;
-
+                btUserPhoto = data;
                 try {
-
-                    userSigned.setPhoto(CompressionUtils.compress(data));
-
                     outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
-
                     outStream.write(data);
                     outStream.close();
                 } catch (FileNotFoundException e) {
@@ -187,6 +183,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     userSigned.setUserName(prefManager.getUserName());
                     userSigned.setsNoteName(prefManager.getSnoteName());
                     userSigned.setPhotoName(photoName);
+                    userSigned.setPhoto(CompressionUtils.compress(btUserPhoto));
                     userSigned.setSignName(signName);
                     userSigned.setSignData(DbBitmap.getBytes(bmSignature));
                     userSigned.setSendStatus("0");
@@ -327,7 +324,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("view_date", sData.getViewDate());
                 sArray.put(sJSON);
                 formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
-                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), CompressionUtils.decompress(sData.getPhoto())));
             }
             formBody.addFormDataPart("json_data", sArray.toString());
             Logger.d(sArray.toString());

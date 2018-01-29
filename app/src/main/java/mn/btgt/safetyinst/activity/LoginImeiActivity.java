@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -83,6 +85,9 @@ public class LoginImeiActivity extends AppCompatActivity {
         String password = passText.getText().toString();
         String username = usernameText.getText().toString();
 
+
+        Animation shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
+
         if (password.trim().length() > 0) {
 
             Cursor checkedUser = userTable.checkUser(password);
@@ -111,6 +116,8 @@ public class LoginImeiActivity extends AppCompatActivity {
                             });
                 }
                 else{
+                    passText.setText("");
+                    passText.startAnimation(shake);
                     Toast.makeText(LoginImeiActivity.this, R.string.username_pass_incorrect, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -124,6 +131,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                 return;
             }
         } else {
+            passText.startAnimation(shake);
             Toast.makeText(LoginImeiActivity.this, R.string.enter_username_pass,Toast.LENGTH_SHORT).show();
             return;
         }
