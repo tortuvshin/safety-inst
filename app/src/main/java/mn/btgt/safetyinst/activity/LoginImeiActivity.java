@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
@@ -28,8 +27,6 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
  */
 
 public class LoginImeiActivity extends AppCompatActivity {
-
-    private static final String TAG = LoginImeiActivity.class.getSimpleName();
 
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;

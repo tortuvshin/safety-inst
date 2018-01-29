@@ -1,7 +1,6 @@
 package mn.btgt.safetyinst;
 
 import android.app.Application;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;

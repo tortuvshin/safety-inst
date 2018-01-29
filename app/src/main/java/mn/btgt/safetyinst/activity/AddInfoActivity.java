@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
-import java.util.zip.DataFormatException;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;

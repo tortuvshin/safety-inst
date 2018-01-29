@@ -1,7 +1,6 @@
 package mn.btgt.safetyinst.utils;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;

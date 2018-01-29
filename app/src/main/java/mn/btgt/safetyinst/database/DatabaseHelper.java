@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.orhanobut.logger.Logger;
 
-import mn.btgt.safetyinst.activity.LoginImeiActivity;
-
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
