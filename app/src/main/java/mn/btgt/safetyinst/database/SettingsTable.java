@@ -39,23 +39,53 @@ public class SettingsTable extends DatabaseHelper {
     }
 
     public void insert(Settings settings) {
+        if (settings == null) {
+            return;
+        }
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(SETTINGS_KEY, settings.getKey());
-        cv.put(SETTINGS_VALUE, settings.getValue());
-        db.replace(TABLE_SETTINGS, null, cv);
-        db.close();
+        if (db == null) {
+            return;
+        }
+        db.beginTransaction();
+        try {
+            ContentValues cv = new ContentValues();
+            cv.put(SETTINGS_KEY, settings.getKey());
+            cv.put(SETTINGS_VALUE, settings.getValue());
+            db.replace(TABLE_SETTINGS, null, cv);
+            db.setTransactionSuccessful();
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public void insertList(List<Settings> SList){
-        SQLiteDatabase db = this.getWritableDatabase();
-        for( Settings iset : SList ){
-            ContentValues values = new ContentValues();
-            values.put(SETTINGS_KEY, iset.getKey());
-            values.put(SETTINGS_VALUE, iset.getValue());
-            db.replace(TABLE_SETTINGS, null, values);
+        if (SList == null) {
+            return;
         }
-        db.close();
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (db == null) {
+            return;
+        }
+        db.beginTransaction();
+        try {
+            for( Settings iset : SList ){
+                ContentValues values = new ContentValues();
+                values.put(SETTINGS_KEY, iset.getKey());
+                values.put(SETTINGS_VALUE, iset.getValue());
+                db.replace(TABLE_SETTINGS, null, values);
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        finally {
+            db.endTransaction();
+            db.close();
+        }
     }
 
     public String select(String key) {

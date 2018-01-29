@@ -24,7 +24,7 @@
     <string name="welcome">Тавтай морилно уу</string>
     <string name="username_pass_incorrect">Хэрэглэгчийн нэр нууц үг буруу байна</string>
     <string name="enter_username_pass">Хэрэглэгчийн нэр нууц үгээ оруулна уу</string>
-    <string name="error_occurred">Алдаа гарлаа</string>
+    <string name="error_occurred">Алдаа гарлаа дахин хадгалах товч дарна уу</string>
     <string name="work_success">Ажлын амжилт хүсэе</string>
     <string name="has_been_saved">Таны мэдээлэл хадгалагдлаа</string>
     <string name="ok">OK</string>
@@ -40,4 +40,5 @@
     <string name="draw_signature">Гарын үсэгээ зурна уу</string>
     <string name="app_name_splash">Х.А.Б</string>
     <string name="photo_or_signature_not_found">Зураг эсвэл гарын үсэг байхгүй байна</string>
+    <string name="cannot_capture">Зураг дарагдаагүй байна</string>
 </resources>
