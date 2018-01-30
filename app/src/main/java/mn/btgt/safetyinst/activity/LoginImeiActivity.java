@@ -5,14 +5,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import agency.techstar.imageloader.ImageLoader;
+import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.model.User;
@@ -26,8 +27,6 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
  */
 
 public class LoginImeiActivity extends AppCompatActivity {
-
-    private static final String TAG = LoginImeiActivity.class.getSimpleName();
 
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
@@ -83,6 +82,9 @@ public class LoginImeiActivity extends AppCompatActivity {
         String password = passText.getText().toString();
         String username = usernameText.getText().toString();
 
+
+        Animation shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
+
         if (password.trim().length() > 0) {
 
             Cursor checkedUser = userTable.checkUser(password);
@@ -111,6 +113,8 @@ public class LoginImeiActivity extends AppCompatActivity {
                             });
                 }
                 else{
+                    passText.setText("");
+                    passText.startAnimation(shake);
                     Toast.makeText(LoginImeiActivity.this, R.string.username_pass_incorrect, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -124,6 +128,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                 return;
             }
         } else {
+            passText.startAnimation(shake);
             Toast.makeText(LoginImeiActivity.this, R.string.enter_username_pass,Toast.LENGTH_SHORT).show();
             return;
         }

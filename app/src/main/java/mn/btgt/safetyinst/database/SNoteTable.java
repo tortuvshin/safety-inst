@@ -83,6 +83,8 @@ public class SNoteTable extends DatabaseHelper {
             cv.put(SNOTE_TIMEOUT, sNote.getTimeout());
             db.insert(TABLE_SNOTE, null, cv);
             db.setTransactionSuccessful();
+        } catch (Exception ex){
+            ex.printStackTrace();
         } finally {
             db.endTransaction();
             db.close();

@@ -82,6 +82,7 @@ public class SignDataTable extends DatabaseHelper {
         if (db == null) {
             return;
         }
+        db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
             cv.put(SIGNDATA_ID, signData.getId());
@@ -96,9 +97,11 @@ public class SignDataTable extends DatabaseHelper {
             cv.put(SIGNDATA_PHOTO, signData.getPhoto());
             cv.put(SIGNDATA_SENDSTATUS, signData.getSendStatus());
             db.insert(TABLE_SIGNDATAS, null, cv);
+            db.setTransactionSuccessful();
         } catch (Exception ex){
             ex.printStackTrace();
         } finally {
+            db.endTransaction();
             db.close();
         }
     }

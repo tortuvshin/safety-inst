@@ -2,19 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mn.btgt.safetyinst">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
-        android:name="mn.btgt.safetyinst.AppMain"
+        android:name=".AppMain"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,13 +25,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="mn.btgt.safetyinst.activity.MainActivity"
-            android:theme="@style/AppFullScreen"/>
-        <activity
-            android:name="mn.btgt.safetyinst.activity.LoginImeiActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/AppFullScreen" />
         <activity
-            android:name="mn.btgt.safetyinst.activity.SplashActivity"
+            android:name=".activity.LoginImeiActivity"
+            android:theme="@style/AppFullScreen" />
+        <activity
+            android:name=".activity.SplashActivity"
             android:theme="@style/AppFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,16 +40,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="mn.btgt.safetyinst.activity.LoginListActivity"
+            android:name=".activity.LoginListActivity"
             android:theme="@style/AppFullScreen" />
-        <activity android:name="mn.btgt.safetyinst.activity.AddInfoActivity" />
+        <activity android:name=".activity.AddInfoActivity" />
 
         <provider
-            android:name="mn.btgt.safetyinst.provider.SettingsProvider"
+            android:name=".provider.SettingsProvider"
             android:authorities="mn.btgt.safetyinst.provider.SettingsProvider"
             android:enabled="true"
             android:exported="true"
-            android:multiprocess="true">
-        </provider>
+            android:multiprocess="true"></provider>
+
+        <activity
+            android:name=".activity.DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/select_device"
+            android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
+
 </manifest>

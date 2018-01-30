@@ -62,10 +62,10 @@ public class CategoryTable extends DatabaseHelper {
             cv.put(CATEGORY_ICON, category.getIcon());
             cv.put(CATEGORY_ORDER, category.getOrder());
             db.insert(TABLE_CATEGORYS, null, cv);
+            db.setTransactionSuccessful();
         } catch (Exception ex){
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             db.endTransaction();
             db.close();
         }

@@ -3,7 +3,6 @@ package mn.btgt.safetyinst.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,7 +30,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import agency.techstar.imageloader.ImageLoader;
+import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.model.SNote;

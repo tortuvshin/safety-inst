@@ -1,7 +1,10 @@
 package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
@@ -12,6 +15,8 @@ import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -33,7 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
-import java.util.zip.DataFormatException;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
@@ -43,6 +47,7 @@ import mn.btgt.safetyinst.model.SignData;
 import mn.btgt.safetyinst.utils.CompressionUtils;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
+import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
@@ -53,6 +58,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static mn.btgt.safetyinst.utils.SAFCONSTANT.REQUEST_CONNECT_DEVICE_SECURE;
+import static mn.btgt.safetyinst.utils.SAFCONSTANT.codePage;
+import static mn.btgt.safetyinst.utils.SAFCONSTANT.printer_font;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -72,7 +81,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SurfaceHolder surfaceHolder;
     SignData userSigned;
     Camera.PictureCallback jpegCallback;
+
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    private SharedPreferences sharedPrefs;
     SignDataTable signDataTable;
+    SettingsTable settingsTable;
 
     private Handler mHandler;
     PrefManager prefManager;
@@ -83,7 +96,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
-        if (getSupportActionBar() != null) {
+
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -95,6 +110,17 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
+
+        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+        String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
+
+        settingsTable = new SettingsTable(getApplicationContext());
+
+        SAFCONSTANT.printer_font = settingsTable.select(SAFCONSTANT.SETTINGS_KEY_PRINTER_FONT);
+        SAFCONSTANT.company_rd = settingsTable.select(SAFCONSTANT.SETTINGS_KEY_RD);
+        SAFCONSTANT.padaan_head = sharedPrefs.getString(SAFCONSTANT.PREF_HEAD, "");
+        SAFCONSTANT.padaan_foot = sharedPrefs.getString(SAFCONSTANT.PREF_FOOT, "");
+        SAFCONSTANT.last_printer_address = last_printer_address;
 
         surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
@@ -108,20 +134,16 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream;
                 btUserPhoto = data;
-
                 try {
                     outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
-
                     outStream.write(data);
                     outStream.close();
-                }
-
-                catch (FileNotFoundException e) {
+                } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                }
-
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
+                } catch (NullPointerException e) {
+                    Toast.makeText(AddInfoActivity.this, R.string.cannot_capture, Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -196,10 +218,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
+
+                    EscPosPrinter.getTestData55(SAFCONSTANT.printer_font, SAFCONSTANT.codePage, AddInfoActivity.this);
                     openDialog();
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -334,10 +357,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             Logger.d(sArray.toString());
         } catch (JSONException je) {
             je.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (DataFormatException e) {
-            e.printStackTrace();
         }
 
         MultipartBody requestBody = formBody.build();
@@ -387,15 +406,48 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         });
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("ACTIVRES", "BT onActivityResult " + resultCode);
+        if (resultCode == Activity.RESULT_CANCELED) {
+//            togglePrinter.setEnabled(true);
+        }else if (resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+                case REQUEST_CONNECT_DEVICE_SECURE:
+                    // When DeviceListActivity returns with a device to connect
+                    String address = data.getExtras().getString("device_address");
+                    Log.d("ACTIVRES", "BT onActivityResult address : " + address);
+                    //togglePrinter.setTextOff(R.string.txt_printer_connecting);
+                    SAFCONSTANT.last_printer_address = address;
+                    SAFCONSTANT.openBT(AddInfoActivity.this,address);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.info_menu, menu);
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        } else if (id == R.id.action_print_on) {
+            SAFCONSTANT.findBT(AddInfoActivity.this);
+        } else if (id == R.id.action_print_off) {
+            SAFCONSTANT.closeBT();
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(AddInfoActivity.this, SettingsActivity.class));
         }
-        return false;
+
+        return super.onOptionsItemSelected(item);
     }
 }
