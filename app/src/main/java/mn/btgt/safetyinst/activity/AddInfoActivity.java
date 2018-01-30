@@ -59,10 +59,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static mn.btgt.safetyinst.utils.SAFCONSTANT.REQUEST_CONNECT_DEVICE_SECURE;
-import static mn.btgt.safetyinst.utils.SAFCONSTANT.codePage;
-import static mn.btgt.safetyinst.utils.SAFCONSTANT.printer_font;
-
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -116,8 +112,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         settingsTable = new SettingsTable(getApplicationContext());
 
-        SAFCONSTANT.printer_font = settingsTable.select(SAFCONSTANT.SETTINGS_KEY_PRINTER_FONT);
-        SAFCONSTANT.company_rd = settingsTable.select(SAFCONSTANT.SETTINGS_KEY_RD);
         SAFCONSTANT.padaan_head = sharedPrefs.getString(SAFCONSTANT.PREF_HEAD, "");
         SAFCONSTANT.padaan_foot = sharedPrefs.getString(SAFCONSTANT.PREF_FOOT, "");
         SAFCONSTANT.last_printer_address = last_printer_address;
@@ -219,12 +213,16 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
 
-                    EscPosPrinter.getTestData55(SAFCONSTANT.printer_font, SAFCONSTANT.codePage, AddInfoActivity.this);
                     openDialog();
 
                 } catch (Exception e) {
                     Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
+                SAFCONSTANT.sendData(EscPosPrinter.getTestData80(
+                        settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE),
+                        Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
+                        AddInfoActivity.this ));
+
             }
         });
     }

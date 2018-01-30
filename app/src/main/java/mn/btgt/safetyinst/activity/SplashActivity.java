@@ -154,7 +154,6 @@ public class SplashActivity extends AppCompatActivity {
                                 if (setting.length() > 0) {
                                     SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
 
-                                    settingsTable.deleteAll();
                                     List<Settings> settingsList = new ArrayList<Settings>();
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_DEPARTMENT, setting.getString("comp")));
