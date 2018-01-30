@@ -255,46 +255,46 @@ public class SAFCONSTANT {
     }
     public static void printBill(boolean copy) {
         Log.d("printer settings",printer_font + " , cp :" + codePage + " , logo:"+show_Logo);
-        EscPosPrinter my_print = new EscPosPrinter(printer_font, codePage, show_Logo);
-        if (userlogo.length() > 4) {
-            File sd = Environment.getExternalStorageDirectory();
-            File banner = new File(sd, userlogo);
-            Bitmap largeIcon = null;
-            if (banner.exists()) {
-                largeIcon = BitmapFactory.decodeFile(banner.getAbsolutePath());
-                my_print.set_align("CENTER");
-                if (largeIcon !=null)
-                    my_print.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
-            }
-        }
-        if (padaan_head.length() > 2 ) {
-            my_print.set_align("CENTER");
-            my_print.text(padaan_head);
-        }
+        EscPosPrinter my_print = new EscPosPrinter(printer_font, codePage);
+//        if (userlogo.length() > 4) {
+//            File sd = Environment.getExternalStorageDirectory();
+//            File banner = new File(sd, userlogo);
+//            Bitmap largeIcon = null;
+//            if (banner.exists()) {
+//                largeIcon = BitmapFactory.decodeFile(banner.getAbsolutePath());
+//                my_print.set_align("CENTER");
+//                if (largeIcon !=null)
+//                    my_print.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
+//            }
+//        }
+//        if (padaan_head.length() > 2 ) {
+//            my_print.set_align("CENTER");
+//            my_print.text(padaan_head);
+//        }
 
-        my_print.text(company_name);
-        if (company_rd.length() > 2) my_print.text("РД : " + company_rd);
+//        my_print.text(company_name);
+//        if (company_rd.length() > 2) my_print.text("РД : " + company_rd);
 
         my_print.set_align("LEFT");
         my_print.set_align("RIGHT");
         my_print.set_charType("B");
-        if (padaan_foot.length() > 2 ) {
-            my_print.set_align("CENTER");
-            my_print.text(padaan_foot);
-        }
+//        if (padaan_foot.length() > 2 ) {
+//            my_print.set_align("CENTER");
+//            my_print.text(padaan_foot);
+//        }
         my_print.text("");
         my_print.text("--x--x--x--x----");
         my_print.text("");
         my_print.text("");
         my_print.text("");
         my_print.cut();
-        SAFCONSTANT.sendData(my_print.prepare());
+//        SAFCONSTANT.sendData(my_print.prepare());
         my_print.clearData();
 
     }
     public static int printPhoto(String photoPath) {
         Log.d("printer settings",printer_font + " , cp :" + codePage + " , logo:"+photoPath);
-        EscPosPrinter my_print = new EscPosPrinter(printer_font, codePage, show_Logo);
+        EscPosPrinter my_print = new EscPosPrinter(printer_font, codePage);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;

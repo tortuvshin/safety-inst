@@ -215,14 +215,24 @@ public class EscPosPrinter {
         this.cut_paper_part = "PARTIAL";
         this.reset();
     }
-    public EscPosPrinter(String font_converter, int printer_codepage, Boolean showLogo) {
+//    public EscPosPrinter(String font_converter, int printer_codepage, Boolean showLogo) {
+//        // TODO Profiles
+//        Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage+ " showLogo : "+showLogo);
+//        this.line_buffers = new ArrayList<byte[]>();
+//        this.font_converter = font_converter;
+//        this.cut_paper_part = "PARTIAL";
+//        this.codepage = printer_codepage;
+//        this.print_image = showLogo;
+//        this.reset();
+//    }
+    @Deprecated
+    public EscPosPrinter(String font_converter, int printer_codepage) {
         // TODO Profiles
-        Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage+ " showLogo : "+showLogo);
+        Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage);
         this.line_buffers = new ArrayList<byte[]>();
         this.font_converter = font_converter;
         this.cut_paper_part = "PARTIAL";
         this.codepage = printer_codepage;
-        this.print_image = showLogo;
         this.reset();
     }
     public  void  clearData() {
@@ -402,11 +412,11 @@ public class EscPosPrinter {
     }
 
     public String translate(String word) {
-        if (font_converter.equals("LATIN")) {
-            return translateToLatin(word);
-        } else {
+//        if (font_converter.equals("LATIN")) {
+//            return translateToLatin(word);
+//        } else {
             return word;
-        }
+//        }
     }
 
     public String translateToLatin(String word) {
@@ -633,7 +643,7 @@ public class EscPosPrinter {
     }
 
     public static byte[] getTestData80(String font_convert, int printer_codepage, Activity ac) {
-        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage,true);
+        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage);
 //        posCommand.set_density(7);
 //        posCommand.set_font("A");
 
@@ -677,7 +687,7 @@ public class EscPosPrinter {
         return posCommand.prepare();
     }
     public static byte[] getTestData55(String font_convert, int printer_codepage, Activity ac) {
-        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage,true);
+        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage);
 //        posCommand.set_density(7);
         posCommand.set_align("CENTER");
 

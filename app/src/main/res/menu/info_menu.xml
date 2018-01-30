@@ -22,6 +22,12 @@
                 android:icon="@drawable/ic_print_blue"
                 app:showAsAction="always|withText"
                 />
+            <item android:id="@+id/action_settings"
+                android:title="@string/action_settings"
+                android:orderInCategory="100"
+                android:icon="@drawable/ic_print_blue"
+                app:showAsAction="always|withText"
+                />
         </menu>
     </item>
 </menu>

@@ -42,9 +42,20 @@
     <string name="photo_or_signature_not_found">Зураг эсвэл гарын үсэг байхгүй байна</string>
     <string name="cannot_capture">Зураг дарагдаагүй байна</string>
 
+
+    <string name="title_settings_main">Үндсэн тохиргоо</string>
+    <string name="title_settings_printer">Принтерийн тохиргоо</string>
+
+    <string name="font_latin">Латин ABCD</string>
+    <string name="font_ascii">Крилл АБВГ</string>
     <string name="printer_btn">BT принтер</string>
     <string name="printer_on">Принтер ON</string>
     <string name="printer_off">Принтер OFF</string>
+    <string name="printer_test">Принтер шалгах</string>
+    <string name="printer_ip">Принтер IP</string>
+    <string name="printer_port">Принтер PORT</string>
+    <string name="printer_code">Принтерийн фонт (1-47)</string>
+    <string name="printer_font">Үсэг</string>
 
     <string name="title_paired_devices">Холбогдсон төхөөрөмжүүд</string>
     <string name="title_other_devices">Бусад төхөөрөмжүүд</string>

@@ -2,10 +2,8 @@ package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
@@ -201,6 +199,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
+
+                    SAFCONSTANT.printBill(false);
                     openDialog();
 
                 } catch (Exception e) {
@@ -426,6 +426,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             SAFCONSTANT.findBT(AddInfoActivity.this);
         } else if (id == R.id.action_print_off) {
             SAFCONSTANT.closeBT();
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(AddInfoActivity.this, SettingsActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
