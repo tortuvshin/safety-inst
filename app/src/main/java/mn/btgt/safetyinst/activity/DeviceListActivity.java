@@ -23,8 +23,7 @@ import java.util.Set;
 
 import mn.btgt.safetyinst.R;
 
-public class DeviceListActivity extends AppCompatActivity {
-
+public class DeviceListActivity extends Activity {
 
     // Debugging
     private static final String TAG = "DeviceListActivity";
@@ -47,7 +46,7 @@ public class DeviceListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_device_list);
 
         // Set result CANCELED in case the user backs out
-        setResult(Activity.RESULT_CANCELED);
+        setResult(AppCompatActivity.RESULT_CANCELED);
 
         // Initialize the button to perform device discovery
         Button scanButton = (Button) findViewById(R.id.button_scan);
@@ -180,5 +179,4 @@ public class DeviceListActivity extends AppCompatActivity {
             }
         }
     };
-
 }

@@ -24,6 +24,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import mn.btgt.safetyinst.activity.DeviceListActivity;
+
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -220,8 +222,8 @@ public class SAFCONSTANT {
             mPrintService = new BluetoothPrintService(act, mHandler);
         Intent serverIntent = null;
         if (printer_address == null || printer_address.length() == 0 || SAFCONSTANT.last_printer_address == "") {
-//            serverIntent = new Intent(act, DeviceListActivity.class);
-//            act.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+            serverIntent = new Intent(act, DeviceListActivity.class);
+            act.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
             Toast.makeText(act.getApplicationContext(), "Bluetooth printer not selected", Toast.LENGTH_LONG).show();
         } else {
             // Standard SerialPortService ID
