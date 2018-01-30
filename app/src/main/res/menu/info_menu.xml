@@ -13,13 +13,13 @@
             <item android:id="@+id/action_print_on"
                 android:title="@string/printer_on"
                 android:orderInCategory="100"
-                android:icon="@drawable/ic_print_white"
+                android:icon="@drawable/ic_print_blue"
                 app:showAsAction="always|withText"
                 />
             <item android:id="@+id/action_print_off"
                 android:title="@string/printer_off"
                 android:orderInCategory="100"
-                android:icon="@drawable/ic_print_white"
+                android:icon="@drawable/ic_print_blue"
                 app:showAsAction="always|withText"
                 />
         </menu>

@@ -410,7 +410,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info_menu, menu);
-
         return true;
     }
 
