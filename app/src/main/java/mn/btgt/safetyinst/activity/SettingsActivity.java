@@ -48,7 +48,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         AppCompatButton saveBtn = findViewById(R.id.saveSettings);
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
-        AppCompatButton fileBtn = findViewById(R.id.printFile);
 
         EditText cp = (EditText) findViewById(R.id.txtFont);
         settingsTable = new SettingsTable(getApplicationContext());
@@ -82,14 +81,6 @@ public class SettingsActivity extends AppCompatActivity {
                 printFontTest();
             }
         });
-        fileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                printFile();
-            }
-        });
-
-
     }
     private void rgOnchanged(){
 
@@ -129,6 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(),R.string.error_occurred,Toast.LENGTH_SHORT);
         }
     }
+
     public void printFontTest(){
         EditText cp = (EditText) findViewById(R.id.txtFont);
         String codePage = String.valueOf(cp.getText());
@@ -143,56 +135,6 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
     }
-    private String selectedImagePath;
-
-    public void printFile(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,
-                "Select Picture"), PICKFILE_REQUEST_CODE);
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PICKFILE_REQUEST_CODE) {
-                Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
-                Toast.makeText(this,"f:"+selectedImagePath,Toast.LENGTH_SHORT).show();
-                int photox = SAFCONSTANT.printPhoto(selectedImagePath);
-                switch (photox){
-                    case 10 : Toast.makeText(this,"Зургын өргөн 400px ээс их байж болохгүй.", Toast.LENGTH_SHORT).show(); break;
-                    case 11 : Toast.makeText(this,"Зургын өндөр 800px ээс их байж болохгүй.", Toast.LENGTH_SHORT).show(); break;
-                    case 1 : Toast.makeText(this,"Зургыг хэмжээ хэвийн байна", Toast.LENGTH_SHORT).show(); break;
-                }
-            }
-        }
-    }
-
-    public String getPath(Uri uri) {
-        // just some safety built in
-        if( uri == null ) {
-            // TODO perform some logging or show user feedback
-            return null;
-        }
-        // try to retrieve the image from the media store first
-        // this will only work for images selected from gallery
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        if( cursor != null ){
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-            cursor.close();
-            return path;
-        }
-        // this is our fallback here
-        return uri.getPath();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

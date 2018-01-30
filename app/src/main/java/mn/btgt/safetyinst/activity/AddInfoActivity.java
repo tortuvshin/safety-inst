@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
@@ -46,6 +47,7 @@ import mn.btgt.safetyinst.model.SignData;
 import mn.btgt.safetyinst.utils.CompressionUtils;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
+import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
@@ -58,6 +60,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static mn.btgt.safetyinst.utils.SAFCONSTANT.REQUEST_CONNECT_DEVICE_SECURE;
+import static mn.btgt.safetyinst.utils.SAFCONSTANT.codePage;
+import static mn.btgt.safetyinst.utils.SAFCONSTANT.printer_font;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -77,7 +81,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SurfaceHolder surfaceHolder;
     SignData userSigned;
     Camera.PictureCallback jpegCallback;
+
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    private SharedPreferences sharedPrefs;
     SignDataTable signDataTable;
+    SettingsTable settingsTable;
 
     private Handler mHandler;
     PrefManager prefManager;
@@ -102,6 +110,17 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
         final SignDataTable signDataTable = new SignDataTable(this);
+
+        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+        String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
+
+        settingsTable = new SettingsTable(getApplicationContext());
+
+        SAFCONSTANT.printer_font = settingsTable.select(SAFCONSTANT.SETTINGS_KEY_PRINTER_FONT);
+        SAFCONSTANT.company_rd = settingsTable.select(SAFCONSTANT.SETTINGS_KEY_RD);
+        SAFCONSTANT.padaan_head = sharedPrefs.getString(SAFCONSTANT.PREF_HEAD, "");
+        SAFCONSTANT.padaan_foot = sharedPrefs.getString(SAFCONSTANT.PREF_FOOT, "");
+        SAFCONSTANT.last_printer_address = last_printer_address;
 
         surfaceView = findViewById(R.id.surfaceView);
         surfaceHolder = surfaceView.getHolder();
@@ -200,11 +219,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                     SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
                     settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
 
-                    SAFCONSTANT.printBill(false);
+                    EscPosPrinter.getTestData55(SAFCONSTANT.printer_font, SAFCONSTANT.codePage, AddInfoActivity.this);
                     openDialog();
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
             }

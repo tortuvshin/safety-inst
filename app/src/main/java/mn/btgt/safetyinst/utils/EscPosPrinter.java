@@ -3,11 +3,14 @@ package mn.btgt.safetyinst.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -15,17 +18,17 @@ import com.google.zxing.common.BitMatrix;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import mn.btgt.safetyinst.R;
 
-/**
- * Author: Turtuvshin Byambaa.
- * Project: Safety Inst
- * URL: https://www.github.com/tortuvshin
- */
 
+/**
+ * Created by Ganaa on 1/8/2016.
+ */
 public class EscPosPrinter {
     // Constants
     public static final byte[] CTL_LF = new byte[]{0x0a}; // Print and line feed
@@ -106,27 +109,27 @@ public class EscPosPrinter {
         Hashtable<String, String> aMap = new Hashtable<String, String>();
         aMap.put("Ё", "YO");
         aMap.put("Й", "I");
-        aMap.put("Ц", "С");
+        aMap.put("Ц", "C");
         aMap.put("У", "U");
         aMap.put("К", "K");
         aMap.put("Е", "E");
         aMap.put("Н", "N");
         aMap.put("Г", "G");
         aMap.put("Ш", "Sh");
-        aMap.put("Щ", "Sch");
+        aMap.put("Щ", "Sc");
         aMap.put("З", "Z");
         aMap.put("Х", "H");
         aMap.put("Ъ", "'");
         aMap.put("ё", "yo");
         aMap.put("й", "i");
-        aMap.put("ц", "с");
+        aMap.put("ц", "c");
         aMap.put("у", "u");
         aMap.put("к", "k");
         aMap.put("е", "e");
         aMap.put("н", "n");
         aMap.put("г", "g");
         aMap.put("ш", "sh");
-        aMap.put("щ", "sch");
+        aMap.put("щ", "sc");
         aMap.put("з", "z");
         aMap.put("х", "h");
         aMap.put("ъ", "'");
@@ -215,24 +218,15 @@ public class EscPosPrinter {
         this.cut_paper_part = "PARTIAL";
         this.reset();
     }
-//    public EscPosPrinter(String font_converter, int printer_codepage, Boolean showLogo) {
-//        // TODO Profiles
-//        Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage+ " showLogo : "+showLogo);
-//        this.line_buffers = new ArrayList<byte[]>();
-//        this.font_converter = font_converter;
-//        this.cut_paper_part = "PARTIAL";
-//        this.codepage = printer_codepage;
-//        this.print_image = showLogo;
-//        this.reset();
-//    }
-    @Deprecated
-    public EscPosPrinter(String font_converter, int printer_codepage) {
+    public EscPosPrinter(String font_converter, int printer_codepage, int showLogo) {
         // TODO Profiles
-        Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage);
+        Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage+ " showLogo : "+showLogo);
         this.line_buffers = new ArrayList<byte[]>();
         this.font_converter = font_converter;
         this.cut_paper_part = "PARTIAL";
         this.codepage = printer_codepage;
+        if (showLogo == 1) this.print_image = true;
+        else this.print_image = false;
         this.reset();
     }
     public  void  clearData() {
@@ -248,7 +242,7 @@ public class EscPosPrinter {
         set_codepage(this.codepage);
     }
     public void set_codepage(int cp){
-        this.raw(new byte[]{0x1B, 0x74, (byte) cp});
+        this.raw(new byte[] { 0x1B, 0x74, (byte)cp});
     }
 
     public void text(String text) {
@@ -412,11 +406,11 @@ public class EscPosPrinter {
     }
 
     public String translate(String word) {
-//        if (font_converter.equals("LATIN")) {
-//            return translateToLatin(word);
-//        } else {
+        if (font_converter.equals("LATIN")) {
+            return translateToLatin(word);
+        } else {
             return word;
-//        }
+        }
     }
 
     public String translateToLatin(String word) {
@@ -510,58 +504,6 @@ public class EscPosPrinter {
 
 
 
-    /*
-    * ESCPosPrinter.prototype.canvas_to_printer = function(canvas, width, height){
-    var ctx = canvas.getContext('2d');
-    var im_border = this._check_image_size(width);
-    var im_left  = "";
-    var im_right = "";
-    var pix_line = "";
-    var img_size = [0, 0];
-    var col_switch = 0;
-    // get all canvas pixel data
-    im_left = this.repeatString(im_border[0], "0")
-    im_right = this.repeatString(im_border[1], "0")
-
-    // Хар цагаан
-    for(var y=0; y<height; y++){
-      img_size[1] += 1;
-      pix_line += im_left;
-      img_size[0] += im_border[0];
-      for(var x=0; x<width; x++){
-        img_size[0] += 1;
-        var RGB = ctx.getImageData(x, y, 1, 1).data;
-        var im_color = (RGB[0] + RGB[1] + RGB[2]);
-        var im_pattern = "1X0";
-        var pattern_len = im_pattern.length;
-
-        if (RGB[3] == 0){ // Transparent
-          im_color = 255 * 3;
-        }
-        col_switch = (col_switch - 1) * (-1)
-        for(var p=0; p<pattern_len; p++){
-          if (im_color <= (255 * 3 / pattern_len * (p+1))) {
-            if (im_pattern[p] == "X"){
-              pix_line += col_switch;
-            }else{
-              pix_line += im_pattern[p];
-            }
-            break;
-          }else if(im_color > (255 * 3 / pattern_len * pattern_len) && (im_color <= (255 * 3))) {
-            pix_line += im_pattern[-1]
-            break;
-          }
-        }
-      }
-      pix_line += im_right;
-      img_size[0] += im_border[1];
-    }
-    this._print_image(pix_line, img_size);
-  }
-    *
-    *
-    * */
-
     private int[] checkImageSize(int size) {
         int[] list = new int[2];
         if (size % 32 == 0) {
@@ -643,7 +585,7 @@ public class EscPosPrinter {
     }
 
     public static byte[] getTestData80(String font_convert, int printer_codepage, Activity ac) {
-        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage);
+        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage,1);
 //        posCommand.set_density(7);
 //        posCommand.set_font("A");
 
@@ -651,71 +593,111 @@ public class EscPosPrinter {
         // 17 Page 17 [PC866: Cyrillic #2]
 
         posCommand.set_align("CENTER");
-        Bitmap largeIcon = BitmapFactory.decodeResource(ac.getResources(), R.mipmap.ic_launcher);
+        Bitmap largeIcon = BitmapFactory.decodeResource(ac.getResources(), R.drawable.logo);
 
         posCommand.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
         posCommand.text("");
-        posCommand.text("Касс: 0031");
+        posCommand.text("Name of Shop, Branch No");
+        posCommand.set_charType("NORMAL");
         posCommand.set_align("LEFT");
-        posCommand.text("ДДТД: 000000000077184567000009908913100");
-        posCommand.text("-------------------------------------------");
-        posCommand.text("1) 865049819108 : Барааны нэр энд");
-        posCommand.text("1500       *15        10%        =123456789");
-        posCommand.text("2) 865049819109:Барааны нэр энд");
-        posCommand.text("2500       *15        10%        =123456789");
-        posCommand.text("3) 865049819110:Барааны нэр энд");
-        posCommand.text("3500       *15        10%        =123456789");
-        posCommand.text("-------------------------------------------");
-        posCommand.set_align("RIGHT");
-        posCommand.set_charType("B");
-        posCommand.text("НӨАТ ороогүй дүн : 123,456.00");
-        posCommand.text("НӨАТатвар   :  12,345.60");
-        posCommand.text("НХАТатвар   :  1,234.56");
-        posCommand.text("НИЙТ ДҮН: 137,036.16");
+        posCommand.text("");
+        posCommand.text("ДДТД: 2359780150521155504123456");
+        posCommand.text("ТТД : 2359780    ПОС#: 0004    Билл#: 0004");
+        posCommand.text("Касс: 123456789012345  2012/05/21 15:55:04");
+        posCommand.text("------------------------------------------");
+        posCommand.text("Бараа           Нэгж үнэ  Тоо    Дүн");
+        posCommand.text("------------------------------------------");
+        posCommand.text("Нэр456789012345 123456789 11,234 123456789");
+        posCommand.text(" Хямдрал             10%        123456789");
+        posCommand.text("Нэр456789012345 123456789 11,234 123456789");
+        posCommand.text(" Хямдрал          123456        123456789");
+        posCommand.text("Нэр456789012345 123456789 11,234 123456789");
+        posCommand.text(" Хямдрал               0 11,235 123456789");
+        posCommand.text("Нэр456789012345 123456789 11,234 123456789");
+        posCommand.text("------------------------------------------");
+        posCommand.text("  Дүн      : 4 төрөл      1,234,567,890.00");
+        posCommand.text("  Карт#    : 4021***, 5% = 115,050.00");
+        posCommand.text("  НИЙТ ДҮН : 1,234,567,890.00");
+        posCommand.text("    НХАТ   :     4,950,000.00");
+        posCommand.text("    НӨАТ   :     4,950,000.00");
+        posCommand.set_charType("BU");
+        posCommand.text("  ТӨЛӨХ ДҮН: 1,234,567,890.00");
+        posCommand.set_charType("NORMAL");
+        posCommand.text("  ТӨЛСӨН   : 1,234,567,890.00");
+        posCommand.text("    Бэлэн  :   134,567,890.00");
+        posCommand.text("    Бэлэн бус: 134,567,890.00");
+        posCommand.text("  Хариулт  :        19,990.00");
+
         posCommand.set_align("CENTER");
         // TODO : Тун удахгүй
-        posCommand.qrcode("4008968969811498142546824452281362396695562036937617327443280005918763034261239397623050659790566988993180435857478227860866529423435428466166386717538542583626604036306095734051793547148162849695935898258671675614361290053235146148604206211419717614895824359463427855189229444944824407643649342069171777408425781539", 300, 300);
-        posCommand.text("ЛОТО: BT 77184567");
+        posCommand.qrcode("Сайн байна уу. Манай компани энэхүү програмыг танд санал болгож байна.",300,300);
+        posCommand.text("SN: GA 77184567");
         posCommand.set_align("LEFT");
-        //posCommand.mini_qrcode("000000000077184567000009908913100", BarcodeFormat.CODE_128);
+        posCommand.set_charType("I");
+        posCommand.text("Буцаалтын код");
+
+        // TODO : Тун удахгүй
+        posCommand.barcode("0123456789ABCDEF", BarcodeFormat.CODE_128, 350);
+
         posCommand.text("Манайхаар үйлчлүүлсэн таньд баярлалаа.");
+
         posCommand.text("");
         posCommand.text("");
         posCommand.text("");
         posCommand.text("");
         posCommand.cut();
+        posCommand.eject_cashdrawer();
         return posCommand.prepare();
     }
     public static byte[] getTestData55(String font_convert, int printer_codepage, Activity ac) {
-        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage);
+        EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage,1);
 //        posCommand.set_density(7);
         posCommand.set_align("CENTER");
+        Bitmap largeIcon = BitmapFactory.decodeResource(ac.getResources(), R.drawable.logo);
 
+        posCommand.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
         posCommand.text("");
-        posCommand.text("Касс: 0031");
+        posCommand.text("Name of Shop, Branch No");
+        posCommand.set_charType("NORMAL");
         posCommand.set_align("LEFT");
+        posCommand.text("");
+        posCommand.text("ДДТД: 2359780150521155504123456 ");
+        posCommand.text("ТТД : 2359780         ПОС#: 0004");
+        posCommand.text("Касс: 123456789012345 Билл#: 0004");
+        posCommand.text("Огноо: 2012/05/21 15:55:04");
         posCommand.text("--------------------------------");
         posCommand.text("Бараа       Н/үнэ  Тоо  Дүн     ");
         posCommand.text("--------------------------------");
-        posCommand.text("1) 865049819108:Барааны нэр энд");
-        posCommand.text("1500    *15   10%    =123456789");
-        posCommand.text("2) 865049819109:Барааны нэр энд");
-        posCommand.text("2500    *15   10%    =123456789");
-        posCommand.text("3) 865049819110:Барааны нэр энд");
-        posCommand.text("3500    *15   10%    =123456789");
+        posCommand.text("Нэр45678901 123456 11,2 12345678");
+        posCommand.text("  Хямдрал      10%    123456789");
+        posCommand.text("Нэр45678901 123456 11,2 12345678");
+        posCommand.text("  Хямдрал      10%    123456789");
+        posCommand.text("Нэр45678901 123456 11,2 12345678");
+        posCommand.text("  Хямдрал      10%    123456789");
+        posCommand.text("Нэр45678901 123456 11,2 12345678");
         posCommand.text("--------------------------------");
         posCommand.text("Дүн : 4 төрөл    1,234,567,890.00");
-        posCommand.text(" ДҮН  : 1,234,567,890.00");
+        posCommand.text(" Карт# : 4021***, 5% = 123,456.00");
+        posCommand.text(" НИЙТ ДҮН  : 1,234,567,890.00");
+        posCommand.text("    НХАТ   :     4,950,000.00");
         posCommand.text("    НӨАТ   :     4,950,000.00");
-        posCommand.set_charType("B");
-        posCommand.text("  НИЙТ ДҮН: 1,234,567,890.00");
+        posCommand.set_charType("BU");
+        posCommand.text("  ТӨЛӨХ ДҮН: 1,234,567,890.00");
+        posCommand.set_charType("NORMAL");
+        posCommand.text("  ТӨЛСӨН   : 1,234,567,890.00");
+        posCommand.text("    Бэлэн  :   134,567,890.00");
+        posCommand.text("    Бэлэн бус: 134,567,890.00");
+        posCommand.text("  Хариулт  :        19,990.00");
+
         posCommand.set_align("CENTER");
-        posCommand.qrcode("4008968969811498142546824452281362396695562036937617327443280005918763034261239397623050659790566988993180435857478227860866529423435428466166386717538542583626604036306095734051793547148162849695935898258671675614361290053235146148604206211419717614895824359463427855189229444944824407643649342069171777408425781539", 300, 300);
-        posCommand.text("SN: TEL 77184567");
+        posCommand.qrcode("Сайн байна уу. Манай компани энэхүү програмыг танд санал болгож байна.", 300, 300);
+        posCommand.text("SN: GA 16018569");
         posCommand.set_align("LEFT");
         posCommand.set_charType("I");
-        posCommand.barcode("000000000077184567000009908913100", BarcodeFormat.CODE_128, 500);
-        posCommand.text("Манайхаар үйлчлүүлсэн таньд баярлалаа.");
+//        posCommand.text("Буцаалтын код");
+        posCommand.barcode("0123456789ABCDEF", BarcodeFormat.CODE_128, 350);
+        posCommand.text("Манайхаар үйлчлүүлсэн таньд баярлалаа.HAND");
+        posCommand.text("Манайхаар үйлчлүүлсэн таньд баярлалаа.HAND");
 
         posCommand.text("");
         posCommand.text("");
@@ -730,32 +712,11 @@ public class EscPosPrinter {
         for(int cp=0x01; cp< 47; cp++){
             posCommand.set_codepage(cp);
             posCommand.text("Code Page : " + String.valueOf(cp));
-            posCommand.text("Сайн байна уу. АБВГДЕЁЖЗИЙКЛМНОӨРТСУҮПФХЦШЩЪЬЭЮЯ абвгдеёжзийклмноөрстуүпфхцшщъьэюя");
-            posCommand.text("1234567890/*-+.,!@#$%^&*()_~");
             posCommand.text("");
+            posCommand.text("Монгол улсын Өсөн нэмэх, Үнэн хүчит, Өрнөн дэлгэрэх, Олныг баясуулагч, Түмэнд түшигтэй, Түмнийг цэнгүүлэгч, Олноо өргөгдсөн... Сайхан наадаарай. ");
+            posCommand.text("");
+            posCommand.text("---------------------");
         }
-        return posCommand.prepare();
-    }
-    public static byte[] getTestQRCODE(){
-        EscPosPrinter posCommand = new EscPosPrinter();
-        posCommand.set_align("CENTER");
-        posCommand.qrcode("9536099422493770386051439818658381661941807216966935939473390005919036165737445073564581823543570336032877885421561786980267182421819569425932192022252898799589474544278537197200370862161601245947615510737177108739015454553211321746789587917611496557092420686439065394839421076056932292034206794177280713675332601212",300,300);
-        posCommand.text("");
-        return posCommand.prepare();
-    }
-    public static byte[] getTestBARCODE(){
-        EscPosPrinter posCommand = new EscPosPrinter();
-        posCommand.set_align("CENTER");
-        posCommand.barcode("ABCDEF0123456789", BarcodeFormat.CODE_128, 500);
-        posCommand.text("");
-        return posCommand.prepare();
-    }
-    public static byte[] getTestIMAGE(Activity ac){
-        EscPosPrinter posCommand = new EscPosPrinter();
-        posCommand.set_align("CENTER");
-        Bitmap largeIcon = BitmapFactory.decodeResource(ac.getResources(), R.mipmap.ic_launcher);
-        posCommand.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
-        posCommand.text("");
         return posCommand.prepare();
     }
     public void qrcode(String qrcode,int w,int h){
@@ -784,12 +745,19 @@ public class EscPosPrinter {
             image(ImageBitmap, ImageBitmap.getWidth(), ImageBitmap.getHeight());
         }
     }
-
+    public static Bitmap overlay(Bitmap bmp1, Bitmap bmp2) {
+        Bitmap bmOverlay = Bitmap.createBitmap(bmp1.getWidth(), bmp1.getHeight(), bmp1.getConfig());
+        Canvas canvas = new Canvas(bmOverlay);
+        canvas.drawBitmap(bmp1, new Matrix(), null);
+        canvas.drawBitmap(bmp2, 0, 0, null);
+        return bmOverlay;
+    }
     public void mini_qrcode(String qrcode,BarcodeFormat format){
         int width = 150;//300
         int heigth = 150;
         int width2 = 250;//300
         int heigth2 = 120;//300
+
 
         if(!TextUtils.isEmpty(qrcode)){
             MultiFormatWriter writer = new MultiFormatWriter();
@@ -815,10 +783,10 @@ public class EscPosPrinter {
                 }
             }
 
+
             image(ImageBitmap, ImageBitmap.getWidth(), ImageBitmap.getHeight());
         }
     }
-
     public void barcode(String barcode, BarcodeFormat format, int width){
         int heigth = 50;
 
