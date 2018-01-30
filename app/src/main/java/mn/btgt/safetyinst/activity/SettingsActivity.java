@@ -128,7 +128,7 @@ public class SettingsActivity extends AppCompatActivity {
             SAFCONSTANT.company_name  = sharedPrefs.getString("", "Company Name");
             SAFCONSTANT.padaan_head = sharedPrefs.getString(SAFCONSTANT.PREF_HEAD, "");
             SAFCONSTANT.padaan_foot = sharedPrefs.getString(SAFCONSTANT.PREF_FOOT, "");
-            SAFCONSTANT.sendData(EscPosPrinter.getTestData80(fontSelect,Integer.valueOf(codePage),this ));
+            SAFCONSTANT.sendData(EscPosPrinter.getTestData80(fontSelect,Integer.valueOf(codePage),SettingsActivity.this ));
         }else{
             Toast.makeText(this.getApplicationContext(),R.string.error_occurred,Toast.LENGTH_SHORT);
 

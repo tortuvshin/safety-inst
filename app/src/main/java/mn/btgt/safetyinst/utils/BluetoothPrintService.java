@@ -1,5 +1,11 @@
 package mn.btgt.safetyinst.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.UUID;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -9,20 +15,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.UUID;
-
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
+
 
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
 public class BluetoothPrintService {
     // Debugging
     private static final String TAG = "BluetoothPrintService";
