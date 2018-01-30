@@ -106,23 +106,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Хадгалах"
-                android:id="@+id/button"
+                android:id="@+id/saveSettings"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/white"
-                android:onClick="saveSettings"
                 android:layout_marginRight="10sp"
                 android:layout_gravity="center_horizontal" />
 
-            <Button
-                android:id="@+id/btn_refrdesh"
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/printFontTest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:onClick="printFontTest"
                 android:layout_marginRight="10sp"
                 android:background="@color/colorPrimary"
                 android:textColor="@color/white"
                 android:text="@string/printer_test" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/printFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="Файл" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

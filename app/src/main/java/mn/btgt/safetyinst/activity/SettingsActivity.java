@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -45,6 +46,10 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        AppCompatButton saveBtn = findViewById(R.id.saveSettings);
+        AppCompatButton testBtn = findViewById(R.id.printFontTest);
+        AppCompatButton fileBtn = findViewById(R.id.printFile);
+
         EditText cp = (EditText) findViewById(R.id.txtFont);
         settingsTable = new SettingsTable(getApplicationContext());
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
@@ -64,6 +69,26 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         rgOnchanged();
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveSettings();
+            }
+        });
+        testBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                printFontTest();
+            }
+        });
+        fileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                printFile();
+            }
+        });
+
 
     }
     private void rgOnchanged(){
@@ -86,7 +111,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         });
     }
-    public void saveSettings(View v){
+    public void saveSettings(){
         EditText cp = (EditText) findViewById(R.id.txtFont);
         String codePage = String.valueOf(cp.getText());
         if (codePage.length() >0) {
@@ -104,7 +129,7 @@ public class SettingsActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(),R.string.error_occurred,Toast.LENGTH_SHORT);
         }
     }
-    public void printFontTest(View v){
+    public void printFontTest(){
         EditText cp = (EditText) findViewById(R.id.txtFont);
         String codePage = String.valueOf(cp.getText());
         if (codePage.length() >0 ) {
@@ -120,7 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
     private String selectedImagePath;
 
-    public void printFile(View v){
+    public void printFile(){
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
