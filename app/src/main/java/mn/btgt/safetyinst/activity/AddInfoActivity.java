@@ -1,7 +1,11 @@
 package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
@@ -12,6 +16,8 @@ import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -53,6 +59,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static mn.btgt.safetyinst.utils.SAFCONSTANT.REQUEST_CONNECT_DEVICE_SECURE;
+
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -82,7 +90,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_info);
-        if (getSupportActionBar() != null) {
+
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -378,15 +388,47 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         });
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("ACTIVRES", "BT onActivityResult " + resultCode);
+        if (resultCode == Activity.RESULT_CANCELED) {
+//            togglePrinter.setEnabled(true);
+        }else if (resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+                case REQUEST_CONNECT_DEVICE_SECURE:
+                    // When DeviceListActivity returns with a device to connect
+                    String address = data.getExtras().getString("device_address");
+                    Log.d("ACTIVRES", "BT onActivityResult address : " + address);
+                    //togglePrinter.setTextOff(R.string.txt_printer_connecting);
+                    SAFCONSTANT.last_printer_address = address;
+                    SAFCONSTANT.openBT(AddInfoActivity.this,address);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.info_menu, menu);
+
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            finish();
+        } else if (id == R.id.action_print_on) {
+            SAFCONSTANT.findBT(AddInfoActivity.this);
+        } else if (id == R.id.action_print_off) {
+            SAFCONSTANT.closeBT();
         }
-        return false;
+
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -41,4 +41,18 @@
     <string name="app_name_splash">Х.А.Б</string>
     <string name="photo_or_signature_not_found">Зураг эсвэл гарын үсэг байхгүй байна</string>
     <string name="cannot_capture">Зураг дарагдаагүй байна</string>
+
+    <string name="printer_btn">BT принтер</string>
+    <string name="printer_on">Принтер ON</string>
+    <string name="printer_off">Принтер OFF</string>
+
+    <string name="title_paired_devices">Холбогдсон төхөөрөмжүүд</string>
+    <string name="title_other_devices">Бусад төхөөрөмжүүд</string>
+    <string name="button_scan">Хайх</string>
+    <string name="connect_fail">Холбогдсонгүй</string>
+    <string name="connect_lost">Холболт тасарлаа</string>
+    <string name="scanning">Хайж байна</string>
+    <string name="none_paired">none_paired</string>
+    <string name="select_device">Принтер сонгох</string>
+    <string name="none_found">Хоосон байна</string>
 </resources>
