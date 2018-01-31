@@ -1,7 +1,6 @@
 package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,9 +9,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
@@ -34,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,6 +63,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -91,6 +94,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     String signName, photoName;
     private BroadcastReceiver mReceiver;
+    String fontSize;
+    String fontEncode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +120,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         settingsTable = new SettingsTable(getApplicationContext());
 
-        SAFCONSTANT.padaan_head = sharedPrefs.getString(SAFCONSTANT.PREF_HEAD, "");
-        SAFCONSTANT.padaan_foot = sharedPrefs.getString(SAFCONSTANT.PREF_FOOT, "");
+        fontSize = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
+        fontEncode = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
+
         SAFCONSTANT.last_printer_address = last_printer_address;
 
         surfaceView = findViewById(R.id.surfaceView);
@@ -132,7 +138,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 FileOutputStream outStream;
                 try {
                     outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
-                    btUserPhoto = CompressionUtils.compress(data);
+                    btUserPhoto = data;
                     outStream.write(btUserPhoto);
                     outStream.close();
                     Intent i = new Intent(BROADCAST_ADDRESS_SAFE).putExtra("VALUE",  "photo_done");
@@ -191,17 +197,14 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 try {
 
                     bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
-                    camera.takePicture(null, null, jpegCallback);
+                    captureImage(view);
 
                 } catch (Exception e) {
                     Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
 
                 if (settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE).length() > 0 && settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) != null) {
-                    SAFCONSTANT.sendData(EscPosPrinter.getTestData80(
-                            settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE),
-                            Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
-                            AddInfoActivity.this ));
+                    printBill();
                 }else{
                     Toast.makeText(AddInfoActivity.this, R.string.font_encode_error,Toast.LENGTH_SHORT).show();
                 }
@@ -209,26 +212,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter intentFilter = new IntentFilter(BROADCAST_ADDRESS_SAFE);
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String value = intent.getStringExtra("VALUE");
-                switch (value){
-                    case "photo_done": //
-                        savedata();
-                        break;
-                    case "photo_error": //
-                        break;
-                }
-            }
-        };
-        this.registerReceiver(mReceiver, intentFilter);
+    public void captureImage(View view) throws IOException {
+        camera.takePicture(null, null, jpegCallback);
     }
-    private  void savedata(){
+
+    private  void saveSignData(){
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.d("photo","size : "+btUserPhoto.length + " data :"+btUserPhoto.toString());
@@ -266,6 +254,17 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         alertDialog.show();
     }
 
+    public void printBill() {
+
+        EscPosPrinter bill = new EscPosPrinter(fontEncode, Integer.valueOf(fontSize), 0);
+        bill.text("Zaawarchilgaanii Ner: ".concat(prefManager.getSnoteName()));
+        bill.text("Zaawartai taniltsasan: ".concat(prefManager.getUserName()));
+        bill.text("");
+        bill.image(bmSignature, 100, 100);
+        bill.cut();
+        SAFCONSTANT.sendData(bill.prepare());
+        bill.clearData();
+    }
     /*
     * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
     **/
@@ -300,7 +299,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 sJSON.put("view_date", sData.getViewDate());
                 sArray.put(sJSON);
                 formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
-                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), CompressionUtils.decompress(sData.getPhoto())));
+                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
             }
             formBody.addFormDataPart("json_data", sArray.toString());
             Logger.d(sArray.toString());
@@ -378,11 +377,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void surfaceCreated(SurfaceHolder holder) {
         try {
             camera = Camera.open(1);
@@ -421,6 +415,36 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         camera = null;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter(BROADCAST_ADDRESS_SAFE);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String value = intent.getStringExtra("VALUE");
+                switch (value){
+                    case "photo_done": //
+                        saveSignData();
+                        break;
+                    case "photo_error": //
+                        break;
+                }
+            }
+        };
+        this.registerReceiver(mReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(mReceiver);
+        super.onStop();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

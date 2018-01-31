@@ -69,4 +69,5 @@
     <string name="save_settings_error">Тохиргоо хадгалах үед алдаа гарлаа</string>
     <string name="font_encode_error">Font хэмжээ болон encoding тохируулаагүй байна</string>
     <string name="save_settings_success">Тохиргооны мэдээлэл амжилттай хадгалагдлаа</string>
+    <string name="printer_connection">Printer холбогдсон эсэх</string>
 </resources>

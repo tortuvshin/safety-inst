@@ -70,10 +70,7 @@ public class SAFCONSTANT {
     public static Context my_context;
     private static BluetoothAdapter mBluetoothAdapter;
     public static BluetoothPrintService mPrintService;
-    public static String company_name;
-    public static String company_rd;
-    public static String padaan_head;
-    public  static String padaan_foot;
+
 
     public static String getSecretCode(String imei, String time){
         return MD5_Hash(imei + "-BTGT-" + time);
