@@ -2,8 +2,11 @@ package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
@@ -68,6 +71,8 @@ import okhttp3.Response;
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
+    private static final String BROADCAST_ADDRESS_SAFE = "btgt_isafe_broadcast";
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
 
     Bitmap bmSignature;
     byte[] btUserPhoto;
@@ -78,7 +83,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SignData userSigned;
     Camera.PictureCallback jpegCallback;
 
-    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private SharedPreferences sharedPrefs;
     SignDataTable signDataTable;
     SettingsTable settingsTable;
@@ -87,6 +91,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     PrefManager prefManager;
 
     String signName, photoName;
+    private BroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +110,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         final AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
-        final SignDataTable signDataTable = new SignDataTable(this);
 
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
@@ -127,11 +131,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream;
-                btUserPhoto = data;
                 try {
                     outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
-                    outStream.write(data);
+                    btUserPhoto = CompressionUtils.compress(data);
+                    outStream.write(btUserPhoto);
                     outStream.close();
+                    Intent i = new Intent(BROADCAST_ADDRESS_SAFE).putExtra("VALUE",  "photo_done");
+                    AddInfoActivity.this.sendBroadcast(i);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -166,15 +172,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
             }
         });
 
-        Camera.FaceDetectionListener faceDetectionListener
-                = new Camera.FaceDetectionListener(){
-
-            @Override
-            public void onFaceDetection(Camera.Face[] faces, Camera camera) {
-
-            }
-        };
-
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,40 +188,65 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 try {
-                    Calendar c = Calendar.getInstance();
 
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
-                    captureImage(view);
-                    userSigned.setsNoteId(prefManager.getSnoteId());
-                    userSigned.setUserId(prefManager.getUserId());
-                    userSigned.setViewDate(df.format(c.getTime()));
-                    userSigned.setUserName(prefManager.getUserName());
-                    userSigned.setsNoteName(prefManager.getSnoteName());
-                    userSigned.setPhotoName(photoName);
-                    userSigned.setPhoto(CompressionUtils.compress(btUserPhoto));
-                    userSigned.setSignName(signName);
-                    userSigned.setSignData(DbBitmap.getBytes(bmSignature));
-                    userSigned.setSendStatus("0");
-
-                    signDataTable.create(userSigned);
-
-                    SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
-                    settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
-
-                    openDialog();
+                    camera.takePicture(null, null, jpegCallback);
 
                 } catch (Exception e) {
                     Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
-                SAFCONSTANT.sendData(EscPosPrinter.getTestData80(
-                        settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE),
-                        Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
-                        AddInfoActivity.this ));
 
+                if (settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE).length() > 0 && settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) != null) {
+                    SAFCONSTANT.sendData(EscPosPrinter.getTestData80(
+                            settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE),
+                            Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
+                            AddInfoActivity.this ));
+                }else{
+                    Toast.makeText(AddInfoActivity.this, R.string.font_encode_error,Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter intentFilter = new IntentFilter(BROADCAST_ADDRESS_SAFE);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String value = intent.getStringExtra("VALUE");
+                switch (value){
+                    case "photo_done": //
+                        savedata();
+                        break;
+                    case "photo_error": //
+                        break;
+                }
+            }
+        };
+        this.registerReceiver(mReceiver, intentFilter);
+    }
+    private  void savedata(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Log.d("photo","size : "+btUserPhoto.length + " data :"+btUserPhoto.toString());
+        userSigned.setsNoteId(prefManager.getSnoteId());
+        userSigned.setUserId(prefManager.getUserId());
+        userSigned.setViewDate(df.format(c.getTime()));
+        userSigned.setUserName(prefManager.getUserName());
+        userSigned.setsNoteName(prefManager.getSnoteName());
+        userSigned.setPhotoName(photoName);
+        userSigned.setPhoto(btUserPhoto);
+        userSigned.setSignName(signName);
+        userSigned.setSignData(DbBitmap.getBytes(bmSignature));
+        userSigned.setSendStatus("0");
+        signDataTable.create(userSigned);
+        SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
+        settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
+        openDialog();
     }
 
     public void openDialog(){
@@ -243,76 +265,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    public void captureImage(View v) throws IOException {
-        camera.takePicture(null, null, jpegCallback);
-    }
-
-    public void refreshCamera() {
-        if (surfaceHolder.getSurface() == null) {
-            return;
-        }
-
-        try {
-            camera.stopPreview();
-        }
-
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        try {
-            camera = Camera.open(1);
-            camera.setDisplayOrientation(90);
-        }
-
-        catch (RuntimeException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        Camera.Parameters param;
-        param = camera.getParameters();
-        param.setPreviewSize(352, 288);
-        camera.setParameters(param);
-
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-        }
-
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        refreshCamera();
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        camera.stopPreview();
-        camera.release();
-        camera = null;
     }
 
     /*
@@ -404,17 +356,80 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         });
     }
 
+    public void refreshCamera() {
+        if (surfaceHolder.getSurface() == null) {
+            return;
+        }
+
+        try {
+            camera.stopPreview();
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            camera.setPreviewDisplay(surfaceHolder);
+            camera.startPreview();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        try {
+            camera = Camera.open(1);
+            camera.setDisplayOrientation(90);
+        }
+
+        catch (RuntimeException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Camera.Parameters param;
+        param = camera.getParameters();
+        param.setPreviewSize(352, 288);
+        camera.setParameters(param);
+
+        try {
+            camera.setPreviewDisplay(surfaceHolder);
+            camera.startPreview();
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        refreshCamera();
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        camera.stopPreview();
+        camera.release();
+        camera = null;
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("ACTIVRES", "BT onActivityResult " + resultCode);
         if (resultCode == Activity.RESULT_CANCELED) {
-//            togglePrinter.setEnabled(true);
         }else if (resultCode == Activity.RESULT_OK){
             switch (requestCode) {
                 case REQUEST_CONNECT_DEVICE_SECURE:
                     // When DeviceListActivity returns with a device to connect
                     String address = data.getExtras().getString("device_address");
                     Log.d("ACTIVRES", "BT onActivityResult address : " + address);
-                    //togglePrinter.setTextOff(R.string.txt_printer_connecting);
                     SAFCONSTANT.last_printer_address = address;
                     SAFCONSTANT.openBT(AddInfoActivity.this,address);
                     break;
@@ -424,16 +439,13 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.info_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
