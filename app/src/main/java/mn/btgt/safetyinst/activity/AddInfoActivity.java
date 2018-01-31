@@ -72,7 +72,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
     private static final String BROADCAST_ADDRESS_SAFE = "btgt_isafe_broadcast";
-    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
 
     Bitmap bmSignature;
     byte[] btUserPhoto;
@@ -422,20 +421,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         camera = null;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_CANCELED) {
-        }else if (resultCode == Activity.RESULT_OK){
-            switch (requestCode) {
-                case REQUEST_CONNECT_DEVICE_SECURE:
-                    // When DeviceListActivity returns with a device to connect
-                    String address = data.getExtras().getString("device_address");
-                    Log.d("ACTIVRES", "BT onActivityResult address : " + address);
-                    SAFCONSTANT.last_printer_address = address;
-                    SAFCONSTANT.openBT(AddInfoActivity.this,address);
-                    break;
-            }
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -450,10 +435,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         if (id == android.R.id.home) {
             finish();
-        } else if (id == R.id.action_print_on) {
-            SAFCONSTANT.findBT(AddInfoActivity.this);
-        } else if (id == R.id.action_print_off) {
-            SAFCONSTANT.closeBT();
         } else if (id == R.id.action_settings) {
             startActivity(new Intent(AddInfoActivity.this, SettingsActivity.class));
         }

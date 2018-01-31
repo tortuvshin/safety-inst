@@ -1,16 +1,20 @@
 package mn.btgt.safetyinst.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.orhanobut.logger.Logger;
 
@@ -26,11 +30,14 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private SettingsTable settingsTable;
     private SharedPreferences sharedPrefs;
     private String fontEncode;
     private String fontSize;
     EditText fontSizeEditText;
+    public static ToggleButton togglePrinter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +53,7 @@ public class SettingsActivity extends AppCompatActivity {
         AppCompatButton saveBtn = findViewById(R.id.saveSettings);
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
+        togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
         settingsTable = new SettingsTable(getApplicationContext());
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         try {
@@ -80,6 +88,30 @@ public class SettingsActivity extends AppCompatActivity {
                 printFontTest();
             }
         });
+        togglePrinter.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (togglePrinter.isChecked()) {
+                    SAFCONSTANT.findBT(SettingsActivity.this);
+                    togglePrinter.toggle();
+                } else {
+                    SAFCONSTANT.closeBT();
+                }
+                togglePrinter.setEnabled(false);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SAFCONSTANT.checkPrinter() == true){
+            togglePrinter.setChecked(true);
+        }else{
+            togglePrinter.setChecked(false);
+        }
     }
 
     private void rgOnchanged(){
@@ -144,4 +176,18 @@ public class SettingsActivity extends AppCompatActivity {
         return false;
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_CANCELED) {
+        }else if (resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+                case REQUEST_CONNECT_DEVICE_SECURE:
+                    // When DeviceListActivity returns with a device to connect
+                    String address = data.getExtras().getString("device_address");
+                    Log.d("ACTIVRES", "BT onActivityResult address : " + address);
+                    SAFCONSTANT.last_printer_address = address;
+                    SAFCONSTANT.openBT(SettingsActivity.this,address);
+                    break;
+            }
+        }
+    }
 }

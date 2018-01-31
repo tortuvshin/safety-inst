@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import mn.btgt.safetyinst.activity.DeviceListActivity;
+import mn.btgt.safetyinst.activity.SettingsActivity;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -58,7 +59,7 @@ public class SAFCONSTANT {
     public static final String PREF_HEAD = "head";
     public static final String PREF_FOOT = "foot";
 
-    public static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
 
     public static String last_printer_address = "";
     public static final int MESSAGE_DEVICE_NAME = 1;
@@ -142,16 +143,19 @@ public class SAFCONSTANT {
             Log.d("printer handler ", "msg : " + msg.toString());
             switch (msg.what) {
                 case MESSAGE_DEVICE_NAME:
-                    Toast.makeText(my_context, "Bluetooth printer connected", Toast.LENGTH_SHORT).show();
+                    // save the connected device's name
+                    Toast.makeText(my_context, "BT Printer connected", Toast.LENGTH_SHORT).show();
+                    SettingsActivity.togglePrinter.setChecked(true);
+                    SettingsActivity.togglePrinter.setEnabled(true);
                     break;
                 case 2:
-                    Toast.makeText(my_context, "Bluetooth printer note connect !!!", Toast.LENGTH_SHORT).show();
-                    last_printer_address = "";
-                    break;
-                default:
+                    Toast.makeText(my_context, "BT Printer NOT connect!", Toast.LENGTH_SHORT).show();
+                    SettingsActivity.togglePrinter.setChecked(false);
+                    SettingsActivity.togglePrinter.setEnabled(true);
                     last_printer_address = "";
                     break;
             }
+
         }
     };
 
@@ -175,6 +179,7 @@ public class SAFCONSTANT {
             e.printStackTrace();
         }
     }
+
     public static void openBT(Activity act, String printer_address) {
         Log.d("printer open", "open printer address : " + printer_address);
         if (mPrintService == null)
@@ -204,7 +209,8 @@ public class SAFCONSTANT {
         if (mPrintService != null && mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED)
             mPrintService.stop();
     }
-    private static boolean checkprinter(){
+
+    public static boolean checkPrinter(){
         if (mPrintService == null) return false;
         if (mBluetoothAdapter == null) return false;
         if (mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED) return true;
@@ -214,7 +220,7 @@ public class SAFCONSTANT {
     public static void sendData(byte[] data) {
         try {
             // the text typed by the user
-            if (checkprinter()) {
+            if (checkPrinter()) {
                 mPrintService.write(data);
             }
             // tell the user data were sent

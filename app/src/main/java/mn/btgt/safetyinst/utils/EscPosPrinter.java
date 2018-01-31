@@ -585,11 +585,6 @@ public class EscPosPrinter {
 
     public static byte[] getTestData80(String font_convert, int printer_codepage, Activity ac) {
         EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage,1);
-//        posCommand.set_density(7);
-//        posCommand.set_font("A");
-
-        // Set charset
-        // 17 Page 17 [PC866: Cyrillic #2]
 
         posCommand.set_align("CENTER");
         Bitmap largeIcon = BitmapFactory.decodeResource(ac.getResources(), R.drawable.logo);
