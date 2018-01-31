@@ -1,6 +1,7 @@
 package mn.btgt.safetyinst.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,6 +30,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.BarcodeFormat;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONArray;
@@ -231,7 +233,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         userSigned.setSignData(DbBitmap.getBytes(bmSignature));
         userSigned.setSendStatus("0");
         signDataTable.create(userSigned);
-        SettingsTable settingsTable = new SettingsTable(AddInfoActivity.this);
         settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
         openDialog();
     }
@@ -249,7 +250,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                         finish();
                     }
                 });
-
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
@@ -257,10 +257,26 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     public void printBill() {
 
         EscPosPrinter bill = new EscPosPrinter(fontEncode, Integer.valueOf(fontSize), 0);
-        bill.text("Zaawarchilgaanii Ner: ".concat(prefManager.getSnoteName()));
-        bill.text("Zaawartai taniltsasan: ".concat(prefManager.getUserName()));
+
+        Bitmap largeIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.logo);
+
+        bill.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
+        bill.text("--------------------------------");
+        bill.text("Байгууллагын нэр: ".concat(settingsTable.select(SAFCONSTANT.SETTINGS_COMPANY)));
         bill.text("");
-        bill.image(bmSignature, 100, 100);
+        bill.text("Салбар хэлтэс: ".concat(settingsTable.select(SAFCONSTANT.SETTINGS_DEPARTMENT)));
+
+        bill.text("");
+        bill.text("");
+        bill.text("");
+        bill.text("");
+        bill.text("Зааварчилгааны нэр: ".concat(prefManager.getSnoteName()));
+        bill.text("Зааварчилгаатай танилцсан: ".concat(prefManager.getUserName()));
+        bill.text("");
+        bill.text("");
+        bill.text("");
+        bill.text("Гарын үсэг");
+        bill.image(bmSignature, 400, 400);
         bill.cut();
         SAFCONSTANT.sendData(bill.prepare());
         bill.clearData();
