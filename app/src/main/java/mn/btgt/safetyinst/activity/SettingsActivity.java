@@ -20,14 +20,12 @@ import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
-
 public class SettingsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
