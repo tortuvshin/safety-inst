@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.BarcodeFormat;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONArray;
@@ -73,8 +76,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     private static final String TAG = AddInfoActivity.class.getSimpleName();
     private static final String BROADCAST_ADDRESS_SAFE = "btgt_isafe_broadcast";
 
-    Bitmap bmSignature;
-    byte[] btUserPhoto;
+    Bitmap bmSignature; // гарын үсэг
+    byte[] btUserPhoto; // зураг
 
     Camera camera;
     SurfaceView surfaceView;
@@ -93,7 +96,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     private BroadcastReceiver mReceiver;
     String fontSize;
     String fontEncode;
+    private Calendar calendar;
+    private SimpleDateFormat dateFormat;
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +109,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
@@ -214,12 +222,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     private  void saveSignData(){
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Log.d("photo","size : "+btUserPhoto.length + " data :"+btUserPhoto.toString());
         userSigned.setsNoteId(prefManager.getSnoteId());
         userSigned.setUserId(prefManager.getUserId());
-        userSigned.setViewDate(df.format(c.getTime()));
+        userSigned.setViewDate(dateFormat.format(calendar.getTime()));
         userSigned.setUserName(prefManager.getUserName());
         userSigned.setsNoteName(prefManager.getSnoteName());
         userSigned.setPhotoName(photoName);
@@ -251,31 +257,42 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     public void printBill() {
 
-        EscPosPrinter bill = new EscPosPrinter(fontEncode, Integer.valueOf(fontSize), 0);
+        EscPosPrinter bill = new EscPosPrinter(fontEncode, Integer.valueOf(fontSize), 1);
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.logo);
-
-        bill.image(largeIcon, largeIcon.getWidth(), largeIcon.getHeight());
-        bill.text("--------------------------------");
-        bill.text("Байгууллагын нэр: ".concat(settingsTable.select(SAFCONSTANT.SETTINGS_COMPANY)));
+        Bitmap newLogo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.logo), 150, 150, false);
+        bill.set_align("CENTER");
+        bill.image(newLogo, newLogo.getWidth(), newLogo.getHeight());
+        bill.set_charType("B");
+        bill.set_font(fontSize);
+        bill.text(settingsTable.select(SAFCONSTANT.SETTINGS_COMPANY));
         bill.text("");
+        bill.text("Зааварчилгаатай");
+        bill.text("танилцсан баримт");
+        bill.text("--------------------------");
+        bill.set_charType("NORMAL");
+        bill.set_align("LEFT");
+        bill.set_charType("B");
+        bill.text(prefManager.getSnoteName());
+        bill.set_charType("NORMAL");
         bill.text("Салбар хэлтэс: ".concat(settingsTable.select(SAFCONSTANT.SETTINGS_DEPARTMENT)));
-
+        bill.text("Ажилтан: ".concat(prefManager.getUserName()));
+        bill.text("Огноо: ".concat(dateFormat.format(calendar.getTime())));
+        bill.text("Гарын үсэг: ");
+        Bitmap newSignature = Bitmap.createScaledBitmap(bmSignature, 300, 200, true);
+        bill.image(newSignature, newSignature.getWidth(), newSignature.getHeight());
+        bill.set_align("CENTER");
+        bill.qrcode(prefManager.getUserName(),300,300);
+        bill.set_charType("I");
+        bill.text("Ажлын амжилт хүсэе.");
         bill.text("");
         bill.text("");
         bill.text("");
         bill.text("");
-        bill.text("Зааварчилгааны нэр: ".concat(prefManager.getSnoteName()));
-        bill.text("Зааварчилгаатай танилцсан: ".concat(prefManager.getUserName()));
-        bill.text("");
-        bill.text("");
-        bill.text("");
-        bill.text("Гарын үсэг");
-        bill.image(bmSignature, 400, 400);
         bill.cut();
         SAFCONSTANT.sendData(bill.prepare());
         bill.clearData();
     }
+
     /*
     * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
     **/
