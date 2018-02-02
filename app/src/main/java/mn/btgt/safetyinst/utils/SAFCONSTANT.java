@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import mn.btgt.safetyinst.activity.DeviceListActivity;
+import mn.btgt.safetyinst.activity.SettingsActivity;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -50,29 +51,16 @@ public class SAFCONSTANT {
     public static String SETTINGS_ANDROID_ID = "android_id";
     public static String SETTINGS_LOGO       = "company_logo";
     public static String SETTINGS_ISSIGNED   = "is_signed";
+    public static String SETTINGS_PRINTER_FONT_ENCODE = "printer_encode";
+    public static String SETTINGS_PRINTER_FONT_SIZE = "printer_font_size";
 
     public static final String SHARED_PREF_NAME = "manager_preferences";
     public static final String PREF_PRINTER_ADDRESS = "printer_address";
     public static final String PREF_HEAD = "head";
     public static final String PREF_FOOT = "foot";
 
-    public static final String SETTINGS_KEY_PRINTER_FONT= "printer_font";
-    public static final String SETTINGS_KEY_PRINTER_CODEPAGE= "printer_codepage";
-    public static final String SETTINGS_KEY_RD = "company_rd";
-    public static final String SETTINGS_KEY_PRINT_LOGO = "print_logo";
-    public static final String SETTINGS_KEY_PRINT_WIDTH = "print_chars";
-    public static final String SETTINGS_KEY_TAX_NOAT_TYPE = "tax_noat_type";
-    public static final String SETTINGS_KEY_TAX_NHAT_TYPE = "tax_nhat_type";
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
 
-    public static final String DEFAULT_PRINTER_FONT = "LATIN";
-
-    public static final int PRINTER_CHAR_WIDTH = 60;
-
-    public static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-
-    //location service
-    public static final int put_offline_interval = 20;
-    public static final int MIN_TIME_BW_UPDATES = 5000;//5secund
     public static String last_printer_address = "";
     public static final int MESSAGE_DEVICE_NAME = 1;
     public static final int MESSAGE_TOAST = 2;
@@ -82,16 +70,6 @@ public class SAFCONSTANT {
     public static Context my_context;
     private static BluetoothAdapter mBluetoothAdapter;
     public static BluetoothPrintService mPrintService;
-    public static String userlogo="";
-    public static String company_name;
-    public static String company_rd;
-    public static String padaan_head;
-    public  static String padaan_foot;
-    public  static String printer_font;
-    public  static int codePage;
-    public  static int printer_port;
-    public  static String printer_ip;
-
 
 
     public static String getSecretCode(String imei, String time){
@@ -155,6 +133,7 @@ public class SAFCONSTANT {
         return dateText;
     }
 
+    @SuppressLint("HandlerLeak")
     private static final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -163,15 +142,15 @@ public class SAFCONSTANT {
                 case MESSAGE_DEVICE_NAME:
                     // save the connected device's name
                     Toast.makeText(my_context, "BT Printer connected", Toast.LENGTH_SHORT).show();
+                    SettingsActivity.togglePrinter.setChecked(true);
+                    SettingsActivity.togglePrinter.setEnabled(true);
                     break;
                 case 2:
                     Toast.makeText(my_context, "BT Printer NOT connect!", Toast.LENGTH_SHORT).show();
+                    SettingsActivity.togglePrinter.setChecked(false);
+                    SettingsActivity.togglePrinter.setEnabled(true);
                     last_printer_address = "";
                     break;
-                default:
-                    last_printer_address = "";
-                    break;
-
             }
 
         }
@@ -197,6 +176,7 @@ public class SAFCONSTANT {
             e.printStackTrace();
         }
     }
+
     public static void openBT(Activity act, String printer_address) {
         Log.d("printer open", "open printer address : " + printer_address);
         if (mPrintService == null)
@@ -208,7 +188,6 @@ public class SAFCONSTANT {
             Toast.makeText(act.getApplicationContext(), "Bluetooth printer not selected", Toast.LENGTH_LONG).show();
         } else {
             // Standard SerialPortService ID
-
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(printer_address);
             // Attempt to connect to the device
             if (!last_printer_address.equals(printer_address)) {
@@ -222,13 +201,13 @@ public class SAFCONSTANT {
             }
             mPrintService.connect(device, true);
         }
-
     }
     public static void closeBT(){
         if (mPrintService != null && mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED)
             mPrintService.stop();
     }
-    public static boolean checkprinter(){
+
+    public static boolean checkPrinter(){
         if (mPrintService == null) return false;
         if (mBluetoothAdapter == null) return false;
         if (mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED) return true;
@@ -238,7 +217,7 @@ public class SAFCONSTANT {
     public static void sendData(byte[] data) {
         try {
             // the text typed by the user
-            if (checkprinter()) {
+            if (checkPrinter()) {
                 mPrintService.write(data);
             }
             // tell the user data were sent
@@ -246,13 +225,6 @@ public class SAFCONSTANT {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-    public static void removeFile(String inputPath) {
-        try {
-            new File(inputPath).delete();
-        } catch (Exception e) {
-            Log.e("tag", e.getMessage());
         }
     }
 }

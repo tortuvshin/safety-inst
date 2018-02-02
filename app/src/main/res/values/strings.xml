@@ -66,4 +66,9 @@
     <string name="none_paired">none_paired</string>
     <string name="select_device">Принтер сонгох</string>
     <string name="none_found">Хоосон байна</string>
+    <string name="save_settings_error">Тохиргоо хадгалах үед алдаа гарлаа</string>
+    <string name="font_encode_error">Font хэмжээ болон encoding тохируулаагүй байна</string>
+    <string name="save_settings_success">Тохиргооны мэдээлэл амжилттай хадгалагдлаа</string>
+    <string name="printer_connection">Printer холбогдсон эсэх</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

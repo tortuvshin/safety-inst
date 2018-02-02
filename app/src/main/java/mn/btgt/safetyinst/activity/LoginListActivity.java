@@ -1,8 +1,11 @@
 package mn.btgt.safetyinst.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,6 +39,7 @@ public class LoginListActivity extends AppCompatActivity {
     UserTable userTable;
     SettingsTable settingsTable;
     ImageLoader imageLoader;
+    private Typeface roboto, robotoLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,17 @@ public class LoginListActivity extends AppCompatActivity {
 
         RecyclerView.Adapter mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);
+
+        roboto = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Regular.ttf");
+        robotoLight = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Light.ttf");
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSettings);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               startActivity(new Intent(LoginListActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
     public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
@@ -74,6 +89,8 @@ public class LoginListActivity extends AppCompatActivity {
                 imageView = (ImageView) v.findViewById(R.id.user_img);
                 mTextView = (TextView) v.findViewById(R.id.username_text);
                 mPosText = (TextView) v.findViewById(R.id.position_text);
+                mTextView.setTypeface(roboto);
+                mPosText.setTypeface(robotoLight);
             }
 
             @Override

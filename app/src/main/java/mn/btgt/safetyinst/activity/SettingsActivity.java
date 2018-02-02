@@ -1,20 +1,22 @@
 package mn.btgt.safetyinst.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +26,15 @@ import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
-
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final int PICKFILE_REQUEST_CODE = 950;
-    private static final int PICKFILE_REQUEST_CODE_KITKAT = 951;
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private SettingsTable settingsTable;
     private SharedPreferences sharedPrefs;
-    private String fontSelect;
-    private int noatType;
-    private int nhatType;
+    private String fontEncode;
+    private String fontSize;
+    EditText fontSizeEditText;
+    public static ToggleButton togglePrinter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,27 +47,31 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        fontSizeEditText = (EditText) findViewById(R.id.txtFont);
         AppCompatButton saveBtn = findViewById(R.id.saveSettings);
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
-        EditText cp = (EditText) findViewById(R.id.txtFont);
+        togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
         settingsTable = new SettingsTable(getApplicationContext());
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         try {
-            String cpv = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_KEY_PRINTER_CODEPAGE));
-            cp.setText(cpv.length() > 0 ? cpv : "6");
-            fontSelect = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_KEY_PRINTER_FONT));
+            fontSize = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
+            fontSizeEditText.setText(fontSize != null ? fontSize : "6");
+            fontEncode = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
 
-            if (fontSelect.equals("ASCII")) {
+            if (fontEncode.equals("ASCII")) {
                 RadioButton ac = (RadioButton) findViewById(R.id.fontASCII);
                 ac.setChecked(true);
-            }else{
+            } else {
                 RadioButton lt = (RadioButton) findViewById(R.id.fontLATIN);
                 lt.setChecked(true);
             }
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
+
+        List<Settings> list = settingsTable.selectAll();
+        Logger.d(list.toString());
         rgOnchanged();
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,60 +86,79 @@ public class SettingsActivity extends AppCompatActivity {
                 printFontTest();
             }
         });
-    }
-    private void rgOnchanged(){
+        togglePrinter.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                if (togglePrinter.isChecked()) {
+                    SAFCONSTANT.findBT(SettingsActivity.this);
+                    togglePrinter.toggle();
+                } else {
+                    SAFCONSTANT.closeBT();
+                }
+                togglePrinter.setEnabled(false);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SAFCONSTANT.checkPrinter() == true){
+            togglePrinter.setChecked(true);
+        }else{
+            togglePrinter.setChecked(false);
+        }
+    }
+
+    private void rgOnchanged(){
         RadioGroup radioFont = (RadioGroup) findViewById(R.id.groupFontSelect);
         radioFont.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
                 if(checkedId == R.id.fontLATIN) {
-                    fontSelect = "LATIN";
+                    fontEncode = "LATIN";
                     Toast.makeText(getApplicationContext(), "font: Mongol hel",
                             Toast.LENGTH_SHORT).show();
                 } else if(checkedId == R.id.fontASCII) {
-                    fontSelect = "ASCII";
-                    Toast.makeText(getApplicationContext(), "font: Молгол хэл",
+                    fontEncode = "ASCII";
+                    Toast.makeText(getApplicationContext(), "font: Монгол хэл",
                             Toast.LENGTH_SHORT).show();
                 }
             }
 
         });
     }
-    public void saveSettings(){
-        EditText cp = (EditText) findViewById(R.id.txtFont);
-        String codePage = String.valueOf(cp.getText());
-        if (codePage.length() >0) {
-            List<Settings> SList = new ArrayList<Settings>();;
-            SList.add(new Settings(SAFCONSTANT.SETTINGS_KEY_PRINTER_CODEPAGE, codePage));
-            SList.add(new Settings(SAFCONSTANT.SETTINGS_KEY_PRINTER_FONT, fontSelect));
-            SList.add(new Settings(SAFCONSTANT.SETTINGS_KEY_TAX_NOAT_TYPE, String.valueOf(noatType)));
-            SList.add(new Settings(SAFCONSTANT.SETTINGS_KEY_TAX_NHAT_TYPE, String.valueOf(nhatType)));
 
-            SAFCONSTANT.codePage = Integer.valueOf(String.valueOf(cp.getText()));
-            SAFCONSTANT.printer_font = fontSelect;
+    public void saveSettings(){
+
+        if (fontSizeEditText.getText().length() >0) {
+            fontSize = fontSizeEditText.getText().toString();
+            List<Settings> SList = new ArrayList<Settings>();
+            SList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, fontSize));
+            SList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, fontEncode));
             settingsTable.insertList(SList);
             finish();
+            Toast.makeText(this.getApplicationContext(), R.string.save_settings_success,Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(this.getApplicationContext(),R.string.error_occurred,Toast.LENGTH_SHORT);
+            Toast.makeText(this.getApplicationContext(), R.string.save_settings_error,Toast.LENGTH_SHORT).show();
         }
     }
 
     public void printFontTest(){
-        EditText cp = (EditText) findViewById(R.id.txtFont);
-        String codePage = String.valueOf(cp.getText());
-        if (codePage.length() >0 ) {
-            SAFCONSTANT.company_name  = sharedPrefs.getString("", "Company Name");
-            SAFCONSTANT.padaan_head = sharedPrefs.getString(SAFCONSTANT.PREF_HEAD, "");
-            SAFCONSTANT.padaan_foot = sharedPrefs.getString(SAFCONSTANT.PREF_FOOT, "");
-            SAFCONSTANT.sendData(EscPosPrinter.getTestData80(fontSelect,Integer.valueOf(codePage),SettingsActivity.this ));
+        if (fontEncode.length() > 0 && fontSize != null) {
+            SAFCONSTANT.sendData(
+                    EscPosPrinter.getTestData80(
+                            String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)),
+                            Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
+                            SettingsActivity.this ));
         }else{
-            Toast.makeText(this.getApplicationContext(),R.string.error_occurred,Toast.LENGTH_SHORT);
-
+            Toast.makeText(this.getApplicationContext(), R.string.font_encode_error,Toast.LENGTH_SHORT).show();
         }
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -147,4 +171,18 @@ public class SettingsActivity extends AppCompatActivity {
         return false;
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_CANCELED) {
+        }else if (resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+                case REQUEST_CONNECT_DEVICE_SECURE:
+                    // When DeviceListActivity returns with a device to connect
+                    String address = data.getExtras().getString("device_address");
+                    Log.d("ACTIVRES", "BT onActivityResult address : " + address);
+                    SAFCONSTANT.last_printer_address = address;
+                    SAFCONSTANT.openBT(SettingsActivity.this,address);
+                    break;
+            }
+        }
+    }
 }

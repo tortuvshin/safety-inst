@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -18,16 +17,16 @@ import com.google.zxing.common.BitMatrix;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import mn.btgt.safetyinst.R;
 
 
 /**
- * Created by Ganaa on 1/8/2016.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 public class EscPosPrinter {
     // Constants
@@ -38,7 +37,7 @@ public class EscPosPrinter {
     public static final byte[] CTL_SET_HT = new byte[]{0x1b, 0x44}; // Set horizontal tab positions
     public static final byte[] CTL_VT = new byte[]{0x1b, 0x64, 0x04}; // Vertical tab
     // Printer hardware
-    public static final byte[] HW_INIT = new byte[]{0x1b, 0x40}; // Clear data in buffer and reset modes
+    private static final byte[] HW_INIT = new byte[]{0x1b, 0x40}; // Clear data in buffer and reset modes
     public static final byte[] HW_SELECT = new byte[]{0x1b, 0x3d, 0x01}; // Printer select
     public static final byte[] HW_RESET = new byte[]{0x1b, 0x3f, 0x0a, 0x00}; // Reset printer hardware
     // Cash Drawer
@@ -586,11 +585,6 @@ public class EscPosPrinter {
 
     public static byte[] getTestData80(String font_convert, int printer_codepage, Activity ac) {
         EscPosPrinter posCommand = new EscPosPrinter(font_convert, printer_codepage,1);
-//        posCommand.set_density(7);
-//        posCommand.set_font("A");
-
-        // Set charset
-        // 17 Page 17 [PC866: Cyrillic #2]
 
         posCommand.set_align("CENTER");
         Bitmap largeIcon = BitmapFactory.decodeResource(ac.getResources(), R.drawable.logo);

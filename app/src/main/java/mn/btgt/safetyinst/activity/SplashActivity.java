@@ -27,8 +27,8 @@ import mn.btgt.safetyinst.database.SNoteTable;
 import mn.btgt.safetyinst.database.SettingsTable;
 import mn.btgt.safetyinst.database.UserTable;
 import mn.btgt.safetyinst.model.SNote;
-import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.model.User;
+import mn.btgt.safetyinst.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
@@ -154,7 +154,6 @@ public class SplashActivity extends AppCompatActivity {
                                 if (setting.length() > 0) {
                                     SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
 
-                                    settingsTable.deleteAll();
                                     List<Settings> settingsList = new ArrayList<Settings>();
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_DEPARTMENT, setting.getString("comp")));
@@ -162,7 +161,8 @@ public class SplashActivity extends AppCompatActivity {
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ANDROID_ID, SAFCONSTANT.getAndroiId(SplashActivity.this)));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_LOGO, setting.getString("company_logo")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "no"));
-
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) == null ? "11" : settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE) == null ? "LATIN" : settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)));
                                     settingsTable.insertList(settingsList);
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_config, Toast.LENGTH_LONG)
