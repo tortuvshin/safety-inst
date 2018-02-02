@@ -161,8 +161,8 @@ public class SplashActivity extends AppCompatActivity {
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ANDROID_ID, SAFCONSTANT.getAndroiId(SplashActivity.this)));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_LOGO, setting.getString("company_logo")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "no"));
-                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, "11"));
-                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, "LATIN"));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) == null ? "11" : settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE) == null ? "LATIN" : settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)));
                                     settingsTable.insertList(settingsList);
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_config, Toast.LENGTH_LONG)

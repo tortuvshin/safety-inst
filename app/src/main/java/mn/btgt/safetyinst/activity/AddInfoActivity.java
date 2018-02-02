@@ -253,8 +253,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     public void printBill() {
 
         EscPosPrinter bill = new EscPosPrinter(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE), Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)), 1);
-
-        Bitmap newLogo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.logo), 150, 150, false);
+        Bitmap newLogo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.logo), 120, 120, false);
         bill.set_align("CENTER");
         bill.image(newLogo, newLogo.getWidth(), newLogo.getHeight());
         bill.set_charType("B");
@@ -272,10 +271,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         bill.text("Ажилтан: ".concat(prefManager.getUserName()));
         bill.text("Огноо: ".concat(dateFormat.format(calendar.getTime())));
         bill.text("Гарын үсэг: ");
-        Bitmap newSignature = Bitmap.createScaledBitmap(bmSignature, 300, 200, true);
+        bill.set_align("RIGHT");
+        Bitmap newSignature = Bitmap.createScaledBitmap(bmSignature, 200, 140, true);
         bill.image(newSignature, newSignature.getWidth(), newSignature.getHeight());
         bill.set_align("CENTER");
-        bill.qrcode(prefManager.getUserName(),300,300);
+        bill.qrcode(prefManager.getUserName(),200,200);
         bill.set_charType("I");
         bill.text("Ажлын амжилт хүсэе.");
         bill.text("");
