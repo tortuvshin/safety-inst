@@ -94,8 +94,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     String signName, photoName;
     private BroadcastReceiver mReceiver;
-    String fontSize;
-    String fontEncode;
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
 
@@ -124,9 +122,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
         settingsTable = new SettingsTable(getApplicationContext());
-
-        fontSize = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
-        fontEncode = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
 
         SAFCONSTANT.last_printer_address = last_printer_address;
 
@@ -257,13 +252,12 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     public void printBill() {
 
-        EscPosPrinter bill = new EscPosPrinter(fontEncode, Integer.valueOf(fontSize), 1);
+        EscPosPrinter bill = new EscPosPrinter(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE), Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)), 1);
 
         Bitmap newLogo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.logo), 150, 150, false);
         bill.set_align("CENTER");
         bill.image(newLogo, newLogo.getWidth(), newLogo.getHeight());
         bill.set_charType("B");
-        bill.set_font(fontSize);
         bill.text(settingsTable.select(SAFCONSTANT.SETTINGS_COMPANY));
         bill.text("");
         bill.text("Зааварчилгаатай");

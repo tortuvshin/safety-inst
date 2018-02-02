@@ -70,4 +70,5 @@
     <string name="font_encode_error">Font хэмжээ болон encoding тохируулаагүй байна</string>
     <string name="save_settings_success">Тохиргооны мэдээлэл амжилттай хадгалагдлаа</string>
     <string name="printer_connection">Printer холбогдсон эсэх</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

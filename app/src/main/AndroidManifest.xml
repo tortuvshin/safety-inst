@@ -49,19 +49,14 @@
             android:authorities="mn.btgt.safetyinst.provider.SettingsProvider"
             android:enabled="true"
             android:exported="true"
-            android:multiprocess="true">
-        </provider>
+            android:multiprocess="true"></provider>
 
         <activity
             android:name=".activity.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
-            android:theme="@android:style/Theme.Dialog">
-        </activity>
-        <activity
-            android:name=".activity.SettingsActivity"
-            >
-        </activity>
+            android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

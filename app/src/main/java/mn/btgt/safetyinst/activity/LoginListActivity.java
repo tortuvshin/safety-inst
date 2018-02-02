@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,6 +66,14 @@ public class LoginListActivity extends AppCompatActivity {
 
         roboto = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Regular.ttf");
         robotoLight = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Light.ttf");
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSettings);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               startActivity(new Intent(LoginListActivity.this, SettingsActivity.class));
+            }
+        });
     }
 
     public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
