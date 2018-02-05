@@ -241,8 +241,11 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        if (ConnectionDetector.isNetworkAvailable(AddInfoActivity.this))
+                        if (!ConnectionDetector.isNetworkAvailable(AddInfoActivity.this)){
+                            Toast.makeText(AddInfoActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+                        } else {
                             sendInfo();
+                        }
                         finish();
                     }
                 });
@@ -291,12 +294,9 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
     **/
     public void sendInfo() {
-        if (!ConnectionDetector.isNetworkAvailable(this)){
-            Toast.makeText(AddInfoActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-            return;
-        }
 
-        List<SignData> sDataList = signDataTable.selectAll();
+        SignDataTable signData = new SignDataTable(getApplicationContext());
+        List<SignData> sDataList = signData.selectAll();
 
         JSONArray sArray = new JSONArray();
 

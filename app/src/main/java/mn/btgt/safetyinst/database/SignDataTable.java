@@ -207,4 +207,14 @@ public class SignDataTable extends DatabaseHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_SIGNDATAS, null, null);
     }
+
+    public int count() {
+        String query = "SELECT * FROM  " + TABLE_SIGNDATAS;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
 }
