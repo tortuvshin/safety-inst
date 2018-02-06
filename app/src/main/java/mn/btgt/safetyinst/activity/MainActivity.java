@@ -32,8 +32,8 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SNoteRepo;
-import mn.btgt.safetyinst.data.model.SNote;
+import mn.btgt.safetyinst.database.repo.SNoteRepo;
+import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.utils.PrefManager;
 
 /**

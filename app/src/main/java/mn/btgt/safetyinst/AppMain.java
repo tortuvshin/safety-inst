@@ -6,8 +6,8 @@ import android.content.Context;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
-import mn.btgt.safetyinst.data.DatabaseHelper;
-import mn.btgt.safetyinst.data.DatabaseManager;
+import mn.btgt.safetyinst.database.DatabaseHelper;
+import mn.btgt.safetyinst.database.DatabaseManager;
 
 /**
  * Author: Turtuvshin Byambaa.

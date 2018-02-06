@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SignDataRepo;
-import mn.btgt.safetyinst.data.model.SignData;
+import mn.btgt.safetyinst.database.repo.SignDataRepo;
+import mn.btgt.safetyinst.database.model.SignData;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;

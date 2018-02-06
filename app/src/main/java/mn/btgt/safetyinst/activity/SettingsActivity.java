@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.model.Settings;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 public class SettingsActivity extends AppCompatActivity {

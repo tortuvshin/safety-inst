@@ -1,15 +1,15 @@
-package mn.btgt.safetyinst.data.repo;
+package mn.btgt.safetyinst.database.repo;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.data.DatabaseHelper;
-import mn.btgt.safetyinst.data.model.SignData;
+import mn.btgt.safetyinst.database.DatabaseHelper;
+import mn.btgt.safetyinst.database.DatabaseManager;
+import mn.btgt.safetyinst.database.model.SignData;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -17,7 +17,7 @@ import mn.btgt.safetyinst.data.model.SignData;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SignDataRepo extends DatabaseHelper {
+public class SignDataRepo {
 
     private SignData signData;
 
@@ -44,7 +44,7 @@ public class SignDataRepo extends DatabaseHelper {
         if (signData == null) {
             return;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
@@ -68,12 +68,12 @@ public class SignDataRepo extends DatabaseHelper {
             ex.printStackTrace();
         } finally {
             db.endTransaction();
-            db.close();
+            DatabaseManager.getInstance().closeDatabase();
         }
     }
 
     public SignData select(int id) {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return null;
         }
@@ -108,13 +108,14 @@ public class SignDataRepo extends DatabaseHelper {
         signData.setPhoto(cursor.getBlob(SignData.SIGNDATA_PHOTO_INDEX));
         signData.setSendStatus(cursor.getString(SignData.SIGNDATA_SENDSTATUS_INDEX));
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return signData;
     }
 
     public List<SignData> selectAll() {
         List<SignData> signDatas = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + SignData.TABLE_SIGNDATAS;
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         try {
             if (cursor.moveToFirst()) {
@@ -137,8 +138,8 @@ public class SignDataRepo extends DatabaseHelper {
         } catch (Exception ex){
             ex.printStackTrace();
         } finally {
-            db.close();
             cursor.close();
+            DatabaseManager.getInstance().closeDatabase();
         }
         return signDatas;
     }
@@ -146,7 +147,7 @@ public class SignDataRepo extends DatabaseHelper {
         if (signData == null) {
             return -1;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return -1;
         }
@@ -164,7 +165,7 @@ public class SignDataRepo extends DatabaseHelper {
         cv.put(SignData.SIGNDATA_SENDSTATUS, signData.getSendStatus());
         int rowCount = db.update(SignData.TABLE_SIGNDATAS, cv, SignData.SIGNDATA_ID + "=?",
                 new String[]{String.valueOf(signData.getId())});
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return rowCount;
     }
 
@@ -172,26 +173,28 @@ public class SignDataRepo extends DatabaseHelper {
         if (signData == null) {
             return;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
         db.delete(SignData.TABLE_SIGNDATAS, SignData.SIGNDATA_ID + "=?", new String[]{String.valueOf(signData.getId())});
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void deleteAll()
     {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         db.delete(SignData.TABLE_SIGNDATAS, null, null);
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public int count() {
         String query = "SELECT * FROM  " + SignData.TABLE_SIGNDATAS;
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return count;
     }
 

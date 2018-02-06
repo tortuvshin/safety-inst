@@ -43,10 +43,10 @@ import java.util.List;
 import java.util.UUID;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.repo.SignDataRepo;
-import mn.btgt.safetyinst.data.model.SignData;
-import mn.btgt.safetyinst.data.model.Settings;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.SignDataRepo;
+import mn.btgt.safetyinst.database.model.SignData;
+import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.EscPosPrinter;

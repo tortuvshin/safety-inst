@@ -1,22 +1,22 @@
-package mn.btgt.safetyinst.data.repo;
+package mn.btgt.safetyinst.database.repo;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.data.DatabaseHelper;
-import mn.btgt.safetyinst.data.model.User;
+import mn.btgt.safetyinst.database.DatabaseHelper;
+import mn.btgt.safetyinst.database.DatabaseManager;
+import mn.btgt.safetyinst.database.model.User;
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
 
-public class UserRepo extends DatabaseHelper {
+public class UserRepo {
 
     private User user;
     public UserRepo() {
@@ -40,7 +40,7 @@ public class UserRepo extends DatabaseHelper {
         if (user == null) {
             return;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
@@ -62,12 +62,12 @@ public class UserRepo extends DatabaseHelper {
             ex.printStackTrace();
         } finally {
             db.endTransaction();
-            db.close();
+            DatabaseManager.getInstance().closeDatabase();
         }
     }
 
     public User select(int id) {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return null;
         }
@@ -97,12 +97,13 @@ public class UserRepo extends DatabaseHelper {
         user.setAvatar(cursor.getString(User.USER_AVATAR_INDEX));
         user.setLastSigned(cursor.getString(User.USER_LASTS_INDEX));
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return user;
     }
 
     public Cursor checkUser(String password){
 
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
 
         Cursor cursor = db.query(User.TABLE_USERS, new String[]{
                         User.USER_ID,
@@ -120,13 +121,14 @@ public class UserRepo extends DatabaseHelper {
         if (cursor != null){
             cursor.moveToFirst();
         }
+        DatabaseManager.getInstance().closeDatabase();
         return cursor;
     }
 
     public List<User> selectAll() {
         List<User> users = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + User.TABLE_USERS;
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
@@ -144,13 +146,14 @@ public class UserRepo extends DatabaseHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return users;
     }
     public int update(User user) {
         if (user == null) {
             return -1;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return -1;
         }
@@ -166,7 +169,7 @@ public class UserRepo extends DatabaseHelper {
         cv.put(User.USER_LAST_SIGNED, user.getLastSigned());
         int rowCount = db.update(User.TABLE_USERS, cv, User.USER_ID + "=?",
                 new String[]{String.valueOf(user.getId())});
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return rowCount;
     }
 
@@ -174,26 +177,28 @@ public class UserRepo extends DatabaseHelper {
         if (user == null) {
             return;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
         db.delete(User.TABLE_USERS, User.USER_ID + "=?", new String[]{String.valueOf(user.getId())});
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void deleteAll()
     {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         db.delete(User.TABLE_USERS, null, null);
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public int count() {
         String query = "SELECT * FROM  " + User.TABLE_USERS;
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return count;
     }
 }

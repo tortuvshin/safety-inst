@@ -1,16 +1,14 @@
-package mn.btgt.safetyinst.data.repo;
+package mn.btgt.safetyinst.database.repo;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.data.DatabaseHelper;
-import mn.btgt.safetyinst.data.DatabaseManager;
-import mn.btgt.safetyinst.data.model.Category;
+import mn.btgt.safetyinst.database.DatabaseManager;
+import mn.btgt.safetyinst.database.model.Category;
 
 /**
  * Author: Turtuvshin Byambaa.

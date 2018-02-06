@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.data;
+package mn.btgt.safetyinst.database;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;

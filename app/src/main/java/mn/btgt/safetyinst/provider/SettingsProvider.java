@@ -13,8 +13,8 @@ import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
-import mn.btgt.safetyinst.data.DatabaseManager;
-import mn.btgt.safetyinst.data.model.Settings;
+import mn.btgt.safetyinst.database.DatabaseManager;
+import mn.btgt.safetyinst.database.model.Settings;
 
 /**
  * Author: Turtuvshin Byambaa.

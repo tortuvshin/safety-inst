@@ -34,7 +34,7 @@ import java.util.List;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.adapter.ImagePreviewAdapter;
-import mn.btgt.safetyinst.data.model.FaceResult;
+import mn.btgt.safetyinst.database.model.FaceResult;
 import mn.btgt.safetyinst.utils.CameraErrorCallback;
 import mn.btgt.safetyinst.utils.ImageUtils;
 import mn.btgt.safetyinst.utils.Util;

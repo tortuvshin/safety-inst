@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.data;
+package mn.btgt.safetyinst.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.orhanobut.logger.Logger;
 
 import mn.btgt.safetyinst.AppMain;
-import mn.btgt.safetyinst.data.model.Category;
-import mn.btgt.safetyinst.data.model.SNote;
-import mn.btgt.safetyinst.data.model.Settings;
-import mn.btgt.safetyinst.data.model.SignData;
-import mn.btgt.safetyinst.data.model.User;
-import mn.btgt.safetyinst.data.repo.CategoryRepo;
-import mn.btgt.safetyinst.data.repo.SNoteRepo;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.repo.SignDataRepo;
-import mn.btgt.safetyinst.data.repo.UserRepo;
+import mn.btgt.safetyinst.database.model.Category;
+import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.database.model.Settings;
+import mn.btgt.safetyinst.database.model.SignData;
+import mn.btgt.safetyinst.database.model.User;
+import mn.btgt.safetyinst.database.repo.CategoryRepo;
+import mn.btgt.safetyinst.database.repo.SNoteRepo;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.SignDataRepo;
+import mn.btgt.safetyinst.database.repo.UserRepo;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -28,20 +28,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context myContext;
 
-    private static final int    DATABASE_VERSION = 33;
+    private static final int    DATABASE_VERSION = 34;
     private static final String DATABASE_NAME    = "safety.db";
 
-    private static DatabaseHelper sInstance;
-
-    public DatabaseHelper( ) {
+    public DatabaseHelper() {
         super(AppMain.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-    @Deprecated
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        Logger.d("New database helper");
-        myContext = context;
     }
 
     @Override
