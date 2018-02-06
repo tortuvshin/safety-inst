@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.orhanobut.logger.Logger;
 
+import mn.btgt.safetyinst.AppMain;
+import mn.btgt.safetyinst.data.model.Category;
 import mn.btgt.safetyinst.data.repo.CategoryRepo;
 import mn.btgt.safetyinst.data.repo.SNoteRepo;
 import mn.btgt.safetyinst.data.repo.SettingsRepo;
@@ -18,7 +20,6 @@ import mn.btgt.safetyinst.data.repo.UserRepo;
  * URL: https://www.github.com/tortuvshin
  */
 
-@SuppressWarnings("ALL")
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private Context myContext;
@@ -26,8 +27,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int    DATABASE_VERSION = 31;
     private static final String DATABASE_NAME    = "safety.db";
 
+    private static DatabaseHelper sInstance;
+
+    public DatabaseHelper( ) {
+        super(AppMain.getContext(), DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Deprecated
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        Logger.d("New database helper");
         myContext = context;
     }
 
@@ -36,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         db.execSQL(UserRepo.CREATE_TABLE_USERS);
         db.execSQL(SNoteRepo.CREATE_TABLE_SNOTES);
-        db.execSQL(CategoryRepo.CREATE_TABLE_CATEGORYS);
+        db.execSQL(CategoryRepo.create());
         db.execSQL(SignDataRepo.CREATE_TABLE_SIGNDATA);
         db.execSQL(SettingsRepo.CREATE_TABLE_SETTINGS);
     }
@@ -45,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + UserRepo.TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + SNoteRepo.TABLE_SNOTE);
-        db.execSQL("DROP TABLE IF EXISTS " + CategoryRepo.TABLE_CATEGORYS);
+        db.execSQL("DROP TABLE IF EXISTS " + Category.TABLE_CATEGORYS);
         db.execSQL("DROP TABLE IF EXISTS " + SignDataRepo.TABLE_SIGNDATAS);
         db.execSQL("DROP TABLE IF EXISTS " + SettingsRepo.TABLE_SETTINGS);
         onCreate(db);

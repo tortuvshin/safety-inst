@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.DatabaseManager;
 import mn.btgt.safetyinst.data.model.Category;
 
 /**
@@ -17,97 +18,92 @@ import mn.btgt.safetyinst.data.model.Category;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class CategoryRepo extends DatabaseHelper {
-
-    public static final String TABLE_CATEGORYS       = "categorys";
-    private static final String CATEGORY_ID          = "id";
-    private static final String CATEGORY_NAME        = "name";
-    private static final String CATEGORY_ICON        = "icon";
-    private static final String CATEGORY_ORDER       = "sorder";
-
-    private static final int CATEGORY_ID_INDEX         = 0;
-    private static final int CATEGORY_NAME_INDEX       = 1;
-    private static final int CATEGORY_ICON_INDEX       = 2;
-    private static final int CATEGORY_ORDER_INDEX      = 3;
-
-    public static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
-            CATEGORY_ID + " TEXT PRIMARY KEY," +
-            CATEGORY_NAME + " TEXT," +
-            CATEGORY_ICON + " TEXT," +
-            CATEGORY_ORDER + " TEXT);";
+public class CategoryRepo {
 
     private static final String[] PROJECTIONS_CATEGORYS = {
-            CATEGORY_ID,
-            CATEGORY_NAME,
-            CATEGORY_ICON,
-            CATEGORY_ORDER
+            Category.CATEGORY_ID,
+            Category.CATEGORY_NAME,
+            Category.CATEGORY_ICON,
+            Category.CATEGORY_ORDER
     };
 
-    public CategoryRepo(Context context) {
-        super(context);
+    private Category category;
+
+    public CategoryRepo() {
+        category = new Category();
     }
 
-    public void create(Category category) {
+    public static String create(){
+        return "CREATE TABLE "+ Category.TABLE_CATEGORYS+" (" +
+                Category.CATEGORY_ID + " TEXT PRIMARY KEY," +
+                Category.CATEGORY_NAME + " TEXT," +
+                Category.CATEGORY_ICON + " TEXT," +
+                Category.CATEGORY_ORDER + " TEXT);";
+    }
+
+    public void insert(Category category) {
         if (category == null) {
             return;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
         db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
-            cv.put(CATEGORY_ID, category.getId());
-            cv.put(CATEGORY_NAME, category.getName());
-            cv.put(CATEGORY_ICON, category.getIcon());
-            cv.put(CATEGORY_ORDER, category.getOrder());
-            db.insert(TABLE_CATEGORYS, null, cv);
+            cv.put(Category.CATEGORY_ID, category.getId());
+            cv.put(Category.CATEGORY_NAME, category.getName());
+            cv.put(Category.CATEGORY_ICON, category.getIcon());
+            cv.put(Category.CATEGORY_ORDER, category.getOrder());
+            db.insert(Category.TABLE_CATEGORYS, null, cv);
             db.setTransactionSuccessful();
         } catch (Exception ex){
             ex.printStackTrace();
         } finally {
             db.endTransaction();
-            db.close();
+            DatabaseManager.getInstance().closeDatabase();
         }
     }
 
     public Category select(int id) {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return null;
         }
-        Cursor cursor = db.query(TABLE_CATEGORYS, PROJECTIONS_CATEGORYS, CATEGORY_ID + "=?",
+        Cursor cursor = db.query(Category.TABLE_CATEGORYS, PROJECTIONS_CATEGORYS, Category.CATEGORY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (!cursor.moveToFirst()) {
             return null;
         }
 
         Category category = new Category();
-        category.setId(cursor.getString(CATEGORY_ID_INDEX));
-        category.setName(cursor.getString(CATEGORY_NAME_INDEX));
-        category.setIcon(cursor.getString(CATEGORY_ICON_INDEX));
-        category.setOrder(cursor.getString(CATEGORY_ORDER_INDEX));
+        category.setId(cursor.getString(Category.CATEGORY_ID_INDEX));
+        category.setName(cursor.getString(Category.CATEGORY_NAME_INDEX));
+        category.setIcon(cursor.getString(Category.CATEGORY_ICON_INDEX));
+        category.setOrder(cursor.getString(Category.CATEGORY_ORDER_INDEX));
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return category;
     }
 
     public List<Category> selectAll() {
         List<Category> categorys = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_CATEGORYS;
-        SQLiteDatabase db = getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + Category.TABLE_CATEGORYS;
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 Category category = new Category();
-                category.setId(cursor.getString(CATEGORY_ID_INDEX));
-                category.setName(cursor.getString(CATEGORY_NAME_INDEX));
-                category.setIcon(cursor.getString(CATEGORY_ICON_INDEX));
-                category.setOrder(cursor.getString(CATEGORY_ORDER_INDEX));
+                category.setId(cursor.getString(Category.CATEGORY_ID_INDEX));
+                category.setName(cursor.getString(Category.CATEGORY_NAME_INDEX));
+                category.setIcon(cursor.getString(Category.CATEGORY_ICON_INDEX));
+                category.setOrder(cursor.getString(Category.CATEGORY_ORDER_INDEX));
                 categorys.add(category);
             } while (cursor.moveToNext());
         }
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return categorys;
     }
 
@@ -115,18 +111,18 @@ public class CategoryRepo extends DatabaseHelper {
         if (category == null) {
             return -1;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return -1;
         }
         ContentValues cv = new ContentValues();
-        cv.put(CATEGORY_ID, category.getId());
-        cv.put(CATEGORY_NAME, category.getName());
-        cv.put(CATEGORY_ICON, category.getIcon());
-        cv.put(CATEGORY_ORDER, category.getOrder());
-        int rowCount = db.update(TABLE_CATEGORYS, cv, CATEGORY_ID + "=?",
+        cv.put(Category.CATEGORY_ID, category.getId());
+        cv.put(Category.CATEGORY_NAME, category.getName());
+        cv.put(Category.CATEGORY_ICON, category.getIcon());
+        cv.put(Category.CATEGORY_ORDER, category.getOrder());
+        int rowCount = db.update(Category.TABLE_CATEGORYS, cv, Category.CATEGORY_ID + "=?",
                 new String[]{String.valueOf(category.getId())});
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return rowCount;
     }
 
@@ -134,26 +130,27 @@ public class CategoryRepo extends DatabaseHelper {
         if (category == null) {
             return;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
-        db.delete(TABLE_CATEGORYS, CATEGORY_ID + "=?", new String[]{String.valueOf(category.getId())});
-        db.close();
+        db.delete(Category.TABLE_CATEGORYS, Category.CATEGORY_ID + "=?", new String[]{String.valueOf(category.getId())});
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public void deleteAll()
     {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_CATEGORYS, null, null);
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        db.delete(Category.TABLE_CATEGORYS, null, null);
+        DatabaseManager.getInstance().closeDatabase();
     }
 
     public int count() {
-        String query = "SELECT * FROM  " + TABLE_CATEGORYS;
-        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT * FROM  " + Category.TABLE_CATEGORYS;
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
-        cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return count;
     }
 }
