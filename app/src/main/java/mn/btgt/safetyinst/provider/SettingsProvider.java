@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -14,10 +13,8 @@ import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
-import mn.btgt.safetyinst.data.DatabaseHelper;
 import mn.btgt.safetyinst.data.DatabaseManager;
 import mn.btgt.safetyinst.data.model.Settings;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -95,7 +92,7 @@ public class SettingsProvider extends ContentProvider{
             getContext().getContentResolver().notifyChange(_uri, null);
             return _uri;
         }
-        throw new SQLException("Failed to create record into" + uri);
+        throw new SQLException("Failed to insert record into" + uri);
     }
 
     @Override

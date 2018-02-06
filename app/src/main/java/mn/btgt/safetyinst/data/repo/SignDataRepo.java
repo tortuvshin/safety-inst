@@ -19,63 +19,28 @@ import mn.btgt.safetyinst.data.model.SignData;
 
 public class SignDataRepo extends DatabaseHelper {
 
-    public static final String TABLE_SIGNDATAS     = "sign_data";
-    private static final String SIGNDATA_ID         = "id";
-    private static final String SIGNDATA_USER_ID    = "user_id";
-    private static final String SIGNDATA_SNOTE_ID   = "snote_id";
-    private static final String SIGNDATA_USERNAME = "user_name";
-    private static final String SIGNDATA_SNOTE_NAME = "snote_name";
-    private static final String SIGNDATA_VIEWDATE   = "view_date";
-    private static final String SIGNDATA_SIGN_NAME  = "signature_name";
-    private static final String SIGNDATA_SIGN_DATA  = "signature_data";
-    private static final String SIGNDATA_PHOTO_NAME = "photo_name";
-    private static final String SIGNDATA_PHOTO      = "photo";
-    private static final String SIGNDATA_SENDSTATUS = "send_status";
+    private SignData signData;
 
-    private static final int SIGNDATA_ID_INDEX         = 0;
-    private static final int SIGNDATA_USER_ID_INDEX    = 1;
-    private static final int SIGNDATA_SNOTE_ID_INDEX   = 2;
-    private static final int SIGNDATA_USERNAME_INDEX   = 3;
-    private static final int SIGNDATA_SNOTE_NAME_INDEX = 4;
-    private static final int SIGNDATA_VIEWDATE_INDEX   = 5;
-    private static final int SIGNDATA_SIGN_NAME_INDEX  = 6;
-    private static final int SIGNDATA_SIGN_DATA_INDEX  = 7;
-    private static final int SIGNDATA_PHOTO_NAME_INDEX = 8;
-    private static final int SIGNDATA_PHOTO_INDEX      = 9;
-    private static final int SIGNDATA_SENDSTATUS_INDEX = 10;
-
-    public static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ TABLE_SIGNDATAS+" (" +
-            SIGNDATA_ID + " TEXT PRIMARY KEY," +
-            SIGNDATA_USER_ID + " TEXT," +
-            SIGNDATA_SNOTE_ID + " TEXT," +
-            SIGNDATA_USERNAME + " TEXT," +
-            SIGNDATA_SNOTE_NAME + " TEXT," +
-            SIGNDATA_VIEWDATE + " TEXT," +
-            SIGNDATA_SIGN_NAME + " TEXT," +
-            SIGNDATA_SIGN_DATA + " BLOB," +
-            SIGNDATA_PHOTO_NAME + " TEXT," +
-            SIGNDATA_PHOTO + " BLOB," +
-            SIGNDATA_SENDSTATUS + " TEXT);";
-
-    private static final String[] PROJECTIONS_SIGNDATAS = {
-            SIGNDATA_ID,
-            SIGNDATA_USER_ID,
-            SIGNDATA_SNOTE_ID,
-            SIGNDATA_USERNAME,
-            SIGNDATA_SNOTE_NAME,
-            SIGNDATA_VIEWDATE,
-            SIGNDATA_SIGN_NAME,
-            SIGNDATA_SIGN_DATA,
-            SIGNDATA_PHOTO_NAME,
-            SIGNDATA_PHOTO,
-            SIGNDATA_SENDSTATUS
-    };
-
-    public SignDataRepo(Context context) {
-        super(context);
+    public SignDataRepo() {
+        signData = new SignData();
     }
 
-    public void create(SignData signData) {
+    public static String create(){
+        return  "CREATE TABLE "+ SignData.TABLE_SIGNDATAS+" (" +
+                SignData.SIGNDATA_ID + " TEXT PRIMARY KEY," +
+                SignData.SIGNDATA_USER_ID + " TEXT," +
+                SignData.SIGNDATA_SNOTE_ID + " TEXT," +
+                SignData.SIGNDATA_USERNAME + " TEXT," +
+                SignData.SIGNDATA_SNOTE_NAME + " TEXT," +
+                SignData.SIGNDATA_VIEWDATE + " TEXT," +
+                SignData.SIGNDATA_SIGN_NAME + " TEXT," +
+                SignData.SIGNDATA_SIGN_DATA + " BLOB," +
+                SignData.SIGNDATA_PHOTO_NAME + " TEXT," +
+                SignData.SIGNDATA_PHOTO + " BLOB," +
+                SignData.SIGNDATA_SENDSTATUS + " TEXT);";
+    }
+
+    public void insert(SignData signData) {
         if (signData == null) {
             return;
         }
@@ -86,18 +51,18 @@ public class SignDataRepo extends DatabaseHelper {
         db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
-            cv.put(SIGNDATA_ID, signData.getId());
-            cv.put(SIGNDATA_USER_ID, signData.getUserId());
-            cv.put(SIGNDATA_SNOTE_ID, signData.getsNoteId());
-            cv.put(SIGNDATA_USERNAME, signData.getUserName());
-            cv.put(SIGNDATA_SNOTE_NAME, signData.getsNoteName());
-            cv.put(SIGNDATA_VIEWDATE, signData.getViewDate());
-            cv.put(SIGNDATA_SIGN_NAME, signData.getSignName());
-            cv.put(SIGNDATA_SIGN_DATA, signData.getSignData());
-            cv.put(SIGNDATA_PHOTO_NAME, signData.getPhotoName());
-            cv.put(SIGNDATA_PHOTO, signData.getPhoto());
-            cv.put(SIGNDATA_SENDSTATUS, signData.getSendStatus());
-            db.insert(TABLE_SIGNDATAS, null, cv);
+            cv.put(SignData.SIGNDATA_ID, signData.getId());
+            cv.put(SignData.SIGNDATA_USER_ID, signData.getUserId());
+            cv.put(SignData.SIGNDATA_SNOTE_ID, signData.getsNoteId());
+            cv.put(SignData.SIGNDATA_USERNAME, signData.getUserName());
+            cv.put(SignData.SIGNDATA_SNOTE_NAME, signData.getsNoteName());
+            cv.put(SignData.SIGNDATA_VIEWDATE, signData.getViewDate());
+            cv.put(SignData.SIGNDATA_SIGN_NAME, signData.getSignName());
+            cv.put(SignData.SIGNDATA_SIGN_DATA, signData.getSignData());
+            cv.put(SignData.SIGNDATA_PHOTO_NAME, signData.getPhotoName());
+            cv.put(SignData.SIGNDATA_PHOTO, signData.getPhoto());
+            cv.put(SignData.SIGNDATA_SENDSTATUS, signData.getSendStatus());
+            db.insert(SignData.TABLE_SIGNDATAS, null, cv);
             db.setTransactionSuccessful();
         } catch (Exception ex){
             ex.printStackTrace();
@@ -112,48 +77,60 @@ public class SignDataRepo extends DatabaseHelper {
         if (db == null) {
             return null;
         }
-        Cursor cursor = db.query(TABLE_SIGNDATAS, PROJECTIONS_SIGNDATAS, SIGNDATA_ID + "=?",
+        Cursor cursor = db.query(SignData.TABLE_SIGNDATAS, new String[]{
+                    SignData.SIGNDATA_ID,
+                    SignData.SIGNDATA_USER_ID,
+                    SignData.SIGNDATA_SNOTE_ID,
+                    SignData.SIGNDATA_USERNAME,
+                    SignData.SIGNDATA_SNOTE_NAME,
+                    SignData.SIGNDATA_VIEWDATE,
+                    SignData.SIGNDATA_SIGN_NAME,
+                    SignData.SIGNDATA_SIGN_DATA,
+                    SignData.SIGNDATA_PHOTO_NAME,
+                    SignData.SIGNDATA_PHOTO,
+                    SignData.SIGNDATA_SENDSTATUS
+                }, SignData.SIGNDATA_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (!cursor.moveToFirst()) {
             return null;
         }
 
         SignData signData = new SignData();
-        signData.setId(cursor.getString(SIGNDATA_ID_INDEX));
-        signData.setUserId(cursor.getString(SIGNDATA_USER_ID_INDEX));
-        signData.setsNoteId(cursor.getString(SIGNDATA_SNOTE_ID_INDEX));
-        signData.setUserName(cursor.getString(SIGNDATA_USERNAME_INDEX));
-        signData.setsNoteName(cursor.getString(SIGNDATA_SNOTE_NAME_INDEX));
-        signData.setViewDate(cursor.getString(SIGNDATA_VIEWDATE_INDEX));
-        signData.setSignName(cursor.getString(SIGNDATA_SIGN_NAME_INDEX));
-        signData.setSignData(cursor.getBlob(SIGNDATA_SIGN_DATA_INDEX));
-        signData.setPhotoName(cursor.getString(SIGNDATA_PHOTO_NAME_INDEX));
-        signData.setPhoto(cursor.getBlob(SIGNDATA_PHOTO_INDEX));
-        signData.setSendStatus(cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
+        signData.setId(cursor.getString(SignData.SIGNDATA_ID_INDEX));
+        signData.setUserId(cursor.getString(SignData.SIGNDATA_USER_ID_INDEX));
+        signData.setsNoteId(cursor.getString(SignData.SIGNDATA_SNOTE_ID_INDEX));
+        signData.setUserName(cursor.getString(SignData.SIGNDATA_USERNAME_INDEX));
+        signData.setsNoteName(cursor.getString(SignData.SIGNDATA_SNOTE_NAME_INDEX));
+        signData.setViewDate(cursor.getString(SignData.SIGNDATA_VIEWDATE_INDEX));
+        signData.setSignName(cursor.getString(SignData.SIGNDATA_SIGN_NAME_INDEX));
+        signData.setSignData(cursor.getBlob(SignData.SIGNDATA_SIGN_DATA_INDEX));
+        signData.setPhotoName(cursor.getString(SignData.SIGNDATA_PHOTO_NAME_INDEX));
+        signData.setPhoto(cursor.getBlob(SignData.SIGNDATA_PHOTO_INDEX));
+        signData.setSendStatus(cursor.getString(SignData.SIGNDATA_SENDSTATUS_INDEX));
         cursor.close();
         return signData;
     }
 
     public List<SignData> selectAll() {
         List<SignData> signDatas = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_SIGNDATAS;
+        String selectQuery = "SELECT * FROM " + SignData.TABLE_SIGNDATAS;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         try {
             if (cursor.moveToFirst()) {
                 do {
                     SignData signData = new SignData();
-                    signData.setId(cursor.getString(SIGNDATA_ID_INDEX));
-                    signData.setUserId(cursor.getString(SIGNDATA_USER_ID_INDEX));
-                    signData.setsNoteId(cursor.getString(SIGNDATA_SNOTE_ID_INDEX));
-                    signData.setUserName(cursor.getString(SIGNDATA_USERNAME_INDEX));
-                    signData.setsNoteName(cursor.getString(SIGNDATA_SNOTE_NAME_INDEX));
-                    signData.setViewDate(cursor.getString(SIGNDATA_VIEWDATE_INDEX));
-                    signData.setSignName(cursor.getString(SIGNDATA_SIGN_NAME_INDEX));
-                    signData.setSignData(cursor.getBlob(SIGNDATA_SIGN_DATA_INDEX));
-                    signData.setPhotoName(cursor.getString(SIGNDATA_PHOTO_NAME_INDEX));
-                    signData.setPhoto(cursor.getBlob(SIGNDATA_PHOTO_INDEX));
-                    signData.setSendStatus(cursor.getString(SIGNDATA_SENDSTATUS_INDEX));
+                    signData.setId(cursor.getString(SignData.SIGNDATA_ID_INDEX));
+                    signData.setUserId(cursor.getString(SignData.SIGNDATA_USER_ID_INDEX));
+                    signData.setsNoteId(cursor.getString(SignData.SIGNDATA_SNOTE_ID_INDEX));
+                    signData.setUserName(cursor.getString(SignData.SIGNDATA_USERNAME_INDEX));
+                    signData.setsNoteName(cursor.getString(SignData.SIGNDATA_SNOTE_NAME_INDEX));
+                    signData.setViewDate(cursor.getString(SignData.SIGNDATA_VIEWDATE_INDEX));
+                    signData.setSignName(cursor.getString(SignData.SIGNDATA_SIGN_NAME_INDEX));
+                    signData.setSignData(cursor.getBlob(SignData.SIGNDATA_SIGN_DATA_INDEX));
+                    signData.setPhotoName(cursor.getString(SignData.SIGNDATA_PHOTO_NAME_INDEX));
+                    signData.setPhoto(cursor.getBlob(SignData.SIGNDATA_PHOTO_INDEX));
+                    signData.setSendStatus(cursor.getString(SignData.SIGNDATA_SENDSTATUS_INDEX));
                     signDatas.add(signData);
                 } while (cursor.moveToNext());
             }
@@ -174,18 +151,18 @@ public class SignDataRepo extends DatabaseHelper {
             return -1;
         }
         ContentValues cv = new ContentValues();
-        cv.put(SIGNDATA_ID, signData.getId());
-        cv.put(SIGNDATA_USER_ID, signData.getUserId());
-        cv.put(SIGNDATA_SNOTE_ID, signData.getsNoteId());
-        cv.put(SIGNDATA_SIGN_DATA, signData.getUserName());
-        cv.put(SIGNDATA_SNOTE_NAME, signData.getsNoteName());
-        cv.put(SIGNDATA_VIEWDATE, signData.getViewDate());
-        cv.put(SIGNDATA_SIGN_NAME, signData.getSignName());
-        cv.put(SIGNDATA_SIGN_DATA, signData.getSignData());
-        cv.put(SIGNDATA_PHOTO_NAME, signData.getPhotoName());
-        cv.put(SIGNDATA_PHOTO, signData.getPhoto());
-        cv.put(SIGNDATA_SENDSTATUS, signData.getSendStatus());
-        int rowCount = db.update(TABLE_SIGNDATAS, cv, SIGNDATA_ID + "=?",
+        cv.put(SignData.SIGNDATA_ID, signData.getId());
+        cv.put(SignData.SIGNDATA_USER_ID, signData.getUserId());
+        cv.put(SignData.SIGNDATA_SNOTE_ID, signData.getsNoteId());
+        cv.put(SignData.SIGNDATA_SIGN_DATA, signData.getUserName());
+        cv.put(SignData.SIGNDATA_SNOTE_NAME, signData.getsNoteName());
+        cv.put(SignData.SIGNDATA_VIEWDATE, signData.getViewDate());
+        cv.put(SignData.SIGNDATA_SIGN_NAME, signData.getSignName());
+        cv.put(SignData.SIGNDATA_SIGN_DATA, signData.getSignData());
+        cv.put(SignData.SIGNDATA_PHOTO_NAME, signData.getPhotoName());
+        cv.put(SignData.SIGNDATA_PHOTO, signData.getPhoto());
+        cv.put(SignData.SIGNDATA_SENDSTATUS, signData.getSendStatus());
+        int rowCount = db.update(SignData.TABLE_SIGNDATAS, cv, SignData.SIGNDATA_ID + "=?",
                 new String[]{String.valueOf(signData.getId())});
         db.close();
         return rowCount;
@@ -199,18 +176,18 @@ public class SignDataRepo extends DatabaseHelper {
         if (db == null) {
             return;
         }
-        db.delete(TABLE_SIGNDATAS, SIGNDATA_ID + "=?", new String[]{String.valueOf(signData.getId())});
+        db.delete(SignData.TABLE_SIGNDATAS, SignData.SIGNDATA_ID + "=?", new String[]{String.valueOf(signData.getId())});
         db.close();
     }
 
     public void deleteAll()
     {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_SIGNDATAS, null, null);
+        db.delete(SignData.TABLE_SIGNDATAS, null, null);
     }
 
     public int count() {
-        String query = "SELECT * FROM  " + TABLE_SIGNDATAS;
+        String query = "SELECT * FROM  " + SignData.TABLE_SIGNDATAS;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();

@@ -9,6 +9,32 @@ import java.util.Arrays;
  */
 
 public class SignData {
+
+    public static final String TABLE_SIGNDATAS     = "sign_data";
+    public static final String SIGNDATA_ID         = "id";
+    public static final String SIGNDATA_USER_ID    = "user_id";
+    public static final String SIGNDATA_SNOTE_ID   = "snote_id";
+    public static final String SIGNDATA_USERNAME = "user_name";
+    public static final String SIGNDATA_SNOTE_NAME = "snote_name";
+    public static final String SIGNDATA_VIEWDATE   = "view_date";
+    public static final String SIGNDATA_SIGN_NAME  = "signature_name";
+    public static final String SIGNDATA_SIGN_DATA  = "signature_data";
+    public static final String SIGNDATA_PHOTO_NAME = "photo_name";
+    public static final String SIGNDATA_PHOTO      = "photo";
+    public static final String SIGNDATA_SENDSTATUS = "send_status";
+
+    public static final int SIGNDATA_ID_INDEX         = 0;
+    public static final int SIGNDATA_USER_ID_INDEX    = 1;
+    public static final int SIGNDATA_SNOTE_ID_INDEX   = 2;
+    public static final int SIGNDATA_USERNAME_INDEX   = 3;
+    public static final int SIGNDATA_SNOTE_NAME_INDEX = 4;
+    public static final int SIGNDATA_VIEWDATE_INDEX   = 5;
+    public static final int SIGNDATA_SIGN_NAME_INDEX  = 6;
+    public static final int SIGNDATA_SIGN_DATA_INDEX  = 7;
+    public static final int SIGNDATA_PHOTO_NAME_INDEX = 8;
+    public static final int SIGNDATA_PHOTO_INDEX      = 9;
+    public static final int SIGNDATA_SENDSTATUS_INDEX = 10;
+
     private String id;
     private String userId;
     private String sNoteId;

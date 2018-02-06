@@ -110,7 +110,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
-        signDataRepo = new SignDataRepo(this);
+        signDataRepo = new SignDataRepo();
         prefManager = new PrefManager(this);
         final AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
@@ -227,7 +227,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         userSigned.setSignName(signName);
         userSigned.setSignData(DbBitmap.getBytes(bmSignature));
         userSigned.setSendStatus("0");
-        signDataRepo.create(userSigned);
+        signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
         openDialog();
     }
@@ -294,7 +294,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     **/
     public void sendInfo() {
 
-        SignDataRepo signData = new SignDataRepo(getApplicationContext());
+        SignDataRepo signData = new SignDataRepo();
         List<SignData> sDataList = signData.selectAll();
 
         JSONArray sArray = new JSONArray();
