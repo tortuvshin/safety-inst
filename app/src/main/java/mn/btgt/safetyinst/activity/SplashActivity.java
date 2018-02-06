@@ -170,7 +170,7 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (notes.length() > 0){
-                                    SNoteRepo sNoteRepo = new SNoteRepo(SplashActivity.this);
+                                    SNoteRepo sNoteRepo = new SNoteRepo();
 
                                     sNoteRepo.deleteAll();
 
@@ -184,7 +184,7 @@ public class SplashActivity extends AppCompatActivity {
                                         sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
                                         sNote.setVoiceData("");
                                         sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
-                                        sNoteRepo.create(sNote);
+                                        sNoteRepo.insert(sNote);
                                     }
 
                                 } else {

@@ -8,6 +8,7 @@ import com.orhanobut.logger.Logger;
 
 import mn.btgt.safetyinst.AppMain;
 import mn.btgt.safetyinst.data.model.Category;
+import mn.btgt.safetyinst.data.model.SNote;
 import mn.btgt.safetyinst.data.model.Settings;
 import mn.btgt.safetyinst.data.model.SignData;
 import mn.btgt.safetyinst.data.repo.CategoryRepo;
@@ -46,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL(UserRepo.CREATE_TABLE_USERS);
-        db.execSQL(SNoteRepo.CREATE_TABLE_SNOTES);
+        db.execSQL(SNoteRepo.create());
         db.execSQL(CategoryRepo.create());
         db.execSQL(SignDataRepo.create());
         db.execSQL(SettingsRepo.create());
@@ -55,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + UserRepo.TABLE_USERS);
-        db.execSQL("DROP TABLE IF EXISTS " + SNoteRepo.TABLE_SNOTE);
+        db.execSQL("DROP TABLE IF EXISTS " + SNote.TABLE_SNOTE);
         db.execSQL("DROP TABLE IF EXISTS " + Category.TABLE_CATEGORYS);
         db.execSQL("DROP TABLE IF EXISTS " + SignData.TABLE_SIGNDATAS);
         db.execSQL("DROP TABLE IF EXISTS " + Settings.TABLE_SETTINGS);

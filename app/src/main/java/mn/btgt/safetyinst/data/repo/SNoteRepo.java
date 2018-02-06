@@ -19,51 +19,25 @@ import mn.btgt.safetyinst.data.model.SNote;
 
 public class SNoteRepo extends DatabaseHelper {
 
-    public static final String TABLE_SNOTE       = "snote";
-    private static final String SNOTE_ID          = "id";
-    private static final String SNOTE_CAT_ID      = "category_id";
-    private static final String SNOTE_NAME        = "name";
-    private static final String SNOTE_ORDER       = "sorder";
-    private static final String SNOTE_FRAME_TYPE  = "frame_type";
-    private static final String SNOTE_FRAME_DATA  = "frame_data";
-    private static final String SNOTE_VOICE_DATA  = "voice_data";
-    private static final String SNOTE_TIMEOUT     = "timeout";
+    private SNote sNote;
 
-    private static final int SNOTE_ID_INDEX         = 0;
-    private static final int SNOTE_CAT_ID_INDEX     = 1;
-    private static final int SNOTE_NAME_INDEX       = 2;
-    private static final int SNOTE_ORDER_INDEX      = 3;
-    private static final int SNOTE_FRAME_TYPE_INDEX = 4;
-    private static final int SNOTE_FRAME_DATA_INDEX = 5;
-    private static final int SNOTE_VOICE_DATA_INDEX = 6;
-    private static final int SNOTE_TIMEOUT_INDEX    = 7;
-
-    public static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ TABLE_SNOTE+" (" +
-            SNOTE_ID + " TEXT PRIMARY KEY," +
-            SNOTE_CAT_ID + " INT," +
-            SNOTE_NAME + " TEXT," +
-            SNOTE_ORDER + " TEXT," +
-            SNOTE_FRAME_TYPE + " INT," +
-            SNOTE_FRAME_DATA + " TEXT," +
-            SNOTE_VOICE_DATA + " TEXT," +
-            SNOTE_TIMEOUT + " INT);";
-
-    private static final String[] PROJECTIONS_SNOTES = {
-            SNOTE_ID,
-            SNOTE_CAT_ID,
-            SNOTE_NAME,
-            SNOTE_ORDER,
-            SNOTE_FRAME_TYPE,
-            SNOTE_FRAME_DATA,
-            SNOTE_VOICE_DATA,
-            SNOTE_TIMEOUT
-    };
-
-    public SNoteRepo(Context context) {
-        super(context);
+    public SNoteRepo() {
+        sNote = new SNote();
     }
 
-    public void create(SNote sNote) {
+    public static String create(){
+        return "CREATE TABLE "+ SNote.TABLE_SNOTE+" (" +
+                SNote.SNOTE_ID + " TEXT PRIMARY KEY," +
+                SNote.SNOTE_CAT_ID + " INT," +
+                SNote.SNOTE_NAME + " TEXT," +
+                SNote.SNOTE_ORDER + " TEXT," +
+                SNote.SNOTE_FRAME_TYPE + " INT," +
+                SNote.SNOTE_FRAME_DATA + " TEXT," +
+                SNote.SNOTE_VOICE_DATA + " TEXT," +
+                SNote.SNOTE_TIMEOUT + " INT);";
+    }
+
+    public void insert(SNote sNote) {
         if (sNote == null) {
             return;
         }
@@ -74,15 +48,15 @@ public class SNoteRepo extends DatabaseHelper {
         db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
-            cv.put(SNOTE_ID, sNote.getId());
-            cv.put(SNOTE_CAT_ID, sNote.getCategoryId());
-            cv.put(SNOTE_NAME, sNote.getName());
-            cv.put(SNOTE_ORDER, sNote.getOrder());
-            cv.put(SNOTE_FRAME_TYPE, sNote.getFrameType());
-            cv.put(SNOTE_FRAME_DATA, sNote.getFrameData());
-            cv.put(SNOTE_VOICE_DATA, sNote.getVoiceData());
-            cv.put(SNOTE_TIMEOUT, sNote.getTimeout());
-            db.insert(TABLE_SNOTE, null, cv);
+            cv.put(SNote.SNOTE_ID, sNote.getId());
+            cv.put(SNote.SNOTE_CAT_ID, sNote.getCategoryId());
+            cv.put(SNote.SNOTE_NAME, sNote.getName());
+            cv.put(SNote.SNOTE_ORDER, sNote.getOrder());
+            cv.put(SNote.SNOTE_FRAME_TYPE, sNote.getFrameType());
+            cv.put(SNote.SNOTE_FRAME_DATA, sNote.getFrameData());
+            cv.put(SNote.SNOTE_VOICE_DATA, sNote.getVoiceData());
+            cv.put(SNote.SNOTE_TIMEOUT, sNote.getTimeout());
+            db.insert(SNote.TABLE_SNOTE, null, cv);
             db.setTransactionSuccessful();
         } catch (Exception ex){
             ex.printStackTrace();
@@ -97,42 +71,51 @@ public class SNoteRepo extends DatabaseHelper {
         if (db == null) {
             return null;
         }
-        Cursor cursor = db.query(TABLE_SNOTE, PROJECTIONS_SNOTES, SNOTE_ID + "=?",
+        Cursor cursor = db.query(SNote.TABLE_SNOTE, new String[] {
+                        SNote.SNOTE_ID,
+                        SNote.SNOTE_CAT_ID,
+                        SNote.SNOTE_NAME,
+                        SNote.SNOTE_ORDER,
+                        SNote.SNOTE_FRAME_TYPE,
+                        SNote.SNOTE_FRAME_DATA,
+                        SNote.SNOTE_VOICE_DATA,
+                        SNote.SNOTE_TIMEOUT
+                }, SNote.SNOTE_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (!cursor.moveToFirst()) {
             return null;
         }
 
         SNote sNote = new SNote();
-        sNote.setId(cursor.getString(SNOTE_ID_INDEX));
-        sNote.setCategoryId(cursor.getString(SNOTE_CAT_ID_INDEX));
-        sNote.setName(cursor.getString(SNOTE_NAME_INDEX));
-        sNote.setOrder(cursor.getString(SNOTE_ORDER_INDEX));
-        sNote.setFrameType(cursor.getInt(SNOTE_FRAME_TYPE_INDEX));
-        sNote.setFrameData(cursor.getString(SNOTE_FRAME_DATA_INDEX));
-        sNote.setVoiceData(cursor.getString(SNOTE_VOICE_DATA_INDEX));
-        sNote.setTimeout(cursor.getInt(SNOTE_TIMEOUT_INDEX));
+        sNote.setId(cursor.getString(SNote.SNOTE_ID_INDEX));
+        sNote.setCategoryId(cursor.getString(SNote.SNOTE_CAT_ID_INDEX));
+        sNote.setName(cursor.getString(SNote.SNOTE_NAME_INDEX));
+        sNote.setOrder(cursor.getString(SNote.SNOTE_ORDER_INDEX));
+        sNote.setFrameType(cursor.getInt(SNote.SNOTE_FRAME_TYPE_INDEX));
+        sNote.setFrameData(cursor.getString(SNote.SNOTE_FRAME_DATA_INDEX));
+        sNote.setVoiceData(cursor.getString(SNote.SNOTE_VOICE_DATA_INDEX));
+        sNote.setTimeout(cursor.getInt(SNote.SNOTE_TIMEOUT_INDEX));
         cursor.close();
         return sNote;
     }
 
     public List<SNote> selectAll() {
         List<SNote> sNotes = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_SNOTE;
+        String selectQuery = "SELECT * FROM " + SNote.TABLE_SNOTE;
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 SNote sNote = new SNote();
-                sNote.setId(cursor.getString(SNOTE_ID_INDEX));
-                sNote.setCategoryId(cursor.getString(SNOTE_CAT_ID_INDEX));
-                sNote.setName(cursor.getString(SNOTE_NAME_INDEX));
-                sNote.setOrder(cursor.getString(SNOTE_ORDER_INDEX));
-                sNote.setFrameType(cursor.getInt(SNOTE_FRAME_TYPE_INDEX));
-                sNote.setFrameData(cursor.getString(SNOTE_FRAME_DATA_INDEX));
-                sNote.setVoiceData(cursor.getString(SNOTE_VOICE_DATA_INDEX));
-                sNote.setTimeout(cursor.getInt(SNOTE_TIMEOUT_INDEX));
+                sNote.setId(cursor.getString(SNote.SNOTE_ID_INDEX));
+                sNote.setCategoryId(cursor.getString(SNote.SNOTE_CAT_ID_INDEX));
+                sNote.setName(cursor.getString(SNote.SNOTE_NAME_INDEX));
+                sNote.setOrder(cursor.getString(SNote.SNOTE_ORDER_INDEX));
+                sNote.setFrameType(cursor.getInt(SNote.SNOTE_FRAME_TYPE_INDEX));
+                sNote.setFrameData(cursor.getString(SNote.SNOTE_FRAME_DATA_INDEX));
+                sNote.setVoiceData(cursor.getString(SNote.SNOTE_VOICE_DATA_INDEX));
+                sNote.setTimeout(cursor.getInt(SNote.SNOTE_TIMEOUT_INDEX));
                 sNotes.add(sNote);
             } while (cursor.moveToNext());
         }
@@ -148,15 +131,15 @@ public class SNoteRepo extends DatabaseHelper {
             return -1;
         }
         ContentValues cv = new ContentValues();
-        cv.put(SNOTE_ID, sNote.getId());
-        cv.put(SNOTE_CAT_ID, sNote.getCategoryId());
-        cv.put(SNOTE_NAME, sNote.getName());
-        cv.put(SNOTE_ORDER, sNote.getOrder());
-        cv.put(SNOTE_FRAME_TYPE, sNote.getFrameType());
-        cv.put(SNOTE_FRAME_DATA, sNote.getFrameData());
-        cv.put(SNOTE_VOICE_DATA, sNote.getVoiceData());
-        cv.put(SNOTE_TIMEOUT, sNote.getTimeout());
-        int rowCount = db.update(TABLE_SNOTE, cv, SNOTE_ID + "=?",
+        cv.put(SNote.SNOTE_ID, sNote.getId());
+        cv.put(SNote.SNOTE_CAT_ID, sNote.getCategoryId());
+        cv.put(SNote.SNOTE_NAME, sNote.getName());
+        cv.put(SNote.SNOTE_ORDER, sNote.getOrder());
+        cv.put(SNote.SNOTE_FRAME_TYPE, sNote.getFrameType());
+        cv.put(SNote.SNOTE_FRAME_DATA, sNote.getFrameData());
+        cv.put(SNote.SNOTE_VOICE_DATA, sNote.getVoiceData());
+        cv.put(SNote.SNOTE_TIMEOUT, sNote.getTimeout());
+        int rowCount = db.update(SNote.TABLE_SNOTE, cv, SNote.SNOTE_ID + "=?",
                 new String[]{String.valueOf(sNote.getId())});
         db.close();
         return rowCount;
@@ -170,18 +153,18 @@ public class SNoteRepo extends DatabaseHelper {
         if (db == null) {
             return;
         }
-        db.delete(TABLE_SNOTE, SNOTE_ID + "=?", new String[]{String.valueOf(sNote.getId())});
+        db.delete(SNote.TABLE_SNOTE, SNote.SNOTE_ID + "=?", new String[]{String.valueOf(sNote.getId())});
         db.close();
     }
 
     public void deleteAll()
     {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_SNOTE, null, null);
+        db.delete(SNote.TABLE_SNOTE, null, null);
     }
 
     public int count() {
-        String query = "SELECT * FROM  " + TABLE_SNOTE;
+        String query = "SELECT * FROM  " + SNote.TABLE_SNOTE;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();

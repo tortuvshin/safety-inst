@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-        SNoteRepo sNoteRepo = new SNoteRepo(this);
+        SNoteRepo sNoteRepo = new SNoteRepo();
 
         List<SNote> sNotes = sNoteRepo.selectAll();
 
