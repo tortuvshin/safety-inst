@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
@@ -18,9 +17,8 @@ import java.io.IOException;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.activity.AddInfoActivity;
-import mn.btgt.safetyinst.database.SignDataTable;
-import mn.btgt.safetyinst.model.SignData;
+import mn.btgt.safetyinst.data.repo.SignDataRepo;
+import mn.btgt.safetyinst.data.model.SignData;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -42,9 +40,9 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
 
         final Handler mHandler = new Handler(Looper.getMainLooper());
-        SignDataTable signDataTable = new SignDataTable(context);
-        if (ConnectionDetector.isNetworkAvailable(context) && signDataTable.count() > 0){
-            final SignDataTable signData = new SignDataTable(context);
+        SignDataRepo signDataRepo = new SignDataRepo(context);
+        if (ConnectionDetector.isNetworkAvailable(context) && signDataRepo.count() > 0){
+            final SignDataRepo signData = new SignDataRepo(context);
             List<SignData> sDataList = signData.selectAll();
 
             JSONArray sArray = new JSONArray();

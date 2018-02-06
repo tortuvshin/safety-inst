@@ -26,7 +26,7 @@ public class SettingsRepo extends DatabaseHelper {
     private static final int SETTINGS_KEY_INDEX = 0;
     private static final int SETTINGS_VALUE_INDEX = 1;
 
-    static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS+" (" +
+    public static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS+" (" +
             SETTINGS_KEY + " TEXT PRIMARY KEY," +
             SETTINGS_VALUE + " TEXT NOT NULL);";
 

@@ -19,7 +19,7 @@ import mn.btgt.safetyinst.data.model.Category;
 
 public class CategoryRepo extends DatabaseHelper {
 
-    static final String TABLE_CATEGORYS       = "categorys";
+    public static final String TABLE_CATEGORYS       = "categorys";
     private static final String CATEGORY_ID          = "id";
     private static final String CATEGORY_NAME        = "name";
     private static final String CATEGORY_ICON        = "icon";
@@ -30,7 +30,7 @@ public class CategoryRepo extends DatabaseHelper {
     private static final int CATEGORY_ICON_INDEX       = 2;
     private static final int CATEGORY_ORDER_INDEX      = 3;
 
-    static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
+    public static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
             CATEGORY_ID + " TEXT PRIMARY KEY," +
             CATEGORY_NAME + " TEXT," +
             CATEGORY_ICON + " TEXT," +

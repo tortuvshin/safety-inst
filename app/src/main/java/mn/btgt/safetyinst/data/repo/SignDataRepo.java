@@ -19,7 +19,7 @@ import mn.btgt.safetyinst.data.model.SignData;
 
 public class SignDataRepo extends DatabaseHelper {
 
-    static final String TABLE_SIGNDATAS     = "sign_data";
+    public static final String TABLE_SIGNDATAS     = "sign_data";
     private static final String SIGNDATA_ID         = "id";
     private static final String SIGNDATA_USER_ID    = "user_id";
     private static final String SIGNDATA_SNOTE_ID   = "snote_id";
@@ -44,7 +44,7 @@ public class SignDataRepo extends DatabaseHelper {
     private static final int SIGNDATA_PHOTO_INDEX      = 9;
     private static final int SIGNDATA_SENDSTATUS_INDEX = 10;
 
-    static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ TABLE_SIGNDATAS+" (" +
+    public static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ TABLE_SIGNDATAS+" (" +
             SIGNDATA_ID + " TEXT PRIMARY KEY," +
             SIGNDATA_USER_ID + " TEXT," +
             SIGNDATA_SNOTE_ID + " TEXT," +

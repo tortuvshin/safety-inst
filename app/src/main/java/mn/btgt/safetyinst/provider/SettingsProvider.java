@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
-import mn.btgt.safetyinst.database.SettingsTable;
+import mn.btgt.safetyinst.data.repo.SettingsRepo;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -44,7 +44,7 @@ public class SettingsProvider extends ContentProvider{
 
     @Override
     public boolean onCreate() {
-        SettingsTable sTable = new SettingsTable(getContext());
+        SettingsRepo sTable = new SettingsRepo(getContext());
         database = sTable.getWritableDatabase();
         return database != null;
     }
@@ -54,7 +54,7 @@ public class SettingsProvider extends ContentProvider{
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        qb.setTables(SettingsTable.TABLE_SETTINGS);
+        qb.setTables(SettingsRepo.TABLE_SETTINGS);
 
         switch (uriMatcher.match(uri)) {
             case uriCode:
@@ -64,7 +64,7 @@ public class SettingsProvider extends ContentProvider{
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
         if (sortOrder == null || sortOrder == "") {
-            sortOrder = SettingsTable.SETTINGS_KEY;
+            sortOrder = SettingsRepo.SETTINGS_KEY;
         }
         Cursor c = qb.query(database, projection, selection, selectionArgs, null,
                 null, sortOrder);
@@ -87,7 +87,7 @@ public class SettingsProvider extends ContentProvider{
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        long rowID = database.insert(SettingsTable.TABLE_SETTINGS, "", contentValues);
+        long rowID = database.insert(SettingsRepo.TABLE_SETTINGS, "", contentValues);
 
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(
@@ -103,7 +103,7 @@ public class SettingsProvider extends ContentProvider{
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case uriCode:
-                count = database.delete(SettingsTable.TABLE_SETTINGS, selection, selectionArgs);
+                count = database.delete(SettingsRepo.TABLE_SETTINGS, selection, selectionArgs);
                 break;
             default:
                 count = 0;
@@ -118,7 +118,7 @@ public class SettingsProvider extends ContentProvider{
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case uriCode:
-                count = database.update(SettingsTable.TABLE_SETTINGS, contentValues, selection, selectionArgs);
+                count = database.update(SettingsRepo.TABLE_SETTINGS, contentValues, selection, selectionArgs);
                 break;
             default:
                 count = 0;
