@@ -32,8 +32,8 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.SNoteTable;
-import mn.btgt.safetyinst.model.SNote;
+import mn.btgt.safetyinst.data.repo.SNoteRepo;
+import mn.btgt.safetyinst.data.model.SNote;
 import mn.btgt.safetyinst.utils.PrefManager;
 
 /**
@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-        SNoteTable sNoteTable = new SNoteTable(this);
+        SNoteRepo sNoteRepo = new SNoteRepo(this);
 
-        List<SNote> sNotes = sNoteTable.selectAll();
+        List<SNote> sNotes = sNoteRepo.selectAll();
 
-        NUM_PAGES = sNoteTable.count();
+        NUM_PAGES = sNoteRepo.count();
         addBottomDots(0);
 
         changeStatusBarColor();

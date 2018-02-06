@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import mn.btgt.safetyinst.model.Settings;
+
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.Settings;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -15,7 +17,7 @@ import mn.btgt.safetyinst.model.Settings;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SettingsTable extends DatabaseHelper {
+public class SettingsRepo extends DatabaseHelper {
 
     public static final String TABLE_SETTINGS = "settings";
     public static final String SETTINGS_KEY   = "settings_key";
@@ -24,7 +26,7 @@ public class SettingsTable extends DatabaseHelper {
     private static final int SETTINGS_KEY_INDEX = 0;
     private static final int SETTINGS_VALUE_INDEX = 1;
 
-    static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS+" (" +
+    public static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS+" (" +
             SETTINGS_KEY + " TEXT PRIMARY KEY," +
             SETTINGS_VALUE + " TEXT NOT NULL);";
 
@@ -33,7 +35,7 @@ public class SettingsTable extends DatabaseHelper {
             SETTINGS_VALUE
     };
 
-    public SettingsTable(Context context) {
+    public SettingsRepo(Context context) {
         super(context);
     }
 

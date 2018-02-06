@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.model.SignData;
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.SignData;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -16,9 +17,9 @@ import mn.btgt.safetyinst.model.SignData;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SignDataTable extends DatabaseHelper {
+public class SignDataRepo extends DatabaseHelper {
 
-    static final String TABLE_SIGNDATAS     = "sign_data";
+    public static final String TABLE_SIGNDATAS     = "sign_data";
     private static final String SIGNDATA_ID         = "id";
     private static final String SIGNDATA_USER_ID    = "user_id";
     private static final String SIGNDATA_SNOTE_ID   = "snote_id";
@@ -43,7 +44,7 @@ public class SignDataTable extends DatabaseHelper {
     private static final int SIGNDATA_PHOTO_INDEX      = 9;
     private static final int SIGNDATA_SENDSTATUS_INDEX = 10;
 
-    static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ TABLE_SIGNDATAS+" (" +
+    public static final String CREATE_TABLE_SIGNDATA = "CREATE TABLE "+ TABLE_SIGNDATAS+" (" +
             SIGNDATA_ID + " TEXT PRIMARY KEY," +
             SIGNDATA_USER_ID + " TEXT," +
             SIGNDATA_SNOTE_ID + " TEXT," +
@@ -70,7 +71,7 @@ public class SignDataTable extends DatabaseHelper {
             SIGNDATA_SENDSTATUS
     };
 
-    public SignDataTable(Context context) {
+    public SignDataRepo(Context context) {
         super(context);
     }
 
@@ -207,4 +208,14 @@ public class SignDataTable extends DatabaseHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_SIGNDATAS, null, null);
     }
+
+    public int count() {
+        String query = "SELECT * FROM  " + TABLE_SIGNDATAS;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
 }

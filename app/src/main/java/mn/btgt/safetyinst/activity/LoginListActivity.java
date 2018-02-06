@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +20,9 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.SettingsTable;
-import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.model.User;
+import mn.btgt.safetyinst.data.repo.SettingsRepo;
+import mn.btgt.safetyinst.data.repo.UserRepo;
+import mn.btgt.safetyinst.data.model.User;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
 /**
@@ -36,8 +35,8 @@ public class LoginListActivity extends AppCompatActivity {
 
     private static final String TAG = LoginListActivity.class.getSimpleName();
 
-    UserTable userTable;
-    SettingsTable settingsTable;
+    UserRepo userRepo;
+    SettingsRepo settingsRepo;
     ImageLoader imageLoader;
     private Typeface roboto, robotoLight;
 
@@ -53,13 +52,13 @@ public class LoginListActivity extends AppCompatActivity {
         TextView compName = (TextView) findViewById(R.id.company_name);
 
         imageLoader = new ImageLoader(this);
-        userTable = new UserTable(this);
-        settingsTable = new SettingsTable(this);
+        userRepo = new UserRepo(this);
+        settingsRepo = new SettingsRepo(this);
 
-        List<User> users = userTable.selectAll();
+        List<User> users = userRepo.selectAll();
 
-        if (settingsTable.select("company")!=null)
-            compName.setText(settingsTable.select("company"));
+        if (settingsRepo.select("company")!=null)
+            compName.setText(settingsRepo.select("company"));
 
         RecyclerView.Adapter mAdapter = new UserListAdapter(users);
         mRecyclerView.setAdapter(mAdapter);

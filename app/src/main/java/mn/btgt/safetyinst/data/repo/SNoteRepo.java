@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.model.SNote;
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.SNote;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -16,9 +17,9 @@ import mn.btgt.safetyinst.model.SNote;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SNoteTable extends DatabaseHelper {
-   
-    static final String TABLE_SNOTE       = "snote";
+public class SNoteRepo extends DatabaseHelper {
+
+    public static final String TABLE_SNOTE       = "snote";
     private static final String SNOTE_ID          = "id";
     private static final String SNOTE_CAT_ID      = "category_id";
     private static final String SNOTE_NAME        = "name";
@@ -37,7 +38,7 @@ public class SNoteTable extends DatabaseHelper {
     private static final int SNOTE_VOICE_DATA_INDEX = 6;
     private static final int SNOTE_TIMEOUT_INDEX    = 7;
 
-    static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ TABLE_SNOTE+" (" +
+    public static final String CREATE_TABLE_SNOTES = "CREATE TABLE "+ TABLE_SNOTE+" (" +
             SNOTE_ID + " TEXT PRIMARY KEY," +
             SNOTE_CAT_ID + " INT," +
             SNOTE_NAME + " TEXT," +
@@ -58,7 +59,7 @@ public class SNoteTable extends DatabaseHelper {
             SNOTE_TIMEOUT
     };
 
-    public SNoteTable(Context context) {
+    public SNoteRepo(Context context) {
         super(context);
     }
 

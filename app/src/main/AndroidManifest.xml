@@ -57,6 +57,17 @@
             android:label="@string/select_device"
             android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".activity.SettingsActivity"></activity>
+
+        <receiver
+            android:name=".utils.NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".activity.FaceDetectActivity"></activity>
     </application>
 
 </manifest>

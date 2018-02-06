@@ -22,14 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.SettingsTable;
-import mn.btgt.safetyinst.model.Settings;
+import mn.btgt.safetyinst.data.repo.SettingsRepo;
+import mn.btgt.safetyinst.data.model.Settings;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 public class SettingsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-    private SettingsTable settingsTable;
+    private SettingsRepo settingsRepo;
     private SharedPreferences sharedPrefs;
     private String fontEncode;
     private String fontSize;
@@ -52,12 +52,12 @@ public class SettingsActivity extends AppCompatActivity {
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
         togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
-        settingsTable = new SettingsTable(getApplicationContext());
+        settingsRepo = new SettingsRepo(getApplicationContext());
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         try {
-            fontSize = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
+            fontSize = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
             fontSizeEditText.setText(fontSize != null ? fontSize : "6");
-            fontEncode = String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
+            fontEncode = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
 
             if (fontEncode.equals("ASCII")) {
                 RadioButton ac = (RadioButton) findViewById(R.id.fontASCII);
@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        List<Settings> list = settingsTable.selectAll();
+        List<Settings> list = settingsRepo.selectAll();
         Logger.d(list.toString());
         rgOnchanged();
 
@@ -139,7 +139,7 @@ public class SettingsActivity extends AppCompatActivity {
             List<Settings> SList = new ArrayList<Settings>();
             SList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, fontSize));
             SList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, fontEncode));
-            settingsTable.insertList(SList);
+            settingsRepo.insertList(SList);
             finish();
             Toast.makeText(this.getApplicationContext(), R.string.save_settings_success,Toast.LENGTH_SHORT).show();
         }else{
@@ -151,8 +151,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (fontEncode.length() > 0 && fontSize != null) {
             SAFCONSTANT.sendData(
                     EscPosPrinter.getTestData80(
-                            String.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)),
-                            Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
+                            String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)),
+                            Integer.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)),
                             SettingsActivity.this ));
         }else{
             Toast.makeText(this.getApplicationContext(), R.string.font_encode_error,Toast.LENGTH_SHORT).show();

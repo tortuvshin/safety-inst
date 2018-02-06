@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,16 +8,17 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.model.User;
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.User;
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
 
-public class UserTable extends DatabaseHelper {
+public class UserRepo extends DatabaseHelper {
 
-    static final String TABLE_USERS      = "users";
+    public static final String TABLE_USERS      = "users";
     private static final String USER_ID          = "id";
     private static final String USER_NAME        = "name";
     private static final String USER_POSITION    = "position";
@@ -38,7 +39,7 @@ public class UserTable extends DatabaseHelper {
     private static final int USER_AVATAR_INDEX   = 7;
     private static final int USER_LASTS_INDEX    = 8;
 
-    static final String CREATE_TABLE_USERS = "CREATE TABLE "+TABLE_USERS+" (" +
+    public static final String CREATE_TABLE_USERS = "CREATE TABLE "+TABLE_USERS+" (" +
             USER_ID + " TEXT PRIMARY KEY," +
             USER_NAME + " TEXT," +
             USER_POSITION + " TEXT," +
@@ -61,7 +62,7 @@ public class UserTable extends DatabaseHelper {
             USER_LAST_SIGNED
     };
 
-    public UserTable(Context context) {
+    public UserRepo(Context context) {
         super(context);
     }
 

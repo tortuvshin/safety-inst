@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.model.Category;
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.Category;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -16,9 +17,9 @@ import mn.btgt.safetyinst.model.Category;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class CategoryTable extends DatabaseHelper {
+public class CategoryRepo extends DatabaseHelper {
 
-    static final String TABLE_CATEGORYS       = "categorys";
+    public static final String TABLE_CATEGORYS       = "categorys";
     private static final String CATEGORY_ID          = "id";
     private static final String CATEGORY_NAME        = "name";
     private static final String CATEGORY_ICON        = "icon";
@@ -29,7 +30,7 @@ public class CategoryTable extends DatabaseHelper {
     private static final int CATEGORY_ICON_INDEX       = 2;
     private static final int CATEGORY_ORDER_INDEX      = 3;
 
-    static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
+    public static final String CREATE_TABLE_CATEGORYS = "CREATE TABLE "+ TABLE_CATEGORYS+" (" +
             CATEGORY_ID + " TEXT PRIMARY KEY," +
             CATEGORY_NAME + " TEXT," +
             CATEGORY_ICON + " TEXT," +
@@ -42,7 +43,7 @@ public class CategoryTable extends DatabaseHelper {
             CATEGORY_ORDER
     };
 
-    public CategoryTable(Context context) {
+    public CategoryRepo(Context context) {
         super(context);
     }
 
