@@ -4,7 +4,7 @@
 ### Төслийн бүтэц
 
 
-```bash
+```
 ├── app
 │   ├── src/main
 │   │   │── assets/fonts
