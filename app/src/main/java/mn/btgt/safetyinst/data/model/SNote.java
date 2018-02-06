@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.model;
+package mn.btgt.safetyinst.data.model;
 
 /**
  * Author: Turtuvshin Byambaa.

@@ -23,12 +23,12 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.SNoteTable;
-import mn.btgt.safetyinst.database.SettingsTable;
-import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.model.SNote;
-import mn.btgt.safetyinst.model.User;
-import mn.btgt.safetyinst.model.Settings;
+import mn.btgt.safetyinst.data.repo.SNoteRepo;
+import mn.btgt.safetyinst.data.repo.SettingsRepo;
+import mn.btgt.safetyinst.data.repo.UserRepo;
+import mn.btgt.safetyinst.data.model.SNote;
+import mn.btgt.safetyinst.data.model.User;
+import mn.btgt.safetyinst.data.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
     PrefManager prefManager;
     ImageLoader imageLoader;
-    UserTable userTable;
+    UserRepo userRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
-        userTable = new UserTable(this);
+        userRepo = new UserRepo(this);
 
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
@@ -76,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
 
                 if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
                     Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-                    if (userTable.count() > 1){
+                    if (userRepo.count() > 1){
                         openSomeActivity(LoginListActivity.class, true);
                     } else {
                         openSomeActivity(LoginImeiActivity.class, true);
@@ -152,7 +152,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Logger.json(setting.toString());
 
                                 if (setting.length() > 0) {
-                                    SettingsTable settingsTable = new SettingsTable(SplashActivity.this);
+                                    SettingsRepo settingsRepo = new SettingsRepo(SplashActivity.this);
 
                                     List<Settings> settingsList = new ArrayList<Settings>();
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));
@@ -161,18 +161,18 @@ public class SplashActivity extends AppCompatActivity {
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ANDROID_ID, SAFCONSTANT.getAndroiId(SplashActivity.this)));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_LOGO, setting.getString("company_logo")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "no"));
-                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) == null ? "11" : settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)));
-                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE) == null ? "LATIN" : settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)));
-                                    settingsTable.insertList(settingsList);
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) == null ? "11" : settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)));
+                                    settingsList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE) == null ? "LATIN" : settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE)));
+                                    settingsRepo.insertList(settingsList);
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_config, Toast.LENGTH_LONG)
                                             .show();
                                 }
 
                                 if (notes.length() > 0){
-                                    SNoteTable sNoteTable = new SNoteTable(SplashActivity.this);
+                                    SNoteRepo sNoteRepo = new SNoteRepo(SplashActivity.this);
 
-                                    sNoteTable.deleteAll();
+                                    sNoteRepo.deleteAll();
 
                                     for (int i = 0; i < notes.length(); i++) {
                                         SNote sNote = new SNote();
@@ -184,7 +184,7 @@ public class SplashActivity extends AppCompatActivity {
                                         sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
                                         sNote.setVoiceData("");
                                         sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
-                                        sNoteTable.create(sNote);
+                                        sNoteRepo.create(sNote);
                                     }
 
                                 } else {
@@ -193,7 +193,7 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (users.length() > 0) {
-                                    userTable.deleteAll();
+                                    userRepo.deleteAll();
 
                                     for (int i = 0; i < users.length(); i++) {
                                         User user = new User();
@@ -206,7 +206,7 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setPassword(users.getJSONObject(i).getString("pass"));
                                         user.setAvatar(users.getJSONObject(i).getString("photo"));
                                         user.setLastSigned("");
-                                        userTable.create(user);
+                                        userRepo.create(user);
                                     }
                                     if (users.length() > 1)
                                         openSomeActivity(LoginListActivity.class, true);
@@ -214,7 +214,7 @@ public class SplashActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
-                                    if ( userTable.count() == 0) {
+                                    if ( userRepo.count() == 0) {
                                         openSomeActivity(LoginImeiActivity.class, true);
                                         return;
                                     }

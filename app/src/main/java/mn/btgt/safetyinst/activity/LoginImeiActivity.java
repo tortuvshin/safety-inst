@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.UserTable;
-import mn.btgt.safetyinst.model.User;
+import mn.btgt.safetyinst.data.repo.UserRepo;
+import mn.btgt.safetyinst.data.model.User;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
@@ -32,7 +32,7 @@ public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatEditText passText;
     private AppCompatEditText usernameText;
 
-    private UserTable userTable;
+    private UserRepo userRepo;
     private PrefManager prefManager;
 
     @Override
@@ -45,7 +45,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
 
-        userTable = new UserTable(this);
+        userRepo = new UserRepo(this);
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
 
@@ -54,7 +54,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         if (iGet.getStringExtra("username") == null){
             if (iGet.getStringExtra("user_id") != null){
                 int id = Integer.parseInt(iGet.getStringExtra("user_id"));
-                User user = userTable.select(id);
+                User user = userRepo.select(id);
                 imageLoader.DisplayImage(SAFCONSTANT.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
                 usernameText.setText(user.getName());
                 prefManager.setUserId(iGet.getStringExtra("user_id"));
@@ -87,7 +87,7 @@ public class LoginImeiActivity extends AppCompatActivity {
 
         if (password.trim().length() > 0) {
 
-            Cursor checkedUser = userTable.checkUser(password);
+            Cursor checkedUser = userRepo.checkUser(password);
             if(checkedUser != null){
                 startManagingCursor(checkedUser);
                 if (checkedUser.getCount() > 0){

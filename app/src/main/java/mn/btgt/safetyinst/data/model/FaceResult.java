@@ -1,9 +1,11 @@
-package mn.btgt.safetyinst.model;
+package mn.btgt.safetyinst.data.model;
 
 import android.graphics.PointF;
 
 /**
- * Created by Nguyen on 5/20/2016.
+ * Author: Turtuvshin Byambaa.
+ * Project: Safety Inst
+ * URL: https://www.github.com/tortuvshin
  */
 
 public class FaceResult extends Object {
@@ -23,7 +25,6 @@ public class FaceResult extends Object {
         pose = 0.0f;
         time = System.currentTimeMillis();
     }
-
 
     public void setFace(int id, PointF midEye, float eyeDist, float confidence, float pose, long time) {
         set(id, midEye, eyeDist, confidence, pose, time);

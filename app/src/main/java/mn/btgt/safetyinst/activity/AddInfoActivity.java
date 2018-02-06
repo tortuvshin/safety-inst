@@ -10,10 +10,8 @@ import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -30,7 +28,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONArray;
@@ -46,10 +43,10 @@ import java.util.List;
 import java.util.UUID;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.SettingsTable;
-import mn.btgt.safetyinst.database.SignDataTable;
-import mn.btgt.safetyinst.model.SignData;
-import mn.btgt.safetyinst.model.Settings;
+import mn.btgt.safetyinst.data.repo.SettingsRepo;
+import mn.btgt.safetyinst.data.repo.SignDataRepo;
+import mn.btgt.safetyinst.data.model.SignData;
+import mn.btgt.safetyinst.data.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
@@ -71,6 +68,7 @@ import okhttp3.Response;
  * URL: https://www.github.com/tortuvshin
  */
 
+@Deprecated
 public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.Callback{
 
     private static final String TAG = AddInfoActivity.class.getSimpleName();
@@ -86,8 +84,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     Camera.PictureCallback jpegCallback;
 
     private SharedPreferences sharedPrefs;
-    SignDataTable signDataTable;
-    SettingsTable settingsTable;
+    SignDataRepo signDataRepo;
+    SettingsRepo settingsRepo;
 
     private Handler mHandler;
     PrefManager prefManager;
@@ -112,7 +110,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
-        signDataTable = new SignDataTable(this);
+        signDataRepo = new SignDataRepo(this);
         prefManager = new PrefManager(this);
         final AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
@@ -121,7 +119,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
-        settingsTable = new SettingsTable(getApplicationContext());
+        settingsRepo = new SettingsRepo(getApplicationContext());
 
         SAFCONSTANT.last_printer_address = last_printer_address;
 
@@ -202,9 +200,10 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                 } catch (Exception e) {
                     Toast.makeText(AddInfoActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
                 }
-
-                if (settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE).length() > 0 && settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) != null) {
+//                startActivity(new Intent(AddInfoActivity.this, FaceDetectActivity.class));
+                if (settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE).length() > 0 && settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) != null) {
                     printBill();
+
                 }else{
                     Toast.makeText(AddInfoActivity.this, R.string.font_encode_error,Toast.LENGTH_SHORT).show();
                 }
@@ -228,8 +227,8 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         userSigned.setSignName(signName);
         userSigned.setSignData(DbBitmap.getBytes(bmSignature));
         userSigned.setSendStatus("0");
-        signDataTable.create(userSigned);
-        settingsTable.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
+        signDataRepo.create(userSigned);
+        settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
         openDialog();
     }
 
@@ -255,12 +254,12 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
     public void printBill() {
 
-        EscPosPrinter bill = new EscPosPrinter(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE), Integer.valueOf(settingsTable.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)), 1);
+        EscPosPrinter bill = new EscPosPrinter(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE), Integer.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)), 1);
         Bitmap newLogo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.logo), 120, 120, false);
         bill.set_align("CENTER");
         bill.image(newLogo, newLogo.getWidth(), newLogo.getHeight());
         bill.set_charType("B");
-        bill.text(settingsTable.select(SAFCONSTANT.SETTINGS_COMPANY));
+        bill.text(settingsRepo.select(SAFCONSTANT.SETTINGS_COMPANY));
         bill.text("");
         bill.text("Зааварчилгаатай");
         bill.text("танилцсан баримт");
@@ -270,7 +269,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         bill.set_charType("B");
         bill.text(prefManager.getSnoteName());
         bill.set_charType("NORMAL");
-        bill.text("Салбар хэлтэс: ".concat(settingsTable.select(SAFCONSTANT.SETTINGS_DEPARTMENT)));
+        bill.text("Салбар хэлтэс: ".concat(settingsRepo.select(SAFCONSTANT.SETTINGS_DEPARTMENT)));
         bill.text("Ажилтан: ".concat(prefManager.getUserName()));
         bill.text("Огноо: ".concat(dateFormat.format(calendar.getTime())));
         bill.text("Гарын үсэг: ");
@@ -295,7 +294,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     **/
     public void sendInfo() {
 
-        SignDataTable signData = new SignDataTable(getApplicationContext());
+        SignDataRepo signData = new SignDataRepo(getApplicationContext());
         List<SignData> sDataList = signData.selectAll();
 
         JSONArray sArray = new JSONArray();
@@ -363,7 +362,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
                             JSONObject resp = ob.getJSONObject(0);
 
                             if (resp.getString("success").equals("1"))
-                                signDataTable.deleteAll();
+                                signDataRepo.deleteAll();
 
                             Toast.makeText(AddInfoActivity.this, R.string.send_info_success, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {

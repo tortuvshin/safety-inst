@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.model.Category;
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.Category;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -16,7 +17,7 @@ import mn.btgt.safetyinst.model.Category;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class CategoryTable extends DatabaseHelper {
+public class CategoryRepo extends DatabaseHelper {
 
     static final String TABLE_CATEGORYS       = "categorys";
     private static final String CATEGORY_ID          = "id";
@@ -42,7 +43,7 @@ public class CategoryTable extends DatabaseHelper {
             CATEGORY_ORDER
     };
 
-    public CategoryTable(Context context) {
+    public CategoryRepo(Context context) {
         super(context);
     }
 

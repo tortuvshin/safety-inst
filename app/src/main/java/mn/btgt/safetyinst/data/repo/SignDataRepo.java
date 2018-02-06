@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.data.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.model.SignData;
+import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.model.SignData;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -16,7 +17,7 @@ import mn.btgt.safetyinst.model.SignData;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SignDataTable extends DatabaseHelper {
+public class SignDataRepo extends DatabaseHelper {
 
     static final String TABLE_SIGNDATAS     = "sign_data";
     private static final String SIGNDATA_ID         = "id";
@@ -70,7 +71,7 @@ public class SignDataTable extends DatabaseHelper {
             SIGNDATA_SENDSTATUS
     };
 
-    public SignDataTable(Context context) {
+    public SignDataRepo(Context context) {
         super(context);
     }
 
