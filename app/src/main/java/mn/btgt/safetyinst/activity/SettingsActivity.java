@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
         togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
-        settingsRepo = new SettingsRepo(getApplicationContext());
+        settingsRepo = new SettingsRepo();
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         try {
             fontSize = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));

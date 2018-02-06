@@ -119,7 +119,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
-        settingsRepo = new SettingsRepo(getApplicationContext());
+        settingsRepo = new SettingsRepo();
 
         SAFCONSTANT.last_printer_address = last_printer_address;
 

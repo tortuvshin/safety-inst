@@ -20,13 +20,6 @@ import mn.btgt.safetyinst.data.model.Category;
 
 public class CategoryRepo {
 
-    private static final String[] PROJECTIONS_CATEGORYS = {
-            Category.CATEGORY_ID,
-            Category.CATEGORY_NAME,
-            Category.CATEGORY_ICON,
-            Category.CATEGORY_ORDER
-    };
-
     private Category category;
 
     public CategoryRepo() {
@@ -71,7 +64,12 @@ public class CategoryRepo {
         if (db == null) {
             return null;
         }
-        Cursor cursor = db.query(Category.TABLE_CATEGORYS, PROJECTIONS_CATEGORYS, Category.CATEGORY_ID + "=?",
+        Cursor cursor = db.query(Category.TABLE_CATEGORYS, new String[]{
+                        Category.CATEGORY_ID,
+                        Category.CATEGORY_NAME,
+                        Category.CATEGORY_ICON,
+                        Category.CATEGORY_ORDER
+                }, Category.CATEGORY_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (!cursor.moveToFirst()) {
             return null;

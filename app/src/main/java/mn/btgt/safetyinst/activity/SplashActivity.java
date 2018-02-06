@@ -152,7 +152,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Logger.json(setting.toString());
 
                                 if (setting.length() > 0) {
-                                    SettingsRepo settingsRepo = new SettingsRepo(SplashActivity.this);
+                                    SettingsRepo settingsRepo = new SettingsRepo();
 
                                     List<Settings> settingsList = new ArrayList<Settings>();
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));

@@ -53,7 +53,7 @@ public class LoginListActivity extends AppCompatActivity {
 
         imageLoader = new ImageLoader(this);
         userRepo = new UserRepo(this);
-        settingsRepo = new SettingsRepo(this);
+        settingsRepo = new SettingsRepo();
 
         List<User> users = userRepo.selectAll();
 

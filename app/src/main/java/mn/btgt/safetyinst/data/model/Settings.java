@@ -8,6 +8,14 @@ package mn.btgt.safetyinst.data.model;
 
 
 public class Settings {
+
+    public static final String TABLE_SETTINGS = "settings";
+    public static final String SETTINGS_KEY   = "settings_key";
+    public static final String SETTINGS_VALUE = "settings_value";
+
+    public static final int SETTINGS_KEY_INDEX = 0;
+    public static final int SETTINGS_VALUE_INDEX = 1;
+
     private String key;
     private String value;
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.data.DatabaseHelper;
+import mn.btgt.safetyinst.data.DatabaseManager;
 import mn.btgt.safetyinst.data.model.Settings;
 
 /**
@@ -17,49 +18,41 @@ import mn.btgt.safetyinst.data.model.Settings;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class SettingsRepo extends DatabaseHelper {
+public class SettingsRepo {
 
-    public static final String TABLE_SETTINGS = "settings";
-    public static final String SETTINGS_KEY   = "settings_key";
-    private static final String SETTINGS_VALUE = "settings_value";
+    private Settings settings;
 
-    private static final int SETTINGS_KEY_INDEX = 0;
-    private static final int SETTINGS_VALUE_INDEX = 1;
+    public SettingsRepo() {
+        settings = new Settings();
+    }
 
-    public static final String CREATE_TABLE_SETTINGS = "CREATE TABLE "+ TABLE_SETTINGS+" (" +
-            SETTINGS_KEY + " TEXT PRIMARY KEY," +
-            SETTINGS_VALUE + " TEXT NOT NULL);";
-
-    private static final String[] PROJECTIONS_SETTINGS = {
-            SETTINGS_KEY,
-            SETTINGS_VALUE
-    };
-
-    public SettingsRepo(Context context) {
-        super(context);
+    public static String create(){
+        return "CREATE TABLE "+ Settings.TABLE_SETTINGS+" (" +
+                Settings.SETTINGS_KEY + " TEXT PRIMARY KEY," +
+                Settings.SETTINGS_VALUE + " TEXT NOT NULL);";
     }
 
     public void insert(Settings settings) {
         if (settings == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
         db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
-            cv.put(SETTINGS_KEY, settings.getKey());
-            cv.put(SETTINGS_VALUE, settings.getValue());
-            db.replace(TABLE_SETTINGS, null, cv);
+            cv.put(Settings.SETTINGS_KEY, settings.getKey());
+            cv.put(Settings.SETTINGS_VALUE, settings.getValue());
+            db.replace(Settings.TABLE_SETTINGS, null, cv);
             db.setTransactionSuccessful();
         } catch (Exception ex){
             ex.printStackTrace();
         }
         finally {
             db.endTransaction();
-            db.close();
+            DatabaseManager.getInstance().closeDatabase();
         }
     }
 
@@ -67,7 +60,7 @@ public class SettingsRepo extends DatabaseHelper {
         if (SList == null) {
             return;
         }
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return;
         }
@@ -75,9 +68,9 @@ public class SettingsRepo extends DatabaseHelper {
         try {
             for( Settings iset : SList ){
                 ContentValues values = new ContentValues();
-                values.put(SETTINGS_KEY, iset.getKey());
-                values.put(SETTINGS_VALUE, iset.getValue());
-                db.replace(TABLE_SETTINGS, null, values);
+                values.put(Settings.SETTINGS_KEY, iset.getKey());
+                values.put(Settings.SETTINGS_VALUE, iset.getValue());
+                db.replace(Settings.TABLE_SETTINGS, null, values);
             }
             db.setTransactionSuccessful();
         } catch (Exception ex){
@@ -85,61 +78,67 @@ public class SettingsRepo extends DatabaseHelper {
         }
         finally {
             db.endTransaction();
-            db.close();
+            DatabaseManager.getInstance().closeDatabase();
         }
     }
 
     public String select(String key) {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return null;
         }
-        Cursor cursor = db.query(TABLE_SETTINGS, PROJECTIONS_SETTINGS, SETTINGS_KEY + "=?",
+        Cursor cursor = db.query(Settings.TABLE_SETTINGS, new String[]{
+                        Settings.SETTINGS_KEY,
+                        Settings.SETTINGS_VALUE
+                }, Settings.SETTINGS_KEY + "=?",
                 new String[]{key}, null, null, null, null);
         if (!cursor.moveToFirst()) {
             return null;
         }
-        String value = cursor.getString(SETTINGS_VALUE_INDEX);
+        String value = cursor.getString(Settings.SETTINGS_VALUE_INDEX);
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return value;
     }
 
     public List<Settings> selectAll() {
         List<Settings> settings = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + TABLE_SETTINGS;
-        SQLiteDatabase db = getReadableDatabase();
+        String selectQuery = "SELECT * FROM " + Settings.TABLE_SETTINGS;
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 Settings setting = new Settings();
-                setting.setKey(cursor.getString(SETTINGS_KEY_INDEX));
-                setting.setValue(cursor.getString(SETTINGS_VALUE_INDEX));
+                setting.setKey(cursor.getString(Settings.SETTINGS_KEY_INDEX));
+                setting.setValue(cursor.getString(Settings.SETTINGS_VALUE_INDEX));
                 settings.add(setting);
             } while (cursor.moveToNext());
         }
         cursor.close();
+        DatabaseManager.getInstance().closeDatabase();
         return settings;
     }
     public int update(Settings settings) {
         if (settings == null) {
             return -1;
         }
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         if (db == null) {
             return -1;
         }
         ContentValues cv = new ContentValues();
-        cv.put(SETTINGS_KEY, settings.getKey());
-        cv.put(SETTINGS_VALUE, settings.getValue());
-        int rowCount = db.update(TABLE_SETTINGS, cv, SETTINGS_KEY + "=?",
+        cv.put(Settings.SETTINGS_KEY, settings.getKey());
+        cv.put(Settings.SETTINGS_VALUE, settings.getValue());
+        int rowCount = db.update(Settings.TABLE_SETTINGS, cv, Settings.SETTINGS_KEY + "=?",
                 new String[]{String.valueOf(settings.getKey())});
-        db.close();
+        DatabaseManager.getInstance().closeDatabase();
         return rowCount;
     }
 
     public void deleteAll()
     {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_SETTINGS, null, null);
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        db.delete(Settings.TABLE_SETTINGS, null, null);
+        DatabaseManager.getInstance().closeDatabase();
     }
 }

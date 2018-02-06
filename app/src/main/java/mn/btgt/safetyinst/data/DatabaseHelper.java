@@ -8,6 +8,7 @@ import com.orhanobut.logger.Logger;
 
 import mn.btgt.safetyinst.AppMain;
 import mn.btgt.safetyinst.data.model.Category;
+import mn.btgt.safetyinst.data.model.Settings;
 import mn.btgt.safetyinst.data.repo.CategoryRepo;
 import mn.btgt.safetyinst.data.repo.SNoteRepo;
 import mn.btgt.safetyinst.data.repo.SettingsRepo;
@@ -47,7 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SNoteRepo.CREATE_TABLE_SNOTES);
         db.execSQL(CategoryRepo.create());
         db.execSQL(SignDataRepo.CREATE_TABLE_SIGNDATA);
-        db.execSQL(SettingsRepo.CREATE_TABLE_SETTINGS);
+        db.execSQL(SettingsRepo.create());
     }
 
     @Override
@@ -56,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + SNoteRepo.TABLE_SNOTE);
         db.execSQL("DROP TABLE IF EXISTS " + Category.TABLE_CATEGORYS);
         db.execSQL("DROP TABLE IF EXISTS " + SignDataRepo.TABLE_SIGNDATAS);
-        db.execSQL("DROP TABLE IF EXISTS " + SettingsRepo.TABLE_SETTINGS);
+        db.execSQL("DROP TABLE IF EXISTS " + Settings.TABLE_SETTINGS);
         onCreate(db);
         Logger.e("Upgrade database version: "+DATABASE_VERSION);
     }

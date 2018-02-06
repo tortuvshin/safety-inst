@@ -3,6 +3,8 @@ package mn.btgt.safetyinst.data;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.orhanobut.logger.Logger;
+
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
@@ -17,6 +19,7 @@ public class DatabaseManager {
     private SQLiteDatabase mDatabase;
 
     public static synchronized void initializeInstance(SQLiteOpenHelper helper) {
+        Logger.d("Database Manage Initialize instance");
         if (instance == null) {
             instance = new DatabaseManager();
             mDatabaseHelper = helper;
@@ -28,7 +31,6 @@ public class DatabaseManager {
             throw new IllegalStateException(DatabaseManager.class.getSimpleName() +
                     " is not initialized, call initializeInstance(..) method first.");
         }
-
         return instance;
     }
 
