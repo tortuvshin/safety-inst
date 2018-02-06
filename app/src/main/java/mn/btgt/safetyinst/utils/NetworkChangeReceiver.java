@@ -40,9 +40,9 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
 
         final Handler mHandler = new Handler(Looper.getMainLooper());
-        SignDataRepo signDataRepo = new SignDataRepo(context);
+        SignDataRepo signDataRepo = new SignDataRepo();
         if (ConnectionDetector.isNetworkAvailable(context) && signDataRepo.count() > 0){
-            final SignDataRepo signData = new SignDataRepo(context);
+            final SignDataRepo signData = new SignDataRepo();
             List<SignData> sDataList = signData.selectAll();
 
             JSONArray sArray = new JSONArray();

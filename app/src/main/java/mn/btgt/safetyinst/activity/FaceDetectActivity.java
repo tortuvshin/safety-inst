@@ -109,7 +109,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         mView = (SurfaceView) findViewById(R.id.surfaceview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // Now create the OverlayView:
+        // Now insert the OverlayView:
         mFaceView = new FaceOverlayView(this);
         addContentView(mFaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // Create and Start the OrientationListener:

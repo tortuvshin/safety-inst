@@ -45,7 +45,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
 
-        userRepo = new UserRepo(this);
+        userRepo = new UserRepo();
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
 

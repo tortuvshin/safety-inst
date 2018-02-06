@@ -52,7 +52,7 @@ public class LoginListActivity extends AppCompatActivity {
         TextView compName = (TextView) findViewById(R.id.company_name);
 
         imageLoader = new ImageLoader(this);
-        userRepo = new UserRepo(this);
+        userRepo = new UserRepo();
         settingsRepo = new SettingsRepo();
 
         List<User> users = userRepo.selectAll();

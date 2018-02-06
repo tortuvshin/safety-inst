@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
-        userRepo = new UserRepo(this);
+        userRepo = new UserRepo();
 
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
@@ -206,7 +206,7 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setPassword(users.getJSONObject(i).getString("pass"));
                                         user.setAvatar(users.getJSONObject(i).getString("photo"));
                                         user.setLastSigned("");
-                                        userRepo.create(user);
+                                        userRepo.insert(user);
                                     }
                                     if (users.length() > 1)
                                         openSomeActivity(LoginListActivity.class, true);

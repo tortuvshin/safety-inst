@@ -253,7 +253,7 @@ public class BluetoothPrintService {
                     tmp = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
+                Log.e(TAG, "Socket Type: " + mSocketType + "insert() failed", e);
             }
             mmSocket = tmp;
         }
@@ -310,7 +310,7 @@ public class BluetoothPrintService {
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket, String socketType) {
-            Log.d(TAG, "create ConnectedThread: " + socketType);
+            Log.d(TAG, "insert ConnectedThread: " + socketType);
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;

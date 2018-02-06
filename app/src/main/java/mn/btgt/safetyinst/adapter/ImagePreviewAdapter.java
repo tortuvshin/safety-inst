@@ -122,7 +122,7 @@ public class ImagePreviewAdapter extends
         public RelativeLayout layoutCheck;
         public ImageView imgPreview;
 
-        // We also create a constructor that accepts the entire item row
+        // We also insert a constructor that accepts the entire item row
         // and does the view lookups to find each subview
         public ViewHolder(View itemView, OnItemClickListener onItemClickListenerListener) {
             super(itemView);
