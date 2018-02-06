@@ -15,7 +15,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import mn.btgt.safetyinst.model.FaceResult;
+import mn.btgt.safetyinst.data.model.FaceResult;
 
 /**
  * View which displays a bitmap containing a face along with overlay graphics that identify the
