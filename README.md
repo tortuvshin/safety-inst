@@ -10,38 +10,38 @@
 │   │   │── assets/fonts
 │   │   │── java/mn/btgt/safetyinst
 │   │   │   │── activity
-│   │   │   │   │── AddInfoActivity.java
-│   │   │   │   │── DeviceListActivity.java
-│   │   │   │   │── LoginImeiActivity.java
-│   │   │   │   │── MainActivity.java
-│   │   │   │   │── SettingsActivity.java
-│   │   │   │   └── SplashActivity.java
+│   │   │   │   │── AddInfoActivity.java    - Зааварчилгаатай танилцсан хэрэглэгчийн зураг гарын үсгийг авч сэрвэрлүү илгээх 
+│   │   │   │   │── DeviceListActivity.java - Printert холбогдсон төхөөрөмжүүдийн жагсаалт харуулах
+│   │   │   │   │── LoginImeiActivity.java  - Нэвтрэх хэсэг
+│   │   │   │   │── MainActivity.java       - Зааварчилгаа унших үндсэн цонх
+│   │   │   │   │── SettingsActivity.java   - Принтерийн тохиргоо хийх
+│   │   │   │   └── SplashActivity.java     - Эхлэл цонх
 │   │   │   │── database
-│   │   │   │   │── CategoryTable.java
-│   │   │   │   │── DatabaseHelper.java
-│   │   │   │   │── SNoteTable.java
-│   │   │   │   │── SettingsTable.java
-│   │   │   │   │── SignDataTable.java
-│   │   │   │   └── UserTable.java
+│   │   │   │   │── CategoryTable.java      - Зааварчилгааны ангилал хүснэгт
+│   │   │   │   │── DatabaseHelper.java     - Өгөгдлийн сангийн үндсэн класс
+│   │   │   │   │── SNoteTable.java         - Зааварчилгааны хүснэгт
+│   │   │   │   │── SettingsTable.java      - Тохиргооны хүснэгт
+│   │   │   │   │── SignDataTable.java      - Хэрэглэгчдийн танилцсан зааварчилгаа болон мэдээлэл хадгалах
+│   │   │   │   └── UserTable.java          - Хэрэглэгчийн хүснэгт
 │   │   │   │── model
-│   │   │   │   │── Category.java
-│   │   │   │   │── FaceResult.java
-│   │   │   │   │── SNote.java
-│   │   │   │   │── Settings.java
-│   │   │   │   │── SignData.java
-│   │   │   │   └── User.java
+│   │   │   │   │── Category.java           - Ангилал модел
+│   │   │   │   │── FaceResult.java         - Зураг авхад хэрэглэгчийн нүүрний хэмжээ зэргийг авах модел
+│   │   │   │   │── SNote.java              - Зааварчилгааны модел
+│   │   │   │   │── Settings.java           - Тохиргоо
+│   │   │   │   │── SignData.java           - Зааварчилгаатай танилцсан хэрэглэгч, болон зааварчилгааны модел
+│   │   │   │   └── User.java               - Хэрэглэгч модел
 │   │   │   │── provider
-│   │   │   │   └── SettingsProvider.java
+│   │   │   │   └── SettingsProvider.java   - Програмын тохиргоог бусад програмд хуваалцах provider
 │   │   │   │── utils
-│   │   │   │   │── BluetoothPrintService.java
-│   │   │   │   │── CompressUtils.java
-│   │   │   │   │── ConnectionDetector.java
-│   │   │   │   │── DbBitmap.java
-│   │   │   │   │── EscPosPrinter.java
-│   │   │   │   │── ImageUtils.java
-│   │   │   │   │── NetworkChangeReceiver.java
-│   │   │   │   │── PrefManager.java
-│   │   │   │   └── SAFCONSTANT.java
+│   │   │   │   │── BluetoothPrintService.java - 
+│   │   │   │   │── CompressUtils.java         - Byte array compress decompress хийх 
+│   │   │   │   │── ConnectionDetector.java    - Интертет холболттой эсэх ямар сүлжээгээр холбогдож байгаа
+│   │   │   │   │── DbBitmap.java              - Bitmap to ByteArray to Bitmap
+│   │   │   │   │── EscPosPrinter.java         - Принтертэй холбогдож баримт хэвлэх
+│   │   │   │   │── ImageUtils.java           
+│   │   │   │   │── NetworkChangeReceiver.java - Интернетэд холбогдох үед локал бааз дээрх мэдээлэл сэрвэрт илгээх
+│   │   │   │   │── PrefManager.java           - Sharedpreference-тэй ажиллах 
+│   │   │   │   └── SAFCONSTANT.java           - Програмын үндсэн util функцүүд
 │   │   │   │── views
 │   │   │   │   │── FaceOverlayView.java
 │   │   │   │   └── FaceView.java
