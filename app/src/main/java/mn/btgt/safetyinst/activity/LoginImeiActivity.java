@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.UserRepo;
-import mn.btgt.safetyinst.data.model.User;
+import mn.btgt.safetyinst.database.repo.UserRepo;
+import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
@@ -45,7 +45,7 @@ public class LoginImeiActivity extends AppCompatActivity {
         passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
 
-        userRepo = new UserRepo(this);
+        userRepo = new UserRepo();
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
 

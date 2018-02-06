@@ -15,7 +15,7 @@ import android.view.View;
 
 import java.text.DecimalFormat;
 
-import mn.btgt.safetyinst.data.model.FaceResult;
+import mn.btgt.safetyinst.database.model.FaceResult;
 
 
 /**

@@ -6,7 +6,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -14,7 +13,8 @@ import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.DatabaseManager;
+import mn.btgt.safetyinst.database.model.Settings;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -26,7 +26,6 @@ public class SettingsProvider extends ContentProvider{
 
     private static final String TAG = SettingsProvider.class.getSimpleName();
 
-    private SQLiteDatabase database;
     static final String PROVIDER_NAME = "mn.btgt.safetyinst.provider.SettingsProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/isafe";
     static final Uri CONTENT_URI = Uri.parse(URL);
@@ -41,12 +40,9 @@ public class SettingsProvider extends ContentProvider{
         uriMatcher.addURI(PROVIDER_NAME, "isafe", uriCode);
         uriMatcher.addURI(PROVIDER_NAME, "isafe/*", uriCode);
     }
-
     @Override
     public boolean onCreate() {
-        SettingsRepo sTable = new SettingsRepo(getContext());
-        database = sTable.getWritableDatabase();
-        return database != null;
+        return true;
     }
 
     @Nullable
@@ -54,7 +50,7 @@ public class SettingsProvider extends ContentProvider{
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        qb.setTables(SettingsRepo.TABLE_SETTINGS);
+        qb.setTables(Settings.TABLE_SETTINGS);
 
         switch (uriMatcher.match(uri)) {
             case uriCode:
@@ -64,13 +60,14 @@ public class SettingsProvider extends ContentProvider{
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
         if (sortOrder == null || sortOrder == "") {
-            sortOrder = SettingsRepo.SETTINGS_KEY;
+            sortOrder = Settings.SETTINGS_KEY;
         }
-        Cursor c = qb.query(database, projection, selection, selectionArgs, null,
+        Cursor c = DatabaseManager.getInstance().openDatabase().query(Settings.TABLE_SETTINGS, projection, selection, selectionArgs, null,
                 null, sortOrder);
         c.setNotificationUri(getContext().getContentResolver(), uri);
         return c;
     }
+
 
     @Nullable
     @Override
@@ -87,7 +84,7 @@ public class SettingsProvider extends ContentProvider{
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        long rowID = database.insert(SettingsRepo.TABLE_SETTINGS, "", contentValues);
+        long rowID = DatabaseManager.getInstance().openDatabase().insert(Settings.TABLE_SETTINGS, "", contentValues);
 
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(
@@ -95,7 +92,7 @@ public class SettingsProvider extends ContentProvider{
             getContext().getContentResolver().notifyChange(_uri, null);
             return _uri;
         }
-        throw new SQLException("Failed to create record into" + uri);
+        throw new SQLException("Failed to insert record into" + uri);
     }
 
     @Override
@@ -103,7 +100,7 @@ public class SettingsProvider extends ContentProvider{
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case uriCode:
-                count = database.delete(SettingsRepo.TABLE_SETTINGS, selection, selectionArgs);
+                count = DatabaseManager.getInstance().openDatabase().delete(Settings.TABLE_SETTINGS, selection, selectionArgs);
                 break;
             default:
                 count = 0;
@@ -118,7 +115,7 @@ public class SettingsProvider extends ContentProvider{
         int count = 0;
         switch (uriMatcher.match(uri)) {
             case uriCode:
-                count = database.update(SettingsRepo.TABLE_SETTINGS, contentValues, selection, selectionArgs);
+                count = DatabaseManager.getInstance().openDatabase().update(Settings.TABLE_SETTINGS, contentValues, selection, selectionArgs);
                 break;
             default:
                 count = 0;

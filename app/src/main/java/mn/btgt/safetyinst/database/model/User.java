@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.data.model;
+package mn.btgt.safetyinst.database.model;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -8,6 +8,28 @@ package mn.btgt.safetyinst.data.model;
 
 
 public class User {
+
+    public static final String TABLE_USERS      = "users";
+    public static final String USER_ID          = "id";
+    public static final String USER_NAME        = "name";
+    public static final String USER_POSITION    = "position";
+    public static final String USER_PHONE       = "phone";
+    public static final String USER_IMEI        = "imei";
+    public static final String USER_EMAIL       = "email";
+    public static final String USER_PASS        = "pass";
+    public static final String USER_AVATAR      = "profile";
+    public static final String USER_LAST_SIGNED = "lastSigned";
+
+    public static final int USER_ID_INDEX       = 0;
+    public static final int USER_NAME_INDEX     = 1;
+    public static final int USER_POSITION_INDEX = 2;
+    public static final int USER_PHONE_INDEX    = 3;
+    public static final int USER_IMEI_INDEX     = 4;
+    public static final int USER_EMAIL_INDEX    = 5;
+    public static final int USER_PASS_INDEX     = 6;
+    public static final int USER_AVATAR_INDEX   = 7;
+    public static final int USER_LASTS_INDEX    = 8;
+
     private String id;
     private String name;
     private String position;

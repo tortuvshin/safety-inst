@@ -14,7 +14,7 @@ import android.provider.MediaStore;
 
 import java.io.IOException;
 
-import mn.btgt.safetyinst.data.model.FaceResult;
+import mn.btgt.safetyinst.database.model.FaceResult;
 
 
 public class ImageUtils {

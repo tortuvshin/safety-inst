@@ -32,8 +32,8 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SNoteRepo;
-import mn.btgt.safetyinst.data.model.SNote;
+import mn.btgt.safetyinst.database.repo.SNoteRepo;
+import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.utils.PrefManager;
 
 /**
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
-        SNoteRepo sNoteRepo = new SNoteRepo(this);
+        SNoteRepo sNoteRepo = new SNoteRepo();
 
         List<SNote> sNotes = sNoteRepo.selectAll();
 

@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.data.model;
+package mn.btgt.safetyinst.database.model;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -7,6 +7,18 @@ package mn.btgt.safetyinst.data.model;
  */
 
 public class Category {
+
+    public static final String TABLE_CATEGORYS       = "categorys";
+    public static final String CATEGORY_ID          = "id";
+    public static final String CATEGORY_NAME        = "name";
+    public static final String CATEGORY_ICON        = "icon";
+    public static final String CATEGORY_ORDER       = "sorder";
+
+    public static final int CATEGORY_ID_INDEX         = 0;
+    public static final int CATEGORY_NAME_INDEX       = 1;
+    public static final int CATEGORY_ICON_INDEX       = 2;
+    public static final int CATEGORY_ORDER_INDEX      = 3;
+
     private String id;
     private String name;
     private String icon;

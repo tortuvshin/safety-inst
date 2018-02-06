@@ -43,10 +43,10 @@ import java.util.List;
 import java.util.UUID;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.repo.SignDataRepo;
-import mn.btgt.safetyinst.data.model.SignData;
-import mn.btgt.safetyinst.data.model.Settings;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.SignDataRepo;
+import mn.btgt.safetyinst.database.model.SignData;
+import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
@@ -110,7 +110,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
 
         mHandler = new Handler(Looper.getMainLooper());
         userSigned = new SignData();
-        signDataRepo = new SignDataRepo(this);
+        signDataRepo = new SignDataRepo();
         prefManager = new PrefManager(this);
         final AppCompatButton saveBtn = findViewById(R.id.save);
         AppCompatButton clearBtn = findViewById(R.id.clear);
@@ -119,7 +119,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
-        settingsRepo = new SettingsRepo(getApplicationContext());
+        settingsRepo = new SettingsRepo();
 
         SAFCONSTANT.last_printer_address = last_printer_address;
 
@@ -227,7 +227,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         userSigned.setSignName(signName);
         userSigned.setSignData(DbBitmap.getBytes(bmSignature));
         userSigned.setSendStatus("0");
-        signDataRepo.create(userSigned);
+        signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
         openDialog();
     }
@@ -294,7 +294,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     **/
     public void sendInfo() {
 
-        SignDataRepo signData = new SignDataRepo(getApplicationContext());
+        SignDataRepo signData = new SignDataRepo();
         List<SignData> sDataList = signData.selectAll();
 
         JSONArray sArray = new JSONArray();

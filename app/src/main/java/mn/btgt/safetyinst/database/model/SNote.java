@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.data.model;
+package mn.btgt.safetyinst.database.model;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -7,6 +7,26 @@ package mn.btgt.safetyinst.data.model;
  */
 
 public class SNote {
+
+    public static final String TABLE_SNOTE       = "snote";
+    public static final String SNOTE_ID          = "id";
+    public static final String SNOTE_CAT_ID      = "category_id";
+    public static final String SNOTE_NAME        = "name";
+    public static final String SNOTE_ORDER       = "sorder";
+    public static final String SNOTE_FRAME_TYPE  = "frame_type";
+    public static final String SNOTE_FRAME_DATA  = "frame_data";
+    public static final String SNOTE_VOICE_DATA  = "voice_data";
+    public static final String SNOTE_TIMEOUT     = "timeout";
+
+    public static final int SNOTE_ID_INDEX         = 0;
+    public static final int SNOTE_CAT_ID_INDEX     = 1;
+    public static final int SNOTE_NAME_INDEX       = 2;
+    public static final int SNOTE_ORDER_INDEX      = 3;
+    public static final int SNOTE_FRAME_TYPE_INDEX = 4;
+    public static final int SNOTE_FRAME_DATA_INDEX = 5;
+    public static final int SNOTE_VOICE_DATA_INDEX = 6;
+    public static final int SNOTE_TIMEOUT_INDEX    = 7;
+
     private String id;
     private String categoryId;
     private String name;

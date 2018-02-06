@@ -20,9 +20,9 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.repo.UserRepo;
-import mn.btgt.safetyinst.data.model.User;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.UserRepo;
+import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
 /**
@@ -52,8 +52,8 @@ public class LoginListActivity extends AppCompatActivity {
         TextView compName = (TextView) findViewById(R.id.company_name);
 
         imageLoader = new ImageLoader(this);
-        userRepo = new UserRepo(this);
-        settingsRepo = new SettingsRepo(this);
+        userRepo = new UserRepo();
+        settingsRepo = new SettingsRepo();
 
         List<User> users = userRepo.selectAll();
 

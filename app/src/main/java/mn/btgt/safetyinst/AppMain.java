@@ -1,9 +1,13 @@
 package mn.btgt.safetyinst;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+
+import mn.btgt.safetyinst.database.DatabaseHelper;
+import mn.btgt.safetyinst.database.DatabaseManager;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -13,9 +17,20 @@ import com.orhanobut.logger.Logger;
 
 public class AppMain extends Application{
 
+    public static Context context;
+
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         super.onCreate();
+        context = this.getApplicationContext();
+        DatabaseHelper dbHelper = new DatabaseHelper();
+        DatabaseManager.initializeInstance(dbHelper);
         Logger.addLogAdapter(new AndroidLogAdapter());
     }
+
+    public static Context getContext(){
+        return context;
+    }
+
 }

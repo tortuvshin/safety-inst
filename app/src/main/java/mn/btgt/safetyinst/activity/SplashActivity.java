@@ -23,12 +23,12 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SNoteRepo;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.repo.UserRepo;
-import mn.btgt.safetyinst.data.model.SNote;
-import mn.btgt.safetyinst.data.model.User;
-import mn.btgt.safetyinst.data.model.Settings;
+import mn.btgt.safetyinst.database.repo.SNoteRepo;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.UserRepo;
+import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.database.model.User;
+import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
 
         prefManager = new PrefManager(this);
         imageLoader = new ImageLoader(this);
-        userRepo = new UserRepo(this);
+        userRepo = new UserRepo();
 
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
@@ -152,7 +152,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Logger.json(setting.toString());
 
                                 if (setting.length() > 0) {
-                                    SettingsRepo settingsRepo = new SettingsRepo(SplashActivity.this);
+                                    SettingsRepo settingsRepo = new SettingsRepo();
 
                                     List<Settings> settingsList = new ArrayList<Settings>();
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));
@@ -170,7 +170,7 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (notes.length() > 0){
-                                    SNoteRepo sNoteRepo = new SNoteRepo(SplashActivity.this);
+                                    SNoteRepo sNoteRepo = new SNoteRepo();
 
                                     sNoteRepo.deleteAll();
 
@@ -184,7 +184,7 @@ public class SplashActivity extends AppCompatActivity {
                                         sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
                                         sNote.setVoiceData("");
                                         sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
-                                        sNoteRepo.create(sNote);
+                                        sNoteRepo.insert(sNote);
                                     }
 
                                 } else {
@@ -206,7 +206,7 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setPassword(users.getJSONObject(i).getString("pass"));
                                         user.setAvatar(users.getJSONObject(i).getString("photo"));
                                         user.setLastSigned("");
-                                        userRepo.create(user);
+                                        userRepo.insert(user);
                                     }
                                     if (users.length() > 1)
                                         openSomeActivity(LoginListActivity.class, true);

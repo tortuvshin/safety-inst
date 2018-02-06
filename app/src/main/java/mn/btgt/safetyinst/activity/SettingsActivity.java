@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.data.repo.SettingsRepo;
-import mn.btgt.safetyinst.data.model.Settings;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 public class SettingsActivity extends AppCompatActivity {
@@ -52,7 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
         togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
-        settingsRepo = new SettingsRepo(getApplicationContext());
+        settingsRepo = new SettingsRepo();
         sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         try {
             fontSize = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
