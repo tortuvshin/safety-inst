@@ -97,7 +97,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     byte[] btUserPhoto; // зураг
 
     private Camera mCamera;
-    private int cameraId = 0;
+    private int cameraId = 1;
 
     // Дэлгэцийн эргэлт болон босоо хэвтээ зэргийг хянах .
     private int mDisplayRotation;
@@ -143,6 +143,10 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     String signName, photoName;
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
+
+    boolean isImageCapture = false; // Зурагаа даруулсан эсэх,
+    boolean isDrawSignature = false; // Гарын үсэг зурсан эсэх
+
     /**
      * UI болон нүүрний таних үйл явцыг эхлүүлж байна.
      */
@@ -216,7 +220,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
             @Override
             public void onGestureEnded(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
-
+                isDrawSignature = true;
             }
 
             @Override
@@ -229,6 +233,10 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             @Override
             public void onClick(View view) {
                 gestureView.clear(true);
+                textView.setVisibility(View.VISIBLE);
+                isDrawSignature = false;
+                isImageCapture = false;
+                imagePreviewAdapter.clearAll();
             }
         });
 
@@ -242,25 +250,26 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             public void onClick(View view) {
 
                 try {
+                    if (!isDrawSignature && !isImageCapture){
+                        Toast.makeText(FaceDetectActivity.this, "Гарын үсэг зураагүй, Зурагаа дараагүй байна", Toast.LENGTH_LONG).show();
+                    } else if (!isImageCapture) {
+                        Toast.makeText(FaceDetectActivity.this, "Зураг дарагдаагүй байна", Toast.LENGTH_LONG).show();
+                    } else if (!isDrawSignature) {
+                        Toast.makeText(FaceDetectActivity.this, "Гарын үсэг зураагүй байна", Toast.LENGTH_LONG).show();
+                    } else {
+                        bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
+                        saveSignData();
+                        printBill();
 
-                    bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
-                    saveSignData();
+                    }
                 } catch (Exception e) {
                     Toast.makeText(FaceDetectActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
-                }
-
-                if (settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE).length() > 0 && settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE) != null) {
-                    printBill();
-
-                } else{
-                    Toast.makeText(FaceDetectActivity.this, R.string.font_encode_error,Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private  void saveSignData(){
-        Log.d("photo","size : "+btUserPhoto.length + " data :"+btUserPhoto.toString());
         userSigned.setsNoteId(prefManager.getSnoteId());
         userSigned.setUserId(prefManager.getUserId());
         userSigned.setViewDate(dateFormat.format(calendar.getTime()));
@@ -317,10 +326,9 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         bill.text("Ажилтан: ".concat(prefManager.getUserName()));
         bill.text("Огноо: ".concat(dateFormat.format(calendar.getTime())));
         bill.text("Гарын үсэг: ");
-        bill.set_align("RIGHT");
-        Bitmap newSignature = Bitmap.createScaledBitmap(bmSignature, 200, 140, true);
-        bill.image(newSignature, newSignature.getWidth(), newSignature.getHeight());
         bill.set_align("CENTER");
+        Bitmap newSignature = Bitmap.createScaledBitmap(bmSignature, 250, 200, true);
+        bill.image(newSignature, newSignature.getWidth(), newSignature.getHeight());
         bill.qrcode(prefManager.getUserName(),200,200);
         bill.set_charType("I");
         bill.text("Ажлын амжилт хүсэе.");
@@ -554,7 +562,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         float aspect = (float) previewHeight / (float) previewWidth;
         fdet = new android.media.FaceDetector(prevSettingWidth, (int) (prevSettingWidth * aspect), MAX_FACE);
 
-
         // Everything is configured! Finally start the camera preview again:
         startPreview();
     }
@@ -643,7 +650,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         mCamera = null;
     }
 
-
     @Override
     public void onPreviewFrame(byte[] _data, Camera _camera) {
         if (!isThreadWorking) {
@@ -671,9 +677,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                 e.printStackTrace();
             }
         }
-
     }
-
 
     // fps detect face (not FPS of camera)
     long start, end;
@@ -693,7 +697,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             this.ctx = ctx;
             this.handler = handler;
         }
-
 
         public void setData(byte[] data) {
             this.data = data;
@@ -824,6 +827,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                                         public void run() {
                                             imagePreviewAdapter.add(faceCroped);
                                             btUserPhoto = DbBitmap.getBytes(faceCroped);
+                                            isImageCapture = true;
                                         }
                                     });
                                 }

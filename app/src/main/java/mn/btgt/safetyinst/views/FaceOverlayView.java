@@ -19,7 +19,7 @@ import java.text.DecimalFormat;
 import mn.btgt.safetyinst.database.model.FaceResult;
 
 /**
- * This class is a simple View to display the faces.
+ * Нүүр царайны зургыг харуулах View
  */
 public class FaceOverlayView extends View {
 

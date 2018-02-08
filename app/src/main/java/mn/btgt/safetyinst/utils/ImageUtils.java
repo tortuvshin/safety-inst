@@ -150,7 +150,7 @@ public class ImageUtils {
                 break;
         }
 
-        bmp = ImageUtils.cropBitmap(bmp, rect);
+//        bmp = ImageUtils.cropBitmap(bmp, rect);
         return bmp;
     }
 }
