@@ -3,6 +3,7 @@
 
 package mn.btgt.safetyinst.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,11 +17,6 @@ import android.view.View;
 import java.text.DecimalFormat;
 
 import mn.btgt.safetyinst.database.model.FaceResult;
-
-
-/**
- * Created by Nguyen on 5/20/2016.
- */
 
 /**
  * This class is a simple View to display the faces.
@@ -81,6 +77,7 @@ public class FaceOverlayView extends View {
         invalidate();
     }
 
+    @SuppressLint("DrawAllocation")
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
