@@ -1,11 +1,8 @@
 package mn.btgt.safetyinst.activity;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
@@ -45,8 +42,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -341,9 +336,9 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         bill.clearData();
     }
 
-    /*
-    * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
-    **/
+    /**
+     * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
+     */
     public void sendInfo() {
 
         SignDataRepo signData = new SignDataRepo();

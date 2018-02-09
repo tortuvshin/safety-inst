@@ -39,7 +39,7 @@ public class FaceOverlayView extends View {
     }
 
     private void initialize() {
-        // We want a green box around the face:
+        // Нүүрний хэсгийг идэвхжүүлж харуулах ногоон дүрс
         DisplayMetrics metrics = getResources().getDisplayMetrics();
 
         int stroke = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics);

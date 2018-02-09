@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
@@ -17,7 +18,8 @@ import mn.btgt.safetyinst.database.DatabaseManager;
 
 public class AppMain extends Application{
 
-    public static Context context;
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
 
     @Override
     public void onCreate()

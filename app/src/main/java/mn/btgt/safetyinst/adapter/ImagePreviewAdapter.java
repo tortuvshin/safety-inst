@@ -24,7 +24,6 @@ import mn.btgt.safetyinst.R;
 public class ImagePreviewAdapter extends
         RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    // Store the context for later use
     private Context context;
 
     private ArrayList<Bitmap> bitmaps;
@@ -32,9 +31,7 @@ public class ImagePreviewAdapter extends
 
     private ViewHolder.OnItemClickListener onItemClickListener;
 
-    // Pass in the context and menuModels array into the constructor
     public ImagePreviewAdapter(Context context, ArrayList<Bitmap> bitmaps, ViewHolder.OnItemClickListener onItemClickListener) {
-
         this.context = context;
         this.bitmaps = bitmaps;
         this.onItemClickListener = onItemClickListener;
@@ -44,7 +41,6 @@ public class ImagePreviewAdapter extends
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(context).
                 inflate(R.layout.item_image_preview, viewGroup, false);
-        // Return a new holder instance
         return new ViewHolder(itemView, onItemClickListener);
     }
 
@@ -113,17 +109,11 @@ public class ImagePreviewAdapter extends
         this.check = check;
     }
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final OnItemClickListener onItemClickListenerListener;
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        public RelativeLayout layoutCheck;
-        public ImageView imgPreview;
+        private RelativeLayout layoutCheck;
+        private ImageView imgPreview;
 
-        // We also insert a constructor that accepts the entire item row
-        // and does the view lookups to find each subview
         public ViewHolder(View itemView, OnItemClickListener onItemClickListenerListener) {
             super(itemView);
             this.layoutCheck = (RelativeLayout) itemView.findViewById(R.id.layoutCheck);
