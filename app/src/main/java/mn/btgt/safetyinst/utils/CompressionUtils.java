@@ -13,7 +13,7 @@ import java.util.zip.Inflater;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class CompressionUtils {
 
     public static byte[] compress(byte[] data){

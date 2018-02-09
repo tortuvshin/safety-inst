@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addInfo() {
         finish();
-        startActivity(new Intent(MainActivity.this, AddInfoActivity.class));
+        startActivity(new Intent(MainActivity.this, FaceDetectActivity.class));
     }
 
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {

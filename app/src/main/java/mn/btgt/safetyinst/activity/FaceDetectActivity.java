@@ -1,7 +1,13 @@
 package mn.btgt.safetyinst.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -12,7 +18,9 @@ import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,25 +28,57 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.adapter.ImagePreviewAdapter;
 import mn.btgt.safetyinst.database.model.FaceResult;
+import mn.btgt.safetyinst.database.model.Settings;
+import mn.btgt.safetyinst.database.model.SignData;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.SignDataRepo;
 import mn.btgt.safetyinst.utils.CameraErrorCallback;
+import mn.btgt.safetyinst.utils.ConnectionDetector;
+import mn.btgt.safetyinst.utils.DbBitmap;
+import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.ImageUtils;
+import mn.btgt.safetyinst.utils.PrefManager;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import mn.btgt.safetyinst.utils.Util;
 import mn.btgt.safetyinst.views.FaceOverlayView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -48,28 +88,28 @@ import mn.btgt.safetyinst.views.FaceOverlayView;
 
 public final class FaceDetectActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.PreviewCallback {
 
-    // Number of Cameras in device.
-    private int numberOfCameras;
+    private int numberOfCameras; // Төхөөрөмжийн камерийн тоо
 
     public static final String TAG = FaceDetectActivity.class.getSimpleName();
+    private static final String BROADCAST_ADDRESS_SAFE = "btgt_isafe_broadcast";
+
+    Bitmap bmSignature; // гарын үсэг
+    byte[] btUserPhoto; // зураг
 
     private Camera mCamera;
-    private int cameraId = 0;
+    private int cameraId = 1;
 
-    // Let's keep track of the display rotation and orientation also:
+    // Дэлгэцийн эргэлт болон босоо хэвтээ зэргийг хянах .
     private int mDisplayRotation;
     private int mDisplayOrientation;
 
     private int previewWidth;
     private int previewHeight;
 
-    // The surface view for the camera data
-    private SurfaceView mView;
+    private SurfaceView mView; // Камерийн өгөгдлийн харагдац
 
-    // Draw rectangles and other fancy stuff:
     private FaceOverlayView mFaceView;
 
-    // Log all errors:
     private final CameraErrorCallback mErrorCallback = new CameraErrorCallback();
 
     private static final int MAX_FACE = 10;
@@ -86,19 +126,29 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private String BUNDLE_CAMERA_ID = "camera";
 
-    //RecylerView face image
     private HashMap<Integer, Integer> facesCount = new HashMap<>();
     private RecyclerView recyclerView;
     private ImagePreviewAdapter imagePreviewAdapter;
     private ArrayList<Bitmap> facesBitmap;
 
+    SignData userSigned;
 
-    //==============================================================================================
-    // Activity Methods
-    //==============================================================================================
+    private SharedPreferences sharedPrefs;
+    SignDataRepo signDataRepo;
+    SettingsRepo settingsRepo;
+
+    private Handler mHandler;
+    PrefManager prefManager;
+
+    String signName, photoName;
+    private Calendar calendar;
+    private SimpleDateFormat dateFormat;
+
+    boolean isImageCapture = false; // Зурагаа даруулсан эсэх,
+    boolean isDrawSignature = false; // Гарын үсэг зурсан эсэх
 
     /**
-     * Initializes the UI and initiates the creation of a face detector.
+     * UI болон нүүрний таних үйл явцыг эхлүүлж байна.
      */
     @Override
     public void onCreate(Bundle icicle) {
@@ -109,16 +159,13 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         mView = (SurfaceView) findViewById(R.id.surfaceview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // Now insert the OverlayView:
         mFaceView = new FaceOverlayView(this);
         addContentView(mFaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        // Create and Start the OrientationListener:
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
 
         handler = new Handler();
         faces = new FaceResult[MAX_FACE];
@@ -128,15 +175,257 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             faces_previous[i] = new FaceResult();
         }
 
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Хувийн мэдээлэл");
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Хувийн мэдээлэл");
+        }
 
         if (icicle != null)
             cameraId = icicle.getInt(BUNDLE_CAMERA_ID, 1);
+
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        mHandler = new Handler(Looper.getMainLooper());
+        userSigned = new SignData();
+        signDataRepo = new SignDataRepo();
+        prefManager = new PrefManager(this);
+        final AppCompatButton saveBtn = findViewById(R.id.save);
+        AppCompatButton clearBtn = findViewById(R.id.clear);
+        final TextView textView = findViewById(R.id.gestureTextView);
+
+        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+        String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
+
+        settingsRepo = new SettingsRepo();
+
+        SAFCONSTANT.last_printer_address = last_printer_address;
+
+
+        final GestureOverlayView gestureView = findViewById(R.id.signaturePad);
+        gestureView.setDrawingCacheEnabled(true);
+        gestureView.addOnGestureListener(new GestureOverlayView.OnGestureListener() {
+            @Override
+            public void onGestureStarted(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+                textView.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onGesture(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onGestureEnded(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+                isDrawSignature = true;
+            }
+
+            @Override
+            public void onGestureCancelled(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
+
+            }
+        });
+
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gestureView.clear(true);
+                textView.setVisibility(View.VISIBLE);
+                isDrawSignature = false;
+                isImageCapture = false;
+                imagePreviewAdapter.clearAll();
+            }
+        });
+
+        String singStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "").replaceAll("_", "");
+        String photoStr = UUID.randomUUID().toString().substring(0, 12).replaceAll("-", "").replaceAll("_", "");
+        signName = "hub_si_".concat(singStr).concat(".jpg");
+        photoName = "hub_pn_".concat(photoStr).concat(".jpg");
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    if (!isDrawSignature && !isImageCapture){
+                        Toast.makeText(FaceDetectActivity.this, "Гарын үсэг зураагүй, Зурагаа дараагүй байна", Toast.LENGTH_LONG).show();
+                    } else if (!isImageCapture) {
+                        Toast.makeText(FaceDetectActivity.this, "Зураг дарагдаагүй байна", Toast.LENGTH_LONG).show();
+                    } else if (!isDrawSignature) {
+                        Toast.makeText(FaceDetectActivity.this, "Гарын үсэг зураагүй байна", Toast.LENGTH_LONG).show();
+                    } else {
+                        bmSignature = Bitmap.createBitmap(gestureView.getDrawingCache());
+                        saveSignData();
+                        printBill();
+
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(FaceDetectActivity.this, R.string.error_occurred, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
+    private  void saveSignData(){
+        userSigned.setsNoteId(prefManager.getSnoteId());
+        userSigned.setUserId(prefManager.getUserId());
+        userSigned.setViewDate(dateFormat.format(calendar.getTime()));
+        userSigned.setUserName(prefManager.getUserName());
+        userSigned.setsNoteName(prefManager.getSnoteName());
+        userSigned.setPhotoName(photoName);
+        userSigned.setPhoto(btUserPhoto);
+        userSigned.setSignName(signName);
+        userSigned.setSignData(DbBitmap.getBytes(bmSignature));
+        userSigned.setSendStatus("0");
+        signDataRepo.insert(userSigned);
+        settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
+        openDialog();
+    }
+
+    public void openDialog(){
+        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(this, R.style.AlertDialog);
+        alertDialogBuilder.setTitle(R.string.work_success);
+        alertDialogBuilder.setMessage(R.string.has_been_saved);
+        alertDialogBuilder.setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (!ConnectionDetector.isNetworkAvailable(FaceDetectActivity.this)){
+                            Toast.makeText(FaceDetectActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+                        } else {
+                            sendInfo();
+                        }
+                        finish();
+                    }
+                });
+        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void printBill() {
+
+        EscPosPrinter bill = new EscPosPrinter(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE), Integer.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE)), 1);
+        Bitmap newLogo = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.logo), 120, 120, false);
+        bill.set_align("CENTER");
+        bill.image(newLogo, newLogo.getWidth(), newLogo.getHeight());
+        bill.set_charType("B");
+        bill.text(settingsRepo.select(SAFCONSTANT.SETTINGS_COMPANY));
+        bill.text("");
+        bill.text("Зааварчилгаатай");
+        bill.text("танилцсан баримт");
+        bill.text("--------------------------");
+        bill.set_charType("NORMAL");
+        bill.set_align("LEFT");
+        bill.set_charType("B");
+        bill.text(prefManager.getSnoteName());
+        bill.set_charType("NORMAL");
+        bill.text("Салбар хэлтэс: ".concat(settingsRepo.select(SAFCONSTANT.SETTINGS_DEPARTMENT)));
+        bill.text("Ажилтан: ".concat(prefManager.getUserName()));
+        bill.text("Огноо: ".concat(dateFormat.format(calendar.getTime())));
+        bill.text("Гарын үсэг: ");
+        bill.set_align("CENTER");
+        Bitmap newSignature = Bitmap.createScaledBitmap(bmSignature, 250, 200, true);
+        bill.image(newSignature, newSignature.getWidth(), newSignature.getHeight());
+        bill.qrcode(prefManager.getUserName(),200,200);
+        bill.set_charType("I");
+        bill.text("Ажлын амжилт хүсэе.");
+        bill.text("");
+        bill.text("");
+        bill.text("");
+        bill.text("");
+        bill.cut();
+        SAFCONSTANT.sendData(bill.prepare());
+        bill.clearData();
+    }
+
+    /*
+    * Зааварчилгаатай танилцсан хэрэглэгчийн мэдээллийг сэрвэрлүү илгээх
+    **/
+    public void sendInfo() {
+
+        SignDataRepo signData = new SignDataRepo();
+        List<SignData> sDataList = signData.selectAll();
+
+        JSONArray sArray = new JSONArray();
+
+        OkHttpClient client = new OkHttpClient();
+        MultipartBody.Builder formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
+                .addFormDataPart("imei", SAFCONSTANT.getImei(this));
+
+        try
+        {
+            for (SignData sData : sDataList)
+            {
+                JSONObject sJSON = new JSONObject();
+                sJSON.put("id", sData.getId());
+                sJSON.put("user_id", sData.getUserId());
+                sJSON.put("note_id", sData.getsNoteId());
+                sJSON.put("user_name", sData.getUserName());
+                sJSON.put("note_name", sData.getsNoteName());
+                sJSON.put("signature_name", sData.getSignName());
+                sJSON.put("photo_name", sData.getPhotoName());
+                sJSON.put("view_date", sData.getViewDate());
+                sArray.put(sJSON);
+                formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+            }
+            formBody.addFormDataPart("json_data", sArray.toString());
+            Logger.d(sArray.toString());
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+
+        MultipartBody requestBody = formBody.build();
+
+        Request request = new Request.Builder()
+                .url(SAFCONSTANT.SEND_URL)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("app", SAFCONSTANT.APP_NAME)
+                .addHeader("appV", SAFCONSTANT.getAppVersion(this))
+                .addHeader("Imei", SAFCONSTANT.getImei(this))
+                .addHeader("AndroidId", SAFCONSTANT.getAndroiId(this))
+                .addHeader("nuuts", SAFCONSTANT.getSecretCode(SAFCONSTANT.getImei(this), String.valueOf(System.currentTimeMillis())))
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e("Server connection failed : " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String res = response.body().string();
+
+                Logger.json(res);
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray ob = new JSONArray(String.valueOf(res));
+                            JSONObject resp = ob.getJSONObject(0);
+
+                            if (resp.getString("success").equals("1"))
+                                signDataRepo.deleteAll();
+
+                            Toast.makeText(FaceDetectActivity.this, R.string.send_info_success, Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Logger.e("ERROR : ", e.getMessage() + " ");
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -185,7 +474,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     }
 
     /**
-     * Restarts the camera.
+     * Камерийг дахин ачааллах.
      */
     @Override
     protected void onResume() {
@@ -196,7 +485,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     }
 
     /**
-     * Stops the camera.
+     * Камер зогсоох
      */
     @Override
     protected void onPause() {
@@ -272,7 +561,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         // Create media.FaceDetector
         float aspect = (float) previewHeight / (float) previewWidth;
         fdet = new android.media.FaceDetector(prevSettingWidth, (int) (prevSettingWidth * aspect), MAX_FACE);
-
 
         // Everything is configured! Finally start the camera preview again:
         startPreview();
@@ -362,7 +650,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         mCamera = null;
     }
 
-
     @Override
     public void onPreviewFrame(byte[] _data, Camera _camera) {
         if (!isThreadWorking) {
@@ -390,9 +677,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                 e.printStackTrace();
             }
         }
-
     }
-
 
     // fps detect face (not FPS of camera)
     long start, end;
@@ -400,7 +685,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     double fps;
 
     /**
-     * Do face detect in thread
+     * Нүүр таних
      */
     private class FaceDetectThread extends Thread {
         private Handler handler;
@@ -412,7 +697,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             this.ctx = ctx;
             this.handler = handler;
         }
-
 
         public void setData(byte[] data) {
             this.data = data;
@@ -501,9 +785,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                             (int) (mid.x + eyesDis * 1.20f),
                             (int) (mid.y + eyesDis * 1.85f));
 
-                    /**
-                     * Only detect face size > 100x100
-                     */
+                    // Зөвхөн нүүрний хэмжээ > 100x100
                     if (rect.height() * rect.width() > 100 * 100) {
                         for (int j = 0; j < MAX_FACE; j++) {
                             float eyesDisPre = faces_previous[j].eyesDistance();
@@ -528,10 +810,8 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
                         faces_previous[i].set(faces[i].getId(), faces[i].getMidEye(), faces[i].eyesDistance(), faces[i].getConfidence(), faces[i].getPose(), faces[i].getTime());
 
-                        //
                         // if focus in a face 5 frame -> take picture face display in RecyclerView
                         // because of some first frame have low quality
-                        //
                         if (facesCount.get(idFace) == null) {
                             facesCount.put(idFace, 0);
                         } else {
@@ -539,15 +819,15 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                             if (count <= 5)
                                 facesCount.put(idFace, count);
 
-                            //
-                            // Crop Face to display in RecylerView
-                            //
+                            // Crop хийсэн царайны зургыг RecylerView дээр харуулах
                             if (count == 5) {
                                 faceCroped = ImageUtils.cropFace(faces[i], bitmap, rotate);
                                 if (faceCroped != null) {
                                     handler.post(new Runnable() {
                                         public void run() {
                                             imagePreviewAdapter.add(faceCroped);
+                                            btUserPhoto = DbBitmap.getBytes(faceCroped);
+                                            isImageCapture = true;
                                         }
                                     });
                                 }
@@ -559,10 +839,10 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
             handler.post(new Runnable() {
                 public void run() {
-                    //send face to FaceView to draw rect
+                    //Царайны дүрсийг FaceView дээр зурах
                     mFaceView.setFaces(faces);
 
-                    //calculate FPS
+                    //FPS тооцоолох
                     end = System.currentTimeMillis();
                     counter++;
                     double time = (double) (end - start) / 1000;
@@ -580,9 +860,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         }
     }
 
-    /**
-     * Release Memory
-     */
     private void resetData() {
         if (imagePreviewAdapter == null) {
             facesBitmap = new ArrayList<>();
