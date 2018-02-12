@@ -3,9 +3,11 @@ package mn.btgt.safetyinst.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -26,6 +28,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.List;
@@ -51,11 +54,19 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private LinearLayout dotsLayout;
     private Button btnPrev, btnNext;
+
+    ProgressBar progressBar;
     PrefManager prefManager;
+
+    List<SNote> sNotes;
+
+    int progressBarValue = 0;
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,9 +80,10 @@ public class MainActivity extends AppCompatActivity {
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar2);
         SNoteRepo sNoteRepo = new SNoteRepo();
 
-        List<SNote> sNotes = sNoteRepo.selectAll();
+        sNotes = sNoteRepo.selectAll();
 
         NUM_PAGES = sNoteRepo.count();
         addBottomDots(0);
@@ -111,6 +123,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void loader(final int current){
+
+        btnNext.setVisibility(View.INVISIBLE);
+
+        Thread readTh = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                while(progressBarValue < 100)
+                {
+                    progressBarValue++;
+
+                    handler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+
+                            progressBar.setProgress(progressBarValue);
+                            if (progressBarValue == 100) {
+                                btnNext.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(sNotes.get(current).getTimeout());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+        readTh.start();
+    }
+
     private void addBottomDots(int currentPage) {
         TextView[] dots = new TextView[NUM_PAGES];
 
@@ -145,11 +193,15 @@ public class MainActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             addBottomDots(position);
 
+            loader(position);
+
             if (position == NUM_PAGES - 1) {
                 btnNext.setText(getString(R.string.start));
             } else {
                 btnNext.setText(getString(R.string.next));
             }
+
+
         }
 
         @Override
@@ -175,37 +227,36 @@ public class MainActivity extends AppCompatActivity {
     private class ScreenSlidePagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
-        List<SNote> sNotes;
         CollapsingToolbarLayout collapsingToolbar;
 
         ImageView imgPreview;
         CoordinatorLayout coordinatorLayout;
         ImageLoader imageLoader;
-
+        TextView noteTitle;
         WebView noteInfo;
         NestedScrollView nestedScrollView;
-
+        List<SNote> pagerSNotes;
         ScreenSlidePagerAdapter(List<SNote> sNotes) {
-            this.sNotes = sNotes;
+            this.pagerSNotes = sNotes;
         }
 
         @NonNull
         @SuppressLint("SetJavaScriptEnabled")
         @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, final int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             assert layoutInflater != null;
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
             collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
-
+            noteTitle = (TextView) view.findViewById(R.id.noteTitle);
             noteInfo = (WebView) view.findViewById(R.id.noteInfo);
             imageLoader = new ImageLoader(MainActivity.this);
 //            imageLoader.DisplayImage(SAFCONSTANT.WEB_URL+"/upload/300x300/"+sNotes.select(position).getVoiceData(), imgPreview);
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
             coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
-            collapsingToolbar.setTitle(sNotes.get(position).getName());
+            noteTitle.setText(sNotes.get(position).getName());
             prefManager.setSnoteId(sNotes.get(position).getId());
             prefManager.setSnoteName(sNotes.get(position).getName());
             noteInfo.loadDataWithBaseURL("", sNotes.get(position).getFrameData(), "text/html", "UTF-8", "");
