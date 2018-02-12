@@ -11,7 +11,10 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
@@ -30,7 +33,8 @@ public class LoginImeiActivity extends AppCompatActivity {
 
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
-    private AppCompatEditText usernameText;
+    private TextView usernameText;
+    private TextView positionText;
 
     private UserRepo userRepo;
     private PrefManager prefManager;
@@ -41,7 +45,8 @@ public class LoginImeiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         ImageView imageView = (ImageView) findViewById(R.id.login_user_avatar);
-        usernameText = (AppCompatEditText) findViewById(R.id.username);
+        usernameText = (TextView) findViewById(R.id.username);
+        positionText = (TextView) findViewById(R.id.position);
         passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
 
@@ -57,6 +62,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                 User user = userRepo.select(id);
                 imageLoader.DisplayImage(SAFCONSTANT.WEB_URL +"/upload/300x300/"+user.getAvatar(), imageView);
                 usernameText.setText(user.getName());
+                positionText.setText(user.getPosition());
                 prefManager.setUserId(iGet.getStringExtra("user_id"));
                 prefManager.setUsername(user.getName());
             }
@@ -81,7 +87,6 @@ public class LoginImeiActivity extends AppCompatActivity {
 
         String password = passText.getText().toString();
         String username = usernameText.getText().toString();
-
 
         Animation shake = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
 
