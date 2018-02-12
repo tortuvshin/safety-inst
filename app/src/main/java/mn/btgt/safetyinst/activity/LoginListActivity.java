@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +52,7 @@ public class LoginListActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.users_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(mLayoutManager);
         TextView compName = (TextView) findViewById(R.id.company_name);
 
@@ -80,11 +85,13 @@ public class LoginListActivity extends AppCompatActivity {
         String imageName;
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             private ImageView imageView;
+            private CardView cardView;
             private TextView mTextView;
             private TextView mPosText;
             private ViewHolder(View v) {
                 super(v);
                 v.setOnClickListener(this);
+                cardView = (CardView) v.findViewById(R.id.user_card_view);
                 imageView = (ImageView) v.findViewById(R.id.user_img);
                 mTextView = (TextView) v.findViewById(R.id.username_text);
                 mPosText = (TextView) v.findViewById(R.id.position_text);
@@ -120,6 +127,13 @@ public class LoginListActivity extends AppCompatActivity {
             imageLoader.DisplayImage(SAFCONSTANT.WEB_URL +"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
             holder.mTextView.setText(users.get(position).getName());
             holder.mPosText.setText(users.get(position).getPosition());
+            setAnimation(holder.cardView, position);
+        }
+
+        private void setAnimation(View viewToAnimate, int position)
+        {
+            Animation animation = AnimationUtils.loadAnimation(LoginListActivity.this, R.anim.push_left_in);
+            viewToAnimate.startAnimation(animation);
         }
 
         @Override

@@ -34,5 +34,4 @@ public class AppMain extends Application{
     public static Context getContext(){
         return context;
     }
-
 }
