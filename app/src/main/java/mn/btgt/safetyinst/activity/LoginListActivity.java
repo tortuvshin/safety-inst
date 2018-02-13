@@ -24,6 +24,7 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.adapter.UserListAdapter;
 import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;
@@ -41,8 +42,6 @@ public class LoginListActivity extends AppCompatActivity {
 
     UserRepo userRepo;
     SettingsRepo settingsRepo;
-    ImageLoader imageLoader;
-    private Typeface roboto, robotoLight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,6 @@ public class LoginListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         TextView compName = (TextView) findViewById(R.id.company_name);
 
-        imageLoader = new ImageLoader(this);
         userRepo = new UserRepo();
         settingsRepo = new SettingsRepo();
 
@@ -65,11 +63,8 @@ public class LoginListActivity extends AppCompatActivity {
         if (settingsRepo.select("company")!=null)
             compName.setText(settingsRepo.select("company"));
 
-        RecyclerView.Adapter mAdapter = new UserListAdapter(users);
+        RecyclerView.Adapter mAdapter = new UserListAdapter(this, users);
         mRecyclerView.setAdapter(mAdapter);
-
-        roboto = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Regular.ttf");
-        robotoLight = Typeface.createFromAsset(getAssets(),  "fonts/Roboto-Light.ttf");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSettings);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,68 +73,6 @@ public class LoginListActivity extends AppCompatActivity {
                startActivity(new Intent(LoginListActivity.this, SettingsActivity.class));
             }
         });
-    }
-
-    public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
-        List<User> users;
-        String imageName;
-        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-            private ImageView imageView;
-            private CardView cardView;
-            private TextView mTextView;
-            private TextView mPosText;
-            private ViewHolder(View v) {
-                super(v);
-                v.setOnClickListener(this);
-                cardView = (CardView) v.findViewById(R.id.user_card_view);
-                imageView = (ImageView) v.findViewById(R.id.user_img);
-                mTextView = (TextView) v.findViewById(R.id.username_text);
-                mPosText = (TextView) v.findViewById(R.id.position_text);
-                mTextView.setTypeface(roboto);
-                mPosText.setTypeface(robotoLight);
-            }
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginListActivity.this, LoginImeiActivity.class);
-                intent.putExtra("user_id", users.get(this.getAdapterPosition()).getId());
-                Log.d("", users.get(this.getAdapterPosition()).getId());
-                startActivity(intent);
-            }
-        }
-
-        public UserListAdapter(List<User> users) {
-            this.users = users;
-        }
-
-        @Override
-        public UserListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                                                        int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.user_list_item, parent, false);
-            UserListAdapter.ViewHolder vh = new UserListAdapter.ViewHolder(v);
-            return vh;
-        }
-
-        @Override
-        public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
-            imageName = users.get(position).getAvatar();
-            imageLoader.DisplayImage(SAFCONSTANT.WEB_URL +"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
-            holder.mTextView.setText(users.get(position).getName());
-            holder.mPosText.setText(users.get(position).getPosition());
-            setAnimation(holder.cardView, position);
-        }
-
-        private void setAnimation(View viewToAnimate, int position)
-        {
-            Animation animation = AnimationUtils.loadAnimation(LoginListActivity.this, R.anim.push_left_in);
-            viewToAnimate.startAnimation(animation);
-        }
-
-        @Override
-        public int getItemCount() {
-            return users.size();
-        }
     }
 
     boolean doubleBackToExitPressedOnce = false;

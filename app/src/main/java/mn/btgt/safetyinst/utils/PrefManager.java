@@ -33,7 +33,6 @@ public class PrefManager {
     }
     /**
      * Application хамгийн анх ачааллахад
-     *
      * @param isFirstTime анх програм нээхэд true
      */
     public void setLaunch(boolean isFirstTime) {
@@ -88,7 +87,6 @@ public class PrefManager {
 
     /**
      * нэвтэрсэн хэрэглэгч байгаа эсэх
-     *
      * @return хэрэглэгч нэвтэрсэн эсвэл нэвтрээгүй байна
      */
     public boolean isLoggedIn(){

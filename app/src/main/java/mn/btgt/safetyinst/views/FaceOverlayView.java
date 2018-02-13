@@ -39,8 +39,7 @@ public class FaceOverlayView extends View {
     }
 
     private void initialize() {
-        // Нүүрний хэсгийг идэвхжүүлж харуулах ногоон дүрс
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        DisplayMetrics metrics = getResources().getDisplayMetrics();// Нүүрний хэсгийг идэвхжүүлж харуулах ногоон дүрс
 
         int stroke = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics);
         mPaint = new Paint();

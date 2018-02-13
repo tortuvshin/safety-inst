@@ -258,7 +258,6 @@ public class SplashActivity extends AppCompatActivity {
                         Manifest.permission.INTERNET,
                         Manifest.permission.ACCESS_NETWORK_STATE,
                         Manifest.permission.READ_PHONE_STATE,
-
                 }, 0);
             }
         }

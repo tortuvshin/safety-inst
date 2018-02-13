@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -122,12 +121,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        loader(0);
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
+
+        loader(0); //
     }
 
+    /**
+     * Зааварчилгааг уншиж дуустал дараагийн хуудасруу шилжихгүй
+     * @param current Хуудасны index
+     */
     public void loader(final int current){
 
         btnNext.setVisibility(View.INVISIBLE);
@@ -165,6 +166,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Доод хэсэгт хуудасны тоогоор цэг харуулах
+     * @param currentPage Идэвхитэй байгаа хуудас
+     */
     private void addBottomDots(int currentPage) {
         TextView[] dots = new TextView[NUM_PAGES];
 
@@ -288,8 +293,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                         Log.i(TAG, "BOTTOM SCROLL");
-
-                        btnNext.setVisibility(View.VISIBLE);
                     }
                 }
             });
