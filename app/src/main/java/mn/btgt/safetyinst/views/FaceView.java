@@ -104,7 +104,7 @@ public class FaceView extends View {
     }
 
     /**
-     * Release Memory
+     * Санах ой шинэчлэх
      */
     public void reset() {
         if (mBitmap != null)

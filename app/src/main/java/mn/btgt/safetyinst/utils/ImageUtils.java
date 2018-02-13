@@ -58,7 +58,7 @@ public class ImageUtils {
     }
 
 
-    //Rotate Bitmap
+    //Bitmap эргүүлэх
     public final static Bitmap rotate(Bitmap b, float degrees) {
         if (degrees != 0 && b != null) {
             Matrix m = new Matrix();
