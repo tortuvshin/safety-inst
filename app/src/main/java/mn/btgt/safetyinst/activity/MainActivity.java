@@ -20,7 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     int progressBarValue = 0;
     Handler handler;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,15 +98,6 @@ public class MainActivity extends AppCompatActivity {
         ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-        viewPager.requestDisallowInterceptTouchEvent(false);
-        viewPager.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                return true;
-            }
-        });
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             Log.e(TAG, "Scrolled");
+
         }
 
         @Override
