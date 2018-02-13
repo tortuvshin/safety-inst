@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Зааварчилгааг уншиж дуустал дараагийн хуудасруу шилжихгүй
-     * @param current Хуудасны index
+     * @param current Идэвхитэй хуудасны index
      */
     public void loader(final int current){
 
@@ -253,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
 
             collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+            collapsingToolbar.setTitle(sNotes.get(position).getName());
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
             noteTitle = (TextView) view.findViewById(R.id.noteTitle);
             noteInfo = (WebView) view.findViewById(R.id.noteInfo);
