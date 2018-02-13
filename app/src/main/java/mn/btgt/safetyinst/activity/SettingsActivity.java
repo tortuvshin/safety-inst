@@ -45,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
         final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Тохиргоо");
         }
 
         fontSizeEditText = (EditText) findViewById(R.id.txtFont);
