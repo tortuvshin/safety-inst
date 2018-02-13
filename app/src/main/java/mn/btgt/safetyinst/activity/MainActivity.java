@@ -7,7 +7,9 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -18,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -61,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
     List<SNote> sNotes;
 
     int progressBarValue = 0;
-    Handler handler = new Handler();
+    Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        handler = new Handler(Looper.getMainLooper());
         prefManager = new PrefManager(this);
         viewPager = (ViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
@@ -93,6 +98,15 @@ public class MainActivity extends AppCompatActivity {
         ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+        viewPager.requestDisallowInterceptTouchEvent(false);
+        viewPager.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                return true;
+            }
+        });
 
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+        loader(0);
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
@@ -126,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     public void loader(final int current){
 
         btnNext.setVisibility(View.INVISIBLE);
-
+        progressBarValue = 0;
         Thread readTh = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -139,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void run() {
-
                             progressBar.setProgress(progressBarValue);
                             if (progressBarValue == 100) {
                                 btnNext.setVisibility(View.VISIBLE);
+                                Thread.interrupted();
                             }
                         }
                     });
@@ -157,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         readTh.start();
+
     }
 
     private void addBottomDots(int currentPage) {
@@ -194,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
             addBottomDots(position);
 
             loader(position);
-
             if (position == NUM_PAGES - 1) {
                 btnNext.setText(getString(R.string.start));
             } else {
@@ -207,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
             Log.e(TAG, "Scrolled");
-
         }
 
         @Override
@@ -241,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @NonNull
-        @SuppressLint("SetJavaScriptEnabled")
+        @SuppressLint({"SetJavaScriptEnabled"})
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, final int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -283,17 +296,12 @@ public class MainActivity extends AppCompatActivity {
 
                     if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                         Log.i(TAG, "BOTTOM SCROLL");
-                        viewPager.setOnTouchListener(new View.OnTouchListener() {
-                            public boolean onTouch(View arg0, MotionEvent arg1) {
-                                return false;
-                            }
-                        });
+
                         btnNext.setVisibility(View.VISIBLE);
                     }
                 }
             });
             container.addView(view);
-
             return view;
         }
 
