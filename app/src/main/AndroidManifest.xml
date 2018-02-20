@@ -48,14 +48,17 @@
             android:name=".provider.SettingsProvider"
             android:authorities="mn.btgt.safetyinst.provider.SettingsProvider"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true">
+        </provider>
 
         <activity
             android:name=".activity.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
-            android:theme="@android:style/Theme.Dialog"></activity>
-        <activity android:name=".activity.SettingsActivity"></activity>
+            android:theme="@android:style/Theme.Dialog">
+        </activity>
+        <activity android:name=".activity.SettingsActivity">
+        </activity>
 
         <receiver
             android:name=".utils.NetworkChangeReceiver"
@@ -66,8 +69,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.FaceDetectActivity"></activity>
-        <activity android:name=".activity.Main2Activity"></activity>
+        <activity android:name=".activity.FaceDetectActivity">
+        </activity>
     </application>
 
 </manifest>

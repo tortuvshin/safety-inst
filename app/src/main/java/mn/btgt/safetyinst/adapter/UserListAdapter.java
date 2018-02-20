@@ -19,7 +19,6 @@ import java.util.List;
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.activity.LoginImeiActivity;
-import mn.btgt.safetyinst.activity.LoginListActivity;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
@@ -30,10 +29,9 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
  */
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHolder> {
-    final Context context;
-    List<User> users;
-    String imageName;
-    public ImageLoader imageLoader;
+    private final Context context;
+    private List<User> users;
+    private ImageLoader imageLoader;
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView imageView;
@@ -81,7 +79,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(UserListAdapter.ViewHolder holder, int position) {
-        imageName = users.get(position).getAvatar();
         imageLoader.DisplayImage(SAFCONSTANT.WEB_URL +"/upload/300x300/"+users.get(position).getAvatar(), holder.imageView);
         holder.mTextView.setText(users.get(position).getName());
         holder.mPosText.setText(users.get(position).getPosition());

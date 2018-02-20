@@ -1,6 +1,5 @@
 package mn.btgt.safetyinst.database;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -25,8 +24,6 @@ import mn.btgt.safetyinst.database.repo.UserRepo;
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
-    private Context myContext;
 
     private static final int    DATABASE_VERSION = 34;
     private static final String DATABASE_NAME    = "safety.db";

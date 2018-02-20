@@ -58,13 +58,13 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private Button btnPrev, btnNext;
 
-    ProgressBar progressBar;
-    PrefManager prefManager;
+    private ProgressBar progressBar;
+    private PrefManager prefManager;
 
-    List<SNote> sNotes;
+    private List<SNote> sNotes;
 
-    int progressBarValue = 0;
-    Handler handler;
+    private int progressBarValue = 0;
+    private Handler handler;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
