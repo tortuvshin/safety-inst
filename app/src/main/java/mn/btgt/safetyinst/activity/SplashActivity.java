@@ -48,12 +48,8 @@ import okhttp3.Response;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private static final String TAG = SplashActivity.class.getSimpleName();
     private Handler mHandler;
-
-    PrefManager prefManager;
-    ImageLoader imageLoader;
-    UserRepo userRepo;
+    private UserRepo userRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +60,6 @@ public class SplashActivity extends AppCompatActivity {
 
         final long startTime = System.currentTimeMillis();
 
-        prefManager = new PrefManager(this);
-        imageLoader = new ImageLoader(this);
         userRepo = new UserRepo();
 
         mHandler = new Handler(Looper.getMainLooper());
@@ -253,6 +247,8 @@ public class SplashActivity extends AppCompatActivity {
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{
                         Manifest.permission.CAMERA,
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN,
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.INTERNET,

@@ -40,6 +40,7 @@ import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.utils.PrefManager;
+import mn.btgt.safetyinst.views.CustomViewPager;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -53,17 +54,17 @@ public class MainActivity extends AppCompatActivity {
 
     private int NUM_PAGES = 1;
 
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
     private LinearLayout dotsLayout;
     private Button btnPrev, btnNext;
 
-    ProgressBar progressBar;
-    PrefManager prefManager;
+    private ProgressBar progressBar;
+    private PrefManager prefManager;
 
-    List<SNote> sNotes;
+    private List<SNote> sNotes;
 
-    int progressBarValue = 0;
-    Handler handler;
+    private int progressBarValue = 0;
+    private Handler handler;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }
         handler = new Handler(Looper.getMainLooper());
         prefManager = new PrefManager(this);
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (CustomViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Зааварчилгааг уншиж дуустал дараагийн хуудасруу шилжихгүй
-     * @param current Хуудасны index
+     * @param current Идэвхитэй хуудасны index
      */
     public void loader(final int current){
 
@@ -136,11 +137,9 @@ public class MainActivity extends AppCompatActivity {
         Thread readTh = new Thread(new Runnable() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
                 while(progressBarValue < 100)
                 {
                     progressBarValue++;
-
                     handler.post(new Runnable() {
 
                         @Override
@@ -152,14 +151,12 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-
                     try {
                         Thread.sleep(sNotes.get(current).getTimeout());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-
             }
         });
         readTh.start();
@@ -203,21 +200,17 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
             addBottomDots(position);
-
             loader(position);
             if (position == NUM_PAGES - 1) {
                 btnNext.setText(getString(R.string.start));
             } else {
                 btnNext.setText(getString(R.string.next));
             }
-
-
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-            Log.e(TAG, "Scrolled");
-
+            viewPager.getParent().requestDisallowInterceptTouchEvent(true);
         }
 
         @Override
@@ -258,7 +251,9 @@ public class MainActivity extends AppCompatActivity {
 
             assert layoutInflater != null;
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
+
             collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+            collapsingToolbar.setTitle(sNotes.get(position).getName());
             imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
             noteTitle = (TextView) view.findViewById(R.id.noteTitle);
             noteInfo = (WebView) view.findViewById(R.id.noteInfo);

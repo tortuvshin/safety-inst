@@ -30,10 +30,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private SettingsRepo settingsRepo;
-    private SharedPreferences sharedPrefs;
     private String fontEncode;
     private String fontSize;
-    EditText fontSizeEditText;
+    private EditText fontSizeEditText;
     public static ToggleButton togglePrinter;
 
     @Override
@@ -45,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
         final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Тохиргоо");
         }
 
         fontSizeEditText = (EditText) findViewById(R.id.txtFont);
@@ -53,10 +53,10 @@ public class SettingsActivity extends AppCompatActivity {
 
         togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
         settingsRepo = new SettingsRepo();
-        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+
         try {
             fontSize = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE));
-            fontSizeEditText.setText(fontSize != null ? fontSize : "6");
+            fontSizeEditText.setText(fontSize != null ? fontSize : "23");
             fontEncode = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
 
             if (fontEncode.equals("ASCII")) {

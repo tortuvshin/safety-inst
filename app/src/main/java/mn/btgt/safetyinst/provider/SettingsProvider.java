@@ -24,8 +24,6 @@ import mn.btgt.safetyinst.database.model.Settings;
 
 public class SettingsProvider extends ContentProvider{
 
-    private static final String TAG = SettingsProvider.class.getSimpleName();
-
     static final String PROVIDER_NAME = "mn.btgt.safetyinst.provider.SettingsProvider";
     static final String URL = "content://" + PROVIDER_NAME + "/isafe";
     static final Uri CONTENT_URI = Uri.parse(URL);

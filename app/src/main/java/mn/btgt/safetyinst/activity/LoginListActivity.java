@@ -38,10 +38,7 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
 public class LoginListActivity extends AppCompatActivity {
 
-    private static final String TAG = LoginListActivity.class.getSimpleName();
-
-    UserRepo userRepo;
-    SettingsRepo settingsRepo;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +52,8 @@ public class LoginListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         TextView compName = (TextView) findViewById(R.id.company_name);
 
-        userRepo = new UserRepo();
-        settingsRepo = new SettingsRepo();
+        UserRepo userRepo = new UserRepo();
+        SettingsRepo settingsRepo = new SettingsRepo();
 
         List<User> users = userRepo.selectAll();
 
@@ -74,8 +71,6 @@ public class LoginListActivity extends AppCompatActivity {
             }
         });
     }
-
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
