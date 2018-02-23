@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst.utils;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import okhttp3.Response;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(final Context context, final Intent intent) {
 
