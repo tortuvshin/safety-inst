@@ -514,8 +514,8 @@ public class EscPosPrinter {
                 list[0] = imageBorder / 2;
                 list[1] = imageBorder / 2;
             } else {
-                list[0] = Integer.valueOf(imageBorder / 2);
-                list[1] = Integer.valueOf(imageBorder / 2) + 1;
+                list[0] = imageBorder / 2;
+                list[1] = imageBorder / 2 + 1;
             }
         }
         return list;
@@ -553,9 +553,11 @@ public class EscPosPrinter {
     public String cutAndRigthFill(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
+            StringBuilder stringBuilder = new StringBuilder(string);
             for (int i = 0; i < gap; i++) {
-                string += " ";
+                stringBuilder.append(" ");
             }
+            string = stringBuilder.toString();
         } else {
             string = string.substring(0, length);
         }
@@ -566,9 +568,11 @@ public class EscPosPrinter {
     public String leftPadding(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
+            StringBuilder stringBuilder = new StringBuilder(string);
             for (int i = 0; i < gap; i++) {
-                string = " " + string;
+                stringBuilder.insert(0, " ");
             }
+            string = stringBuilder.toString();
         }
         return string;
     }
@@ -576,9 +580,11 @@ public class EscPosPrinter {
     public String rightPadding(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
+            StringBuilder stringBuilder = new StringBuilder(string);
             for (int i = 0; i < gap; i++) {
-                string += " ";
+                stringBuilder.append(" ");
             }
+            string = stringBuilder.toString();
         }
         return string;
     }
