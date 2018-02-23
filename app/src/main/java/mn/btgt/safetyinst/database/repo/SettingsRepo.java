@@ -116,6 +116,7 @@ public class SettingsRepo {
         DatabaseManager.getInstance().closeDatabase();
         return settings;
     }
+
     public int update(Settings settings) {
         if (settings == null) {
             return -1;

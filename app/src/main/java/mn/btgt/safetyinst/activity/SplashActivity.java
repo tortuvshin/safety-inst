@@ -84,6 +84,9 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Вэбээс хэрэглэгч, зааварчилгаа, тохиргооны мэдээлэл зэргийг татаж локал баазруу хадгална
+     */
     public void connectServer() {
 
         OkHttpClient client = new OkHttpClient();
@@ -202,9 +205,6 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setLastSigned("");
                                         userRepo.insert(user);
                                     }
-                                    if (users.length() > 1)
-                                        openSomeActivity(LoginListActivity.class, true);
-                                        return;
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
@@ -215,7 +215,12 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (setting.getString("error").equals("0")) {
-                                    openSomeActivity(LoginImeiActivity.class, true);
+
+                                    if (users.length() > 1) {
+                                        openSomeActivity(LoginListActivity.class, true);
+                                    } else {
+                                        openSomeActivity(LoginImeiActivity.class, true);
+                                    }
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.error_server_connection, Toast.LENGTH_LONG).show();
                                 }

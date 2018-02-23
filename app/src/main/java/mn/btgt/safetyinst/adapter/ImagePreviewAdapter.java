@@ -70,7 +70,6 @@ public class ImagePreviewAdapter extends
         return position;
     }
 
-
     public void add(Bitmap bitmap) {
         insert(bitmap, bitmaps.size());
     }

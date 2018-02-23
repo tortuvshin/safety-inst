@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,7 +60,6 @@ import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.SignDataRepo;
 import mn.btgt.safetyinst.utils.CameraErrorCallback;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
-import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.ImageUtils;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -145,6 +145,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     /**
      * UI болон нүүрний таних үйл явцыг эхлүүлж байна.
      */
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -273,7 +274,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         userSigned.setPhotoName(photoName);
         userSigned.setPhoto(btUserPhoto);
         userSigned.setSignName(signName);
-        userSigned.setSignData(DbBitmap.getBytes(bmSignature));
+        userSigned.setSignData(ImageUtils.getBytes(bmSignature));
         userSigned.setSendStatus("0");
         signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
@@ -821,7 +822,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                                     handler.post(new Runnable() {
                                         public void run() {
                                             imagePreviewAdapter.add(faceCroped);
-                                            btUserPhoto = DbBitmap.getBytes(faceCroped);
+                                            btUserPhoto = ImageUtils.getBytes(faceCroped);
                                             isImageCapture = true;
                                         }
                                     });

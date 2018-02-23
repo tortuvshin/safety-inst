@@ -48,8 +48,8 @@ import mn.btgt.safetyinst.database.repo.SignDataRepo;
 import mn.btgt.safetyinst.database.model.SignData;
 import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
-import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
+import mn.btgt.safetyinst.utils.ImageUtils;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
@@ -60,7 +60,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -225,7 +224,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         userSigned.setPhotoName(photoName);
         userSigned.setPhoto(btUserPhoto);
         userSigned.setSignName(signName);
-        userSigned.setSignData(DbBitmap.getBytes(bmSignature));
+        userSigned.setSignData(ImageUtils.getBytes(bmSignature));
         userSigned.setSendStatus("0");
         signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
