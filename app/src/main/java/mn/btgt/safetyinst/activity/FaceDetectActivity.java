@@ -121,6 +121,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private String BUNDLE_CAMERA_ID = "camera";
 
+    @SuppressLint("UseSparseArrays")
     private HashMap<Integer, Integer> facesCount = new HashMap<>();
     private RecyclerView recyclerView;
     private ImagePreviewAdapter imagePreviewAdapter;

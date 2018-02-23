@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
     private String fontEncode;
     private String fontSize;
     private EditText fontSizeEditText;
+    @SuppressLint("StaticFieldLeak")
     public static ToggleButton togglePrinter;
 
     @Override

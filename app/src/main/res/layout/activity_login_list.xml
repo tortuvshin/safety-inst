@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mn.btgt.safetyinst.activity.Main2Activity">
+    tools:context="mn.btgt.safetyinst.activity.LoginListActivity">
 
     <include layout="@layout/content_login_list" />
 

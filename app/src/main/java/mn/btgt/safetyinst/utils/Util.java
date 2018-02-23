@@ -130,7 +130,7 @@ public class Util {
     @SuppressWarnings("deprecation")
     private static Point getDefaultDisplaySize(Activity activity, Point size) {
         Display d = activity.getWindowManager().getDefaultDisplay();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+        if (Build.VERSION.SDK_INT >= 14) {
             d.getSize(size);
         } else {
             size.set(d.getWidth(), d.getHeight());

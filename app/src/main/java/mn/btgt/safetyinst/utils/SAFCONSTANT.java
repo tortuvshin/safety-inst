@@ -184,7 +184,7 @@ public class SAFCONSTANT {
                 SharedPreferences.Editor editor = act.getSharedPreferences(
                         SAFCONSTANT.SHARED_PREF_NAME, act.MODE_PRIVATE).edit();
                 editor.putString(SAFCONSTANT.PREF_PRINTER_ADDRESS, printer_address);
-                editor.commit();
+                editor.apply();
 
                 last_printer_address = printer_address;
             }

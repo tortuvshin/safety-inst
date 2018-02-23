@@ -146,6 +146,7 @@ public class CategoryRepo {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = db.rawQuery(query, null);
         int count = cursor.getCount();
+        cursor.close();
         DatabaseManager.getInstance().closeDatabase();
         return count;
     }

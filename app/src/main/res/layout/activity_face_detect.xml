@@ -14,7 +14,6 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +42,6 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_ges"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,8 +65,7 @@
                     android:gestureColor="@color/colorPrimaryDark"
                     android:gestureStrokeLengthThreshold="0.1"
                     android:gestureStrokeType="multiple"
-                    android:orientation="vertical"
-                    android:tooltipText="@string/app_name">
+                    android:orientation="vertical">
                     <TextView
                         android:id="@+id/gestureTextView"
                         android:layout_width="wrap_content"
