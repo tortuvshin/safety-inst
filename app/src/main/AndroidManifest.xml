@@ -48,7 +48,7 @@
             android:name=".provider.SettingsProvider"
             android:authorities="mn.btgt.safetyinst.provider.SettingsProvider"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
         </provider>
 
         <activity
