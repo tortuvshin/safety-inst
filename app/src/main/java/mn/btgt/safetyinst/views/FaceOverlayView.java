@@ -30,7 +30,6 @@ public class FaceOverlayView extends View {
     private int previewWidth;
     private int previewHeight;
     private FaceResult[] mFaces;
-    private double fps;
     private boolean isFront = false;
 
     public FaceOverlayView(Context context) {
@@ -59,7 +58,7 @@ public class FaceOverlayView extends View {
     }
 
     public void setFPS(double fps) {
-        this.fps = fps;
+        double fps1 = fps;
     }
 
     public void setFaces(FaceResult[] faces) {

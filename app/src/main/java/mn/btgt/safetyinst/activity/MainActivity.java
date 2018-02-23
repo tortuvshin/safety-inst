@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CustomViewPager viewPager;
     private LinearLayout dotsLayout;
-    private Button btnPrev, btnNext;
+    private Button btnNext;
 
     private ProgressBar progressBar;
     private PrefManager prefManager;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         prefManager = new PrefManager(this);
         viewPager = (CustomViewPager) findViewById(R.id.pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        btnPrev = (Button) findViewById(R.id.btn_skip);
+        Button btnPrev = (Button) findViewById(R.id.btn_skip);
         btnNext = (Button) findViewById(R.id.btn_next);
         progressBar = (ProgressBar)findViewById(R.id.progressBar2);
         SNoteRepo sNoteRepo = new SNoteRepo();

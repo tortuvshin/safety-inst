@@ -82,7 +82,6 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
     SignData userSigned;
     Camera.PictureCallback jpegCallback;
 
-    private SharedPreferences sharedPrefs;
     SignDataRepo signDataRepo;
     SettingsRepo settingsRepo;
 
@@ -115,7 +114,7 @@ public class AddInfoActivity extends AppCompatActivity implements SurfaceHolder.
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
 
-        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
         settingsRepo = new SettingsRepo();

@@ -34,7 +34,6 @@ public class LoginImeiActivity extends AppCompatActivity {
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
     private TextView usernameText;
-    private TextView positionText;
 
     private UserRepo userRepo;
     private PrefManager prefManager;
@@ -46,7 +45,7 @@ public class LoginImeiActivity extends AppCompatActivity {
 
         ImageView imageView = (ImageView) findViewById(R.id.login_user_avatar);
         usernameText = (TextView) findViewById(R.id.username);
-        positionText = (TextView) findViewById(R.id.position);
+        TextView positionText = (TextView) findViewById(R.id.position);
         passText = (AppCompatEditText) findViewById(R.id.password);
         loginBtn = (AppCompatButton) findViewById(R.id.login);
 

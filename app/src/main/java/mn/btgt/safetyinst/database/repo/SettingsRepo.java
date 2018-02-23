@@ -18,10 +18,8 @@ import mn.btgt.safetyinst.database.model.Settings;
 
 public class SettingsRepo {
 
-    private Settings settings;
-
     public SettingsRepo() {
-        settings = new Settings();
+        Settings settings = new Settings();
     }
 
     public static String create(){

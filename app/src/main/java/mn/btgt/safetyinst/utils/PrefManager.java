@@ -13,9 +13,6 @@ import android.content.SharedPreferences;
 public class PrefManager {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
-    private Context context;
-
-    private int PRIVATE_MODE = 0;
 
     private static final String PREF_NAME = "SafetyInst";
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
@@ -27,7 +24,8 @@ public class PrefManager {
 
     @SuppressLint("CommitPrefEdits")
     public PrefManager(Context context) {
-        this.context = context;
+        Context context1 = context;
+        int PRIVATE_MODE = 0;
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }

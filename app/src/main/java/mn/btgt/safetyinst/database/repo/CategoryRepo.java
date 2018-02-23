@@ -18,10 +18,8 @@ import mn.btgt.safetyinst.database.model.Category;
 
 public class CategoryRepo {
 
-    private Category category;
-
     public CategoryRepo() {
-        category = new Category();
+        Category category = new Category();
     }
 
     public static String create(){

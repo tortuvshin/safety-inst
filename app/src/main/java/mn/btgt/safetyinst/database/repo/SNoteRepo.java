@@ -19,10 +19,8 @@ import mn.btgt.safetyinst.database.model.SNote;
 
 public class SNoteRepo {
 
-    private SNote sNote;
-
     public SNoteRepo() {
-        sNote = new SNote();
+        SNote sNote = new SNote();
     }
 
     public static String create(){

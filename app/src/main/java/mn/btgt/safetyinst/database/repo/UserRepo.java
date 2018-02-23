@@ -18,9 +18,8 @@ import mn.btgt.safetyinst.database.model.User;
 
 public class UserRepo {
 
-    private User user;
     public UserRepo() {
-        user = new User();
+        User user = new User();
     }
 
     public static String create(){

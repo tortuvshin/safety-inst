@@ -112,7 +112,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     private Handler handler;
     private FaceDetectThread detectThread = null;
     private int prevSettingWidth;
-    private int prevSettingHeight;
     private android.media.FaceDetector fdet;
 
     private FaceResult faces[];
@@ -125,11 +124,9 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     private HashMap<Integer, Integer> facesCount = new HashMap<>();
     private RecyclerView recyclerView;
     private ImagePreviewAdapter imagePreviewAdapter;
-    private ArrayList<Bitmap> facesBitmap;
 
     SignData userSigned;
 
-    private SharedPreferences sharedPrefs;
     SignDataRepo signDataRepo;
     SettingsRepo settingsRepo;
 
@@ -194,7 +191,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
 
-        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
         settingsRepo = new SettingsRepo();
@@ -604,6 +601,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
          * The smaller image size -> detect faster, but distance to detect face shorter,
          * so calculate the size follow your purpose
          */
+        int prevSettingHeight;
         if (previewWidth / 4 > 360) {
             prevSettingWidth = 360;
             prevSettingHeight = 270;
@@ -859,7 +857,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private void resetData() {
         if (imagePreviewAdapter == null) {
-            facesBitmap = new ArrayList<>();
+            ArrayList<Bitmap> facesBitmap = new ArrayList<>();
             imagePreviewAdapter = new ImagePreviewAdapter(FaceDetectActivity.this, facesBitmap, new ImagePreviewAdapter.ViewHolder.OnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {

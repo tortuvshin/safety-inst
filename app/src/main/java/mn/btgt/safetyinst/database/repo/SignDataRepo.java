@@ -19,10 +19,8 @@ import mn.btgt.safetyinst.database.model.SignData;
 
 public class SignDataRepo {
 
-    private SignData signData;
-
     public SignDataRepo() {
-        signData = new SignData();
+        SignData signData = new SignData();
     }
 
     public static String create(){
