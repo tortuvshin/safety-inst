@@ -549,7 +549,6 @@ public class EscPosPrinter {
         System.out.println("[" + direction + "] " + sb.toString());
     }
 
-
     public String cutAndRigthFill(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
