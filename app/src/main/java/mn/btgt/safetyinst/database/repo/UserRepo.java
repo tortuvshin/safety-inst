@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.database.DatabaseHelper;
 import mn.btgt.safetyinst.database.DatabaseManager;
 import mn.btgt.safetyinst.database.model.User;
 /**

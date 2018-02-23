@@ -105,7 +105,7 @@ public class EscPosPrinter {
     private static final List<String> pattern = new ArrayList<>(Arrays.asList("1", "X", "0"));
     public static final String TAG = "ESCPOSPrinter";
     static {
-        Hashtable<String, String> aMap = new Hashtable<String, String>();
+        Hashtable<String, String> aMap = new Hashtable<>();
         aMap.put("Ё", "YO");
         aMap.put("Й", "I");
         aMap.put("Ц", "C");
@@ -180,7 +180,7 @@ public class EscPosPrinter {
     }
 
     static {
-        Hashtable<Integer, Integer> spec_map = new Hashtable<Integer, Integer>();
+        Hashtable<Integer, Integer> spec_map = new Hashtable<>();
         spec_map.put(1025, 168); // ТОМ Ё
         spec_map.put(1105, 184); // Жижиш ё
 
@@ -206,13 +206,13 @@ public class EscPosPrinter {
     private int codepage = 17; // LATIN, ASCII
     private  boolean print_image = true;
     public EscPosPrinter(){  // test Mode
-        this.line_buffers = new ArrayList<byte[]>();
+        this.line_buffers = new ArrayList<>();
         this.font_converter = "ASCII";
         this.reset();
     }
     public EscPosPrinter(int vendorId, int productId) {
         // TODO Profiles
-        this.line_buffers = new ArrayList<byte[]>();
+        this.line_buffers = new ArrayList<>();
         this.font_converter = "LATIN";
         this.cut_paper_part = "PARTIAL";
         this.reset();
@@ -220,7 +220,7 @@ public class EscPosPrinter {
     public EscPosPrinter(String font_converter, int printer_codepage, int showLogo) {
         // TODO Profiles
         Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage+ " showLogo : "+showLogo);
-        this.line_buffers = new ArrayList<byte[]>();
+        this.line_buffers = new ArrayList<>();
         this.font_converter = font_converter;
         this.cut_paper_part = "PARTIAL";
         this.codepage = printer_codepage;
@@ -426,7 +426,7 @@ public class EscPosPrinter {
     }
 
     public void image(Bitmap bitmap, int width, int height) {
-        if (this.print_image == true){
+        if (this.print_image){
             int[] imBorder = checkImageSize(width);
             String imLeft = "";
             String imRight = "";

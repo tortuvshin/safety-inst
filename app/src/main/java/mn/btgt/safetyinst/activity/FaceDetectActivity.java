@@ -150,13 +150,13 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
         setContentView(R.layout.activity_face_detect);
 
-        mView = (SurfaceView) findViewById(R.id.surfaceview);
+        mView = findViewById(R.id.surfaceview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mFaceView = new FaceOverlayView(this);
         addContentView(mFaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -595,12 +595,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         Log.e(TAG, "previewWidth" + previewWidth);
         Log.e(TAG, "previewHeight" + previewHeight);
 
-        /**
-         * Calculate size to scale full frame bitmap to smaller bitmap
-         * Detect face in scaled bitmap have high performance than full bitmap.
-         * The smaller image size -> detect faster, but distance to detect face shorter,
-         * so calculate the size follow your purpose
-         */
         int prevSettingHeight;
         if (previewWidth / 4 > 360) {
             prevSettingWidth = 360;

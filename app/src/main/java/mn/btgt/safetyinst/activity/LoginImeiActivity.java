@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.repo.UserRepo;
@@ -43,11 +41,11 @@ public class LoginImeiActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ImageView imageView = (ImageView) findViewById(R.id.login_user_avatar);
-        usernameText = (TextView) findViewById(R.id.username);
-        TextView positionText = (TextView) findViewById(R.id.position);
-        passText = (AppCompatEditText) findViewById(R.id.password);
-        loginBtn = (AppCompatButton) findViewById(R.id.login);
+        ImageView imageView = findViewById(R.id.login_user_avatar);
+        usernameText = findViewById(R.id.username);
+        TextView positionText = findViewById(R.id.position);
+        passText = findViewById(R.id.password);
+        loginBtn = findViewById(R.id.login);
 
         userRepo = new UserRepo();
         prefManager = new PrefManager(this);

@@ -55,7 +55,7 @@ public class ImageUtils {
     }
 
     //Get Path Image file
-    public final static String getRealPathFromURI(Context context, Uri contentUri) {
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = {MediaStore.Images.Media.DATA};
@@ -73,7 +73,7 @@ public class ImageUtils {
 
 
     //Bitmap эргүүлэх
-    public final static Bitmap rotate(Bitmap b, float degrees) {
+    public static Bitmap rotate(Bitmap b, float degrees) {
         if (degrees != 0 && b != null) {
             Matrix m = new Matrix();
             m.setRotate(degrees, (float) b.getWidth() / 2,
