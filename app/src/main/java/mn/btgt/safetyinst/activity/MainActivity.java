@@ -3,11 +3,9 @@ package mn.btgt.safetyinst.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -21,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -56,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CustomViewPager viewPager;
     private LinearLayout dotsLayout;
-    private Button btnPrev, btnNext;
+    private Button btnNext;
 
     private ProgressBar progressBar;
     private PrefManager prefManager;
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -81,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
         }
         handler = new Handler(Looper.getMainLooper());
         prefManager = new PrefManager(this);
-        viewPager = (CustomViewPager) findViewById(R.id.pager);
-        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
-        btnPrev = (Button) findViewById(R.id.btn_skip);
-        btnNext = (Button) findViewById(R.id.btn_next);
-        progressBar = (ProgressBar)findViewById(R.id.progressBar2);
+        viewPager = findViewById(R.id.pager);
+        dotsLayout = findViewById(R.id.layoutDots);
+        Button btnPrev = findViewById(R.id.btn_skip);
+        btnNext = findViewById(R.id.btn_next);
+        progressBar = findViewById(R.id.progressBar2);
         SNoteRepo sNoteRepo = new SNoteRepo();
 
         sNotes = sNoteRepo.selectAll();
@@ -252,15 +249,15 @@ public class MainActivity extends AppCompatActivity {
             assert layoutInflater != null;
             View view = layoutInflater.inflate(R.layout.snote_viewer, container, false);
 
-            collapsingToolbar = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+            collapsingToolbar = view.findViewById(R.id.collapsing_toolbar);
             collapsingToolbar.setTitle(sNotes.get(position).getName());
-            imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
-            noteTitle = (TextView) view.findViewById(R.id.noteTitle);
-            noteInfo = (WebView) view.findViewById(R.id.noteInfo);
+            imgPreview = view.findViewById(R.id.imgPreview);
+            noteTitle = view.findViewById(R.id.noteTitle);
+            noteInfo = view.findViewById(R.id.noteInfo);
             imageLoader = new ImageLoader(MainActivity.this);
 //            imageLoader.DisplayImage(SAFCONSTANT.WEB_URL+"/upload/300x300/"+sNotes.select(position).getVoiceData(), imgPreview);
             imageLoader.DisplayImage("http://www.zasag.mn/uploads/201310/news/files/d5c04c615f75bad6576c752b3b27d8c0.jpeg", imgPreview);
-            coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
+            coordinatorLayout = findViewById(R.id.main_content);
             noteTitle.setText(sNotes.get(position).getName());
             prefManager.setSnoteId(sNotes.get(position).getId());
             prefManager.setSnoteName(sNotes.get(position).getName());
@@ -269,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
             noteInfo.getSettings().setJavaScriptEnabled(true);
             noteInfo.getSettings().setDefaultTextEncodingName("UTF-8");
 
-            nestedScrollView = (NestedScrollView) view.findViewById(R.id.sclDetail);
+            nestedScrollView = view.findViewById(R.id.sclDetail);
             nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @SuppressLint("ClickableViewAccessibility")
                 @Override

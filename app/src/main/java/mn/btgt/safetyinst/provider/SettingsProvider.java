@@ -66,7 +66,6 @@ public class SettingsProvider extends ContentProvider{
         return c;
     }
 
-
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {

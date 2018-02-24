@@ -1,5 +1,6 @@
 package mn.btgt.safetyinst.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,7 +60,6 @@ import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.SignDataRepo;
 import mn.btgt.safetyinst.utils.CameraErrorCallback;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
-import mn.btgt.safetyinst.utils.DbBitmap;
 import mn.btgt.safetyinst.utils.EscPosPrinter;
 import mn.btgt.safetyinst.utils.ImageUtils;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -112,7 +112,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     private Handler handler;
     private FaceDetectThread detectThread = null;
     private int prevSettingWidth;
-    private int prevSettingHeight;
     private android.media.FaceDetector fdet;
 
     private FaceResult faces[];
@@ -121,14 +120,13 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private String BUNDLE_CAMERA_ID = "camera";
 
+    @SuppressLint("UseSparseArrays")
     private HashMap<Integer, Integer> facesCount = new HashMap<>();
     private RecyclerView recyclerView;
     private ImagePreviewAdapter imagePreviewAdapter;
-    private ArrayList<Bitmap> facesBitmap;
 
     SignData userSigned;
 
-    private SharedPreferences sharedPrefs;
     SignDataRepo signDataRepo;
     SettingsRepo settingsRepo;
 
@@ -145,19 +143,20 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     /**
      * UI болон нүүрний таних үйл явцыг эхлүүлж байна.
      */
+    @SuppressLint("SimpleDateFormat")
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
         setContentView(R.layout.activity_face_detect);
 
-        mView = (SurfaceView) findViewById(R.id.surfaceview);
+        mView = findViewById(R.id.surfaceview);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         mFaceView = new FaceOverlayView(this);
         addContentView(mFaceView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -192,7 +191,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         AppCompatButton clearBtn = findViewById(R.id.clear);
         final TextView textView = findViewById(R.id.gestureTextView);
 
-        sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
+        SharedPreferences sharedPrefs = getSharedPreferences(SAFCONSTANT.SHARED_PREF_NAME, MODE_PRIVATE);
         String last_printer_address = sharedPrefs.getString(SAFCONSTANT.PREF_PRINTER_ADDRESS, "");
 
         settingsRepo = new SettingsRepo();
@@ -273,7 +272,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         userSigned.setPhotoName(photoName);
         userSigned.setPhoto(btUserPhoto);
         userSigned.setSignName(signName);
-        userSigned.setSignData(DbBitmap.getBytes(bmSignature));
+        userSigned.setSignData(ImageUtils.getBytes(bmSignature));
         userSigned.setSendStatus("0");
         signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
@@ -596,12 +595,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         Log.e(TAG, "previewWidth" + previewWidth);
         Log.e(TAG, "previewHeight" + previewHeight);
 
-        /**
-         * Calculate size to scale full frame bitmap to smaller bitmap
-         * Detect face in scaled bitmap have high performance than full bitmap.
-         * The smaller image size -> detect faster, but distance to detect face shorter,
-         * so calculate the size follow your purpose
-         */
+        int prevSettingHeight;
         if (previewWidth / 4 > 360) {
             prevSettingWidth = 360;
             prevSettingHeight = 270;
@@ -821,7 +815,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                                     handler.post(new Runnable() {
                                         public void run() {
                                             imagePreviewAdapter.add(faceCroped);
-                                            btUserPhoto = DbBitmap.getBytes(faceCroped);
+                                            btUserPhoto = ImageUtils.getBytes(faceCroped);
                                             isImageCapture = true;
                                         }
                                     });
@@ -857,7 +851,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private void resetData() {
         if (imagePreviewAdapter == null) {
-            facesBitmap = new ArrayList<>();
+            ArrayList<Bitmap> facesBitmap = new ArrayList<>();
             imagePreviewAdapter = new ImagePreviewAdapter(FaceDetectActivity.this, facesBitmap, new ImagePreviewAdapter.ViewHolder.OnItemClickListener() {
                 @Override
                 public void onClick(View v, int position) {

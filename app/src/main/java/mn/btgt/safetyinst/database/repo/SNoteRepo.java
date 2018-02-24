@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.database.DatabaseHelper;
 import mn.btgt.safetyinst.database.DatabaseManager;
 import mn.btgt.safetyinst.database.model.SNote;
 
@@ -19,10 +18,8 @@ import mn.btgt.safetyinst.database.model.SNote;
 
 public class SNoteRepo {
 
-    private SNote sNote;
-
     public SNoteRepo() {
-        sNote = new SNote();
+        SNote sNote = new SNote();
     }
 
     public static String create(){

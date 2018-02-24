@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.database.DatabaseHelper;
 import mn.btgt.safetyinst.database.DatabaseManager;
 import mn.btgt.safetyinst.database.model.User;
 /**
@@ -18,9 +17,8 @@ import mn.btgt.safetyinst.database.model.User;
 
 public class UserRepo {
 
-    private User user;
     public UserRepo() {
-        user = new User();
+        User user = new User();
     }
 
     public static String create(){

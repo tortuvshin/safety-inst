@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.database.DatabaseHelper;
 import mn.btgt.safetyinst.database.DatabaseManager;
 import mn.btgt.safetyinst.database.model.SignData;
 
@@ -19,10 +18,8 @@ import mn.btgt.safetyinst.database.model.SignData;
 
 public class SignDataRepo {
 
-    private SignData signData;
-
     public SignDataRepo() {
-        signData = new SignData();
+        SignData signData = new SignData();
     }
 
     public static String create(){

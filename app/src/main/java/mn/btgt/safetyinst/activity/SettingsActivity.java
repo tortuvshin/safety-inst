@@ -1,8 +1,8 @@
 package mn.btgt.safetyinst.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
     private String fontEncode;
     private String fontSize;
     private EditText fontSizeEditText;
+    @SuppressLint("StaticFieldLeak")
     public static ToggleButton togglePrinter;
 
     @Override
@@ -47,11 +48,11 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Тохиргоо");
         }
 
-        fontSizeEditText = (EditText) findViewById(R.id.txtFont);
+        fontSizeEditText = findViewById(R.id.txtFont);
         AppCompatButton saveBtn = findViewById(R.id.saveSettings);
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
-        togglePrinter= (ToggleButton) findViewById(R.id.toggleButtonPrinter);
+        togglePrinter= findViewById(R.id.toggleButtonPrinter);
         settingsRepo = new SettingsRepo();
 
         try {
@@ -60,10 +61,10 @@ public class SettingsActivity extends AppCompatActivity {
             fontEncode = String.valueOf(settingsRepo.select(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE));
 
             if (fontEncode.equals("ASCII")) {
-                RadioButton ac = (RadioButton) findViewById(R.id.fontASCII);
+                RadioButton ac = findViewById(R.id.fontASCII);
                 ac.setChecked(true);
             } else {
-                RadioButton lt = (RadioButton) findViewById(R.id.fontLATIN);
+                RadioButton lt = findViewById(R.id.fontLATIN);
                 lt.setChecked(true);
             }
         } catch (Exception e){
@@ -105,7 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (SAFCONSTANT.checkPrinter() == true){
+        if (SAFCONSTANT.checkPrinter()){
             togglePrinter.setChecked(true);
         }else{
             togglePrinter.setChecked(false);
@@ -113,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void rgOnchanged(){
-        RadioGroup radioFont = (RadioGroup) findViewById(R.id.groupFontSelect);
+        RadioGroup radioFont = findViewById(R.id.groupFontSelect);
         radioFont.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -136,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (fontSizeEditText.getText().length() >0) {
             fontSize = fontSizeEditText.getText().toString();
-            List<Settings> SList = new ArrayList<Settings>();
+            List<Settings> SList = new ArrayList<>();
             SList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_SIZE, fontSize));
             SList.add(new Settings(SAFCONSTANT.SETTINGS_PRINTER_FONT_ENCODE, fontEncode));
             settingsRepo.insertList(SList);

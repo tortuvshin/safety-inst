@@ -20,19 +20,11 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="AlertDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowAnimationStyle">@style/AlertDialogAnimation</item>
     </style>
 
-    <style name="AlertDialogAnimation"></style>
+    <style name="AlertDialogAnimation" />
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 </resources>

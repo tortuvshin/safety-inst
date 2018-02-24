@@ -45,10 +45,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
             Typeface roboto = Typeface.createFromAsset(context.getAssets(),  "fonts/Roboto-Regular.ttf");
             Typeface robotoLight = Typeface.createFromAsset(context.getAssets(),  "fonts/Roboto-Light.ttf");
 
-            cardView = (CardView) v.findViewById(R.id.user_card_view);
-            imageView = (ImageView) v.findViewById(R.id.user_img);
-            mTextView = (TextView) v.findViewById(R.id.username_text);
-            mPosText = (TextView) v.findViewById(R.id.position_text);
+            cardView = v.findViewById(R.id.user_card_view);
+            imageView = v.findViewById(R.id.user_img);
+            mTextView = v.findViewById(R.id.username_text);
+            mPosText = v.findViewById(R.id.position_text);
             mTextView.setTypeface(roboto);
             mPosText.setTypeface(robotoLight);
         }

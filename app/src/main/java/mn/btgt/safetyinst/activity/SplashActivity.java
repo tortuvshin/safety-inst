@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.repo.SettingsRepo;
@@ -30,7 +29,6 @@ import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
-import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -84,6 +82,9 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Вэбээс хэрэглэгч, зааварчилгаа, тохиргооны мэдээлэл зэргийг татаж локал баазруу хадгална
+     */
     public void connectServer() {
 
         OkHttpClient client = new OkHttpClient();
@@ -148,7 +149,7 @@ public class SplashActivity extends AppCompatActivity {
                                 if (setting.length() > 0) {
                                     SettingsRepo settingsRepo = new SettingsRepo();
 
-                                    List<Settings> settingsList = new ArrayList<Settings>();
+                                    List<Settings> settingsList = new ArrayList<>();
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_COMPANY, setting.getString("comp")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_DEPARTMENT, setting.getString("comp")));
                                     settingsList.add(new Settings(SAFCONSTANT.SETTINGS_IMEI, SAFCONSTANT.getImei(SplashActivity.this)));
@@ -202,9 +203,6 @@ public class SplashActivity extends AppCompatActivity {
                                         user.setLastSigned("");
                                         userRepo.insert(user);
                                     }
-                                    if (users.length() > 1)
-                                        openSomeActivity(LoginListActivity.class, true);
-                                        return;
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
@@ -215,7 +213,12 @@ public class SplashActivity extends AppCompatActivity {
                                 }
 
                                 if (setting.getString("error").equals("0")) {
-                                    openSomeActivity(LoginImeiActivity.class, true);
+
+                                    if (users.length() > 1) {
+                                        openSomeActivity(LoginListActivity.class, true);
+                                    } else {
+                                        openSomeActivity(LoginImeiActivity.class, true);
+                                    }
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.error_server_connection, Toast.LENGTH_LONG).show();
                                 }

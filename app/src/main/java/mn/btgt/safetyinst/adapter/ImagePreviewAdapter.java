@@ -70,7 +70,6 @@ public class ImagePreviewAdapter extends
         return position;
     }
 
-
     public void add(Bitmap bitmap) {
         insert(bitmap, bitmaps.size());
     }
@@ -116,8 +115,8 @@ public class ImagePreviewAdapter extends
 
         public ViewHolder(View itemView, OnItemClickListener onItemClickListenerListener) {
             super(itemView);
-            this.layoutCheck = (RelativeLayout) itemView.findViewById(R.id.layoutCheck);
-            this.imgPreview = (ImageView) itemView.findViewById(R.id.imagePreview);
+            this.layoutCheck = itemView.findViewById(R.id.layoutCheck);
+            this.imgPreview = itemView.findViewById(R.id.imagePreview);
             this.onItemClickListenerListener = onItemClickListenerListener;
             itemView.setOnClickListener(this);
         }

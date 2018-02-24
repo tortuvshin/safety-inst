@@ -12,12 +12,25 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import mn.btgt.safetyinst.database.model.FaceResult;
 
 
 public class ImageUtils {
+
+    // Bitmap-ийг byteArray хөрвүүлнэ
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    //ByteArray-ийг bitmap руу хөрвүүлнэ
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
 
     public static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -42,11 +55,12 @@ public class ImageUtils {
     }
 
     //Get Path Image file
-    public final static String getRealPathFromURI(Context context, Uri contentUri) {
+    public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = {MediaStore.Images.Media.DATA};
             cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+            assert cursor != null;
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -59,7 +73,7 @@ public class ImageUtils {
 
 
     //Bitmap эргүүлэх
-    public final static Bitmap rotate(Bitmap b, float degrees) {
+    public static Bitmap rotate(Bitmap b, float degrees) {
         if (degrees != 0 && b != null) {
             Matrix m = new Matrix();
             m.setRotate(degrees, (float) b.getWidth() / 2,

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="mn.btgt.safetyinst">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -23,7 +24,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/AppFullScreen" />
@@ -42,13 +45,12 @@
         <activity
             android:name=".activity.LoginListActivity"
             android:theme="@style/AppFullScreen" />
-        <activity android:name=".activity.AddInfoActivity" />
 
         <provider
             android:name=".provider.SettingsProvider"
             android:authorities="mn.btgt.safetyinst.provider.SettingsProvider"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
         </provider>
 
         <activity

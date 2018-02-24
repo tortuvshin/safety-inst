@@ -18,10 +18,8 @@ import mn.btgt.safetyinst.database.model.Settings;
 
 public class SettingsRepo {
 
-    private Settings settings;
-
     public SettingsRepo() {
-        settings = new Settings();
+        Settings settings = new Settings();
     }
 
     public static String create(){
@@ -116,6 +114,7 @@ public class SettingsRepo {
         DatabaseManager.getInstance().closeDatabase();
         return settings;
     }
+
     public int update(Settings settings) {
         if (settings == null) {
             return -1;

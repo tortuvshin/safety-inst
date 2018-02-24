@@ -105,7 +105,7 @@ public class EscPosPrinter {
     private static final List<String> pattern = new ArrayList<>(Arrays.asList("1", "X", "0"));
     public static final String TAG = "ESCPOSPrinter";
     static {
-        Hashtable<String, String> aMap = new Hashtable<String, String>();
+        Hashtable<String, String> aMap = new Hashtable<>();
         aMap.put("Ё", "YO");
         aMap.put("Й", "I");
         aMap.put("Ц", "C");
@@ -180,7 +180,7 @@ public class EscPosPrinter {
     }
 
     static {
-        Hashtable<Integer, Integer> spec_map = new Hashtable<Integer, Integer>();
+        Hashtable<Integer, Integer> spec_map = new Hashtable<>();
         spec_map.put(1025, 168); // ТОМ Ё
         spec_map.put(1105, 184); // Жижиш ё
 
@@ -206,13 +206,13 @@ public class EscPosPrinter {
     private int codepage = 17; // LATIN, ASCII
     private  boolean print_image = true;
     public EscPosPrinter(){  // test Mode
-        this.line_buffers = new ArrayList<byte[]>();
+        this.line_buffers = new ArrayList<>();
         this.font_converter = "ASCII";
         this.reset();
     }
     public EscPosPrinter(int vendorId, int productId) {
         // TODO Profiles
-        this.line_buffers = new ArrayList<byte[]>();
+        this.line_buffers = new ArrayList<>();
         this.font_converter = "LATIN";
         this.cut_paper_part = "PARTIAL";
         this.reset();
@@ -220,7 +220,7 @@ public class EscPosPrinter {
     public EscPosPrinter(String font_converter, int printer_codepage, int showLogo) {
         // TODO Profiles
         Log.d("EscPos Printer ","font : "+font_converter + " codepage : "+printer_codepage+ " showLogo : "+showLogo);
-        this.line_buffers = new ArrayList<byte[]>();
+        this.line_buffers = new ArrayList<>();
         this.font_converter = font_converter;
         this.cut_paper_part = "PARTIAL";
         this.codepage = printer_codepage;
@@ -426,7 +426,7 @@ public class EscPosPrinter {
     }
 
     public void image(Bitmap bitmap, int width, int height) {
-        if (this.print_image == true){
+        if (this.print_image){
             int[] imBorder = checkImageSize(width);
             String imLeft = "";
             String imRight = "";
@@ -514,8 +514,8 @@ public class EscPosPrinter {
                 list[0] = imageBorder / 2;
                 list[1] = imageBorder / 2;
             } else {
-                list[0] = Integer.valueOf(imageBorder / 2);
-                list[1] = Integer.valueOf(imageBorder / 2) + 1;
+                list[0] = imageBorder / 2;
+                list[1] = imageBorder / 2 + 1;
             }
         }
         return list;
@@ -549,13 +549,14 @@ public class EscPosPrinter {
         System.out.println("[" + direction + "] " + sb.toString());
     }
 
-
     public String cutAndRigthFill(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
+            StringBuilder stringBuilder = new StringBuilder(string);
             for (int i = 0; i < gap; i++) {
-                string += " ";
+                stringBuilder.append(" ");
             }
+            string = stringBuilder.toString();
         } else {
             string = string.substring(0, length);
         }
@@ -566,9 +567,11 @@ public class EscPosPrinter {
     public String leftPadding(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
+            StringBuilder stringBuilder = new StringBuilder(string);
             for (int i = 0; i < gap; i++) {
-                string = " " + string;
+                stringBuilder.insert(0, " ");
             }
+            string = stringBuilder.toString();
         }
         return string;
     }
@@ -576,9 +579,11 @@ public class EscPosPrinter {
     public String rightPadding(String string, int length) {
         if (string.length() < length) {
             int gap = length - string.length();
+            StringBuilder stringBuilder = new StringBuilder(string);
             for (int i = 0; i < gap; i++) {
-                string += " ";
+                stringBuilder.append(" ");
             }
+            string = stringBuilder.toString();
         }
         return string;
     }

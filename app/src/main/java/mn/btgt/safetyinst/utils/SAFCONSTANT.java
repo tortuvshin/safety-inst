@@ -10,9 +10,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -22,10 +19,6 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import mn.btgt.safetyinst.activity.DeviceListActivity;
 import mn.btgt.safetyinst.activity.SettingsActivity;
@@ -67,9 +60,10 @@ public class SAFCONSTANT {
     public static final int MESSAGE_READ = 3;
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
-    public static Context my_context;
+    @SuppressLint("StaticFieldLeak")
+    private static Context my_context;
     private static BluetoothAdapter mBluetoothAdapter;
-    public static BluetoothPrintService mPrintService;
+    private static BluetoothPrintService mPrintService;
 
 
     public static String getSecretCode(String imei, String time){
@@ -94,7 +88,7 @@ public class SAFCONSTANT {
 
     @NonNull
     public static String getAndroiId(Context myContext){
-        String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+        @SuppressLint("HardwareIds") String androidId = Settings.Secure.getString(myContext.getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("ANDROID ID", "ID: "+ androidId);
         return androidId == null ? "915d19ef8b0e30b2" : androidId;
     }
@@ -110,6 +104,7 @@ public class SAFCONSTANT {
         }
     }
 
+    @SuppressLint("HardwareIds")
     public static String getImei(Context myContext) {
         TelephonyManager mngr = (TelephonyManager) myContext.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -118,19 +113,6 @@ public class SAFCONSTANT {
         }
         assert mngr != null;
         return mngr.getDeviceId() == null ? "35451605332605" : mngr.getDeviceId();
-    }
-
-    public static boolean isNumeric(String str)
-    {
-        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public static String longToStrDate(long longDate){
-        Date date=new Date(longDate);
-        SimpleDateFormat df2 = new SimpleDateFormat("yyyy/MM/dd");
-        String dateText = df2.format(date);
-        return dateText;
     }
 
     @SuppressLint("HandlerLeak")
@@ -195,7 +177,7 @@ public class SAFCONSTANT {
                 SharedPreferences.Editor editor = act.getSharedPreferences(
                         SAFCONSTANT.SHARED_PREF_NAME, act.MODE_PRIVATE).edit();
                 editor.putString(SAFCONSTANT.PREF_PRINTER_ADDRESS, printer_address);
-                editor.commit();
+                editor.apply();
 
                 last_printer_address = printer_address;
             }

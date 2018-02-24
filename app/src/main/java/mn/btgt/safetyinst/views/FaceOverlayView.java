@@ -1,6 +1,3 @@
-// Copyright (c) Philipp Wagner. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
 package mn.btgt.safetyinst.views;
 
 import android.annotation.SuppressLint;
@@ -30,7 +27,6 @@ public class FaceOverlayView extends View {
     private int previewWidth;
     private int previewHeight;
     private FaceResult[] mFaces;
-    private double fps;
     private boolean isFront = false;
 
     public FaceOverlayView(Context context) {
@@ -59,7 +55,7 @@ public class FaceOverlayView extends View {
     }
 
     public void setFPS(double fps) {
-        this.fps = fps;
+        double fps1 = fps;
     }
 
     public void setFaces(FaceResult[] faces) {
@@ -123,7 +119,7 @@ public class FaceOverlayView extends View {
             canvas.restore();
         }
 
-        DecimalFormat df2 = new DecimalFormat(".##");
+//        DecimalFormat df2 = new DecimalFormat(".##");
 //        canvas.drawText("Detected_Frame/s: " + df2.format(fps) + " @ " + previewWidth + "x" + previewHeight, mTextPaint.getTextSize(), mTextPaint.getTextSize(), mTextPaint);
     }
 
