@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import mn.btgt.safetyinst.database.model.FaceResult;
 
 /**
- * View which displays a bitmap containing a face along with overlay graphics that identify the
- * locations of detected facial landmarks.
+ * Хүний царай илэрсэн тохиолдолд тухайн хэсгийг харуулах
  */
 public class FaceView extends View {
     private static final float ID_TEXT_SIZE = 60.0f;
@@ -30,18 +29,12 @@ public class FaceView extends View {
         super(context, attrs);
     }
 
-    /**
-     * Sets the bitmap background and the associated face detections.
-     */
     public void setContent(Bitmap bitmap, ArrayList<FaceResult> faces) {
         mBitmap = bitmap;
         mFaces = faces;
         invalidate();
     }
 
-    /**
-     * Draws the bitmap background and the associated face landmarks.
-     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -51,10 +44,6 @@ public class FaceView extends View {
         }
     }
 
-    /**
-     * Draws the bitmap background, scaled to the device size.  Returns the scale for future use in
-     * positioning the facial landmark graphics.
-     */
     private double drawBitmap(Canvas canvas) {
         double viewWidth = canvas.getWidth();
         double viewHeight = canvas.getHeight();
