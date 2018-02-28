@@ -20,7 +20,8 @@
             android:id="@+id/login_user_avatar"
             app:srcCompat="@drawable/ic_account_circle_black"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/user_image" />
 
         <TextView
             android:id="@+id/username"

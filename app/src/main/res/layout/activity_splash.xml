@@ -15,7 +15,8 @@
         android:background="@color/white"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"/>
+        android:layout_marginTop="60dp"
+        android:contentDescription="@string/company_logo" />
 
     <TextView
         android:layout_width="wrap_content"
