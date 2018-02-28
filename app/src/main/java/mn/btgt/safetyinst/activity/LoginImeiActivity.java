@@ -51,9 +51,11 @@ public class LoginImeiActivity extends AppCompatActivity {
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
 
-        Intent iGet = getIntent();
+        Intent iGet = getIntent(); // Mercury дээрээс Intent ээр ирсэн өгөгдөл
 
+        // Mercury-ээс ХАБ-руу дамжиж ирсэн бол шууд зааварчилгаа харуулна
         if (iGet.getStringExtra("username") == null){
+            // Ажилтнуудын жагсаалтаас сонгосон хүний id
             if (iGet.getStringExtra("user_id") != null){
                 int id = Integer.parseInt(iGet.getStringExtra("user_id"));
                 User user = userRepo.select(id);

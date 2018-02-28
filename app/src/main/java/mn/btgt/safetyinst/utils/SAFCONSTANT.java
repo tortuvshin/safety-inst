@@ -146,6 +146,9 @@ public class SAFCONSTANT {
                 Toast.makeText(act.getApplicationContext(), "No bluetooth adapter available", Toast.LENGTH_LONG).show();
             } else if (!mBluetoothAdapter.isEnabled()) {
                 Toast.makeText(act.getApplicationContext(), "bluetooth -г асаана уу", Toast.LENGTH_LONG).show();
+                Intent intentOpenBluetoothSettings = new Intent();
+                intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
+                act.startActivity(intentOpenBluetoothSettings);
             }  else if ( mPrintService !=null && mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED) {
                 Log.d("bt printer","connected baina");
             }   else{
@@ -164,7 +167,7 @@ public class SAFCONSTANT {
         if (mPrintService == null)
             mPrintService = new BluetoothPrintService(act, mHandler);
         Intent serverIntent = null;
-        if (printer_address == null || printer_address.length() == 0 || SAFCONSTANT.last_printer_address == "") {
+        if (printer_address == null || printer_address.length() == 0 || SAFCONSTANT.last_printer_address.equals("")) {
             serverIntent = new Intent(act, DeviceListActivity.class);
             act.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
             Toast.makeText(act.getApplicationContext(), "Bluetooth printer not selected", Toast.LENGTH_LONG).show();

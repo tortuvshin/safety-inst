@@ -57,7 +57,7 @@ public class SettingsProvider extends ContentProvider{
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
-        if (sortOrder == null || sortOrder == "") {
+        if (sortOrder == null || sortOrder.equals("")) {
             sortOrder = Settings.SETTINGS_KEY;
         }
         Cursor c = DatabaseManager.getInstance().openDatabase().query(Settings.TABLE_SETTINGS, projection, selection, selectionArgs, null,

@@ -107,7 +107,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private final CameraErrorCallback mErrorCallback = new CameraErrorCallback();
 
-    private static final int MAX_FACE = 10;
+    private static final int MAX_FACE = 2;
     private boolean isThreadWorking = false;
     private Handler handler;
     private FaceDetectThread detectThread = null;
@@ -491,8 +491,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     }
 
     /**
-     * Releases the resources associated with the camera source, the associated detector, and the
-     * rest of the processing pipeline.
+     * Камер, холбогдох детектор, болон бусад холбоотой нөөцийг цэвэрлэх.
      */
     @Override
     protected void onDestroy() {
@@ -511,7 +510,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         resetData();
 
-        //Find the total number of cameras available
+        //Боломжит бүх камерийн тоог олох
         numberOfCameras = Camera.getNumberOfCameras();
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int i = 0; i < Camera.getNumberOfCameras(); i++) {
@@ -537,11 +536,11 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height) {
-        // We have no surface, return immediately:
+
         if (surfaceHolder.getSurface() == null) {
             return;
         }
-        // Try to stop the current preview:
+        // Camera preview болиулах:
         try {
             mCamera.stopPreview();
         } catch (Exception e) {
@@ -552,12 +551,11 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         setDisplayOrientation();
         setErrorCallback();
 
-        // Create media.FaceDetector
+        // Царай таньсан хэсэгт идэвхжүүлэх
         float aspect = (float) previewHeight / (float) previewWidth;
         fdet = new android.media.FaceDetector(prevSettingWidth, (int) (prevSettingWidth * aspect), MAX_FACE);
-
-        // Everything is configured! Finally start the camera preview again:
-        startPreview();
+        if (facesCount.size() < MAX_FACE)
+            startPreview();
     }
 
     private void setErrorCallback() {
@@ -565,7 +563,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     }
 
     private void setDisplayOrientation() {
-        // Now set the display orientation:
+        // Дэлгэцийн эргэлтийг тохируулах
         mDisplayRotation = Util.getDisplayRotation(FaceDetectActivity.this);
         mDisplayOrientation = Util.getDisplayOrientation(mDisplayRotation, cameraId);
 
@@ -578,10 +576,9 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private void configureCamera(int width, int height) {
         Camera.Parameters parameters = mCamera.getParameters();
-        // Set the PreviewSize and AutoFocus:
+        // PreviewSize болон AutoFocus-г тохируулна
         setOptimalPreviewSize(parameters, width, height);
         setAutoFocus(parameters);
-        // And set the parameters:
         mCamera.setParameters(parameters);
     }
 
@@ -668,7 +665,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         }
     }
 
-    // fps detect face (not FPS of camera)
+    // fps нүүр илрүүлэх (камертай FPS биш)
     long start, end;
     int counter = 0;
     double fps;
@@ -699,13 +696,12 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             int h = (int) (prevSettingWidth * aspect);
 
             Bitmap bitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.RGB_565);
-            // face detection: first convert the image from NV21 to RGB_565
+            // Нүүр илрүүлэх: NV21-ээс RGB_565 руу зургийг хөрвүүлнэ
             YuvImage yuv = new YuvImage(data, ImageFormat.NV21,
                     bitmap.getWidth(), bitmap.getHeight(), null);
-            // TODO: make rect a member and use it for width and height values above
+
             Rect rectImage = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
-            // TODO: use a threaded option or a circular buffer for converting streams?
             //see http://ostermiller.org/convert_java_outputstream_inputstream.html
             ByteArrayOutputStream baout = new ByteArrayOutputStream();
             if (!yuv.compressToJpeg(rectImage, 100, baout)) {
@@ -799,8 +795,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
                         faces_previous[i].set(faces[i].getId(), faces[i].getMidEye(), faces[i].eyesDistance(), faces[i].getConfidence(), faces[i].getPose(), faces[i].getTime());
 
-                        // if focus in a face 5 frame -> take picture face display in RecyclerView
-                        // because of some first frame have low quality
                         if (facesCount.get(idFace) == null) {
                             facesCount.put(idFace, 0);
                         } else {

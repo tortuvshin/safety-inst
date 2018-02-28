@@ -224,6 +224,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Зааварчилгаанууд хуудаслаж харуулах Adapter
+     */
     private class ScreenSlidePagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
 
