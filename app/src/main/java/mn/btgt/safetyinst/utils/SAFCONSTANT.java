@@ -149,6 +149,8 @@ public class SAFCONSTANT {
                 Intent intentOpenBluetoothSettings = new Intent();
                 intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
                 act.startActivity(intentOpenBluetoothSettings);
+                SettingsActivity.togglePrinter.setEnabled(true);
+                SettingsActivity.togglePrinter.setChecked(true);
             }  else if ( mPrintService !=null && mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED) {
                 Log.d("bt printer","connected baina");
             }   else{

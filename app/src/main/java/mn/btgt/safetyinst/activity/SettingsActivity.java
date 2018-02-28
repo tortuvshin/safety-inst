@@ -97,7 +97,6 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     SAFCONSTANT.closeBT();
                 }
-                togglePrinter.setEnabled(false);
             }
         });
 
