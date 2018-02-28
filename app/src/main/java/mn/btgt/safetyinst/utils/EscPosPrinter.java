@@ -336,7 +336,7 @@ public class EscPosPrinter {
     }
 
     public void cut() {
-        if (cut_paper_part == "FULL") {
+        if (cut_paper_part.equals("FULL")) {
             this.raw(PAPER_FULL_CUT);
         } else {
             this.raw(PAPER_PART_CUT);

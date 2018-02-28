@@ -107,7 +107,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
 
     private final CameraErrorCallback mErrorCallback = new CameraErrorCallback();
 
-    private static final int MAX_FACE = 10;
+    private static final int MAX_FACE = 2;
     private boolean isThreadWorking = false;
     private Handler handler;
     private FaceDetectThread detectThread = null;
@@ -554,8 +554,8 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         // Царай таньсан хэсэгт идэвхжүүлэх
         float aspect = (float) previewHeight / (float) previewWidth;
         fdet = new android.media.FaceDetector(prevSettingWidth, (int) (prevSettingWidth * aspect), MAX_FACE);
-
-        startPreview();
+        if (facesCount.size() < MAX_FACE)
+            startPreview();
     }
 
     private void setErrorCallback() {
