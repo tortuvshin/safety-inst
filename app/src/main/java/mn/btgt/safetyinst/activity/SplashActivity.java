@@ -29,6 +29,7 @@ import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
+import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;

@@ -62,4 +62,11 @@
     <string name="company_logo">Байгууллагын лого</string>
     <string name="print">Хэвлэх</string>
     <string name="camera_change">Камер солих</string>
+
+
+    <string name="slide_1_title">SAFETY INST</string>
+    <string name="slide_1_desc"> Аюулгүй ажиллагааны зааварчилгаатай танилцах</string>
+
+    <string name="slide_2_title">SAFETY INST</string>
+    <string name="slide_2_desc">Permission зөвшөөрсөн байх шаардлагатай</string>
 </resources>

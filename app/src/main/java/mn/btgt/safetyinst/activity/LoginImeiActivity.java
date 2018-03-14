@@ -115,8 +115,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                                     finish();
                                 }
                             });
-                }
-                else{
+                } else {
                     passText.setText("");
                     passText.startAnimation(shake);
                     Toast.makeText(LoginImeiActivity.this, R.string.username_pass_incorrect, Toast.LENGTH_SHORT).show();
@@ -125,7 +124,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                 stopManagingCursor(checkedUser);
                 checkedUser.close();
 
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(),
                         R.string.error_database_query,
                         Toast.LENGTH_SHORT).show();
