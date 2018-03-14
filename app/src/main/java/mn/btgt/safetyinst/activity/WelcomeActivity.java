@@ -1,10 +1,13 @@
 package mn.btgt.safetyinst.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +20,33 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.database.model.Settings;
+import mn.btgt.safetyinst.database.model.User;
+import mn.btgt.safetyinst.database.repo.SNoteRepo;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.utils.PrefManager;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Author: Turtuvshin Byambaa.
@@ -113,7 +140,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        prefManager.setLaunch(false);
+        prefManager.setLaunch(true);
         startActivity(new Intent(WelcomeActivity.this, SplashActivity.class));
         finish();
     }
@@ -154,6 +181,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public class MyViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
+        private Button permissionButton;
+        private Button downloadButton;
 
         public MyViewPagerAdapter() {
         }
@@ -162,7 +191,17 @@ public class WelcomeActivity extends AppCompatActivity {
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View view = layoutInflater.inflate(layouts[position], container, false);
+            View view = layoutInflater.inflate(R.layout.welcome_slide1, container, false);
+            permissionButton = view.findViewById(R.id.permissionButton);
+            downloadButton = view.findViewById(R.id.downloadButton);
+
+            permissionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reqPermissions();
+                }
+            });
+
             container.addView(view);
 
             return view;
@@ -184,4 +223,24 @@ public class WelcomeActivity extends AppCompatActivity {
             container.removeView(view);
         }
     }
+
+    public void reqPermissions(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(WelcomeActivity.this,
+                    Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE,
+                        Manifest.permission.READ_PHONE_STATE,
+                }, 0);
+            }
+        }
+    }
+
 }
