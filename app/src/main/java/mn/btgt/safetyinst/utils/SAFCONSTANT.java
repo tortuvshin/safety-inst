@@ -35,7 +35,7 @@ public class SAFCONSTANT {
     public static int    APP_ENV             = 1;
     public static boolean APP_DEBUG          = true;
     public static String APP_NAME            = "iSafe";
-    public static String WEB_URL             = "http://www.mongolgps.com";
+    public static String WEB_URL             = "http://app.gps.mn";
     public static String API_URL             = WEB_URL.concat("/phone.php/safe_settings");
     public static String SEND_URL            = WEB_URL.concat("/phone.php/safe_upload");
     public static String SETTINGS_COMPANY    = "company";
@@ -64,7 +64,6 @@ public class SAFCONSTANT {
     private static Context my_context;
     private static BluetoothAdapter mBluetoothAdapter;
     private static BluetoothPrintService mPrintService;
-
 
     public static String getSecretCode(String imei, String time){
         return MD5_Hash(imei + "-BTGT-" + time);
@@ -112,7 +111,7 @@ public class SAFCONSTANT {
             return "";
         }
         assert mngr != null;
-        return mngr.getDeviceId() == null ? "35451605332605" : mngr.getDeviceId();
+        return mngr.getDeviceId();
     }
 
     @SuppressLint("HandlerLeak")
@@ -124,13 +123,13 @@ public class SAFCONSTANT {
                 case MESSAGE_DEVICE_NAME:
                     // save the connected device's name
                     Toast.makeText(my_context, "BT Printer connected", Toast.LENGTH_SHORT).show();
-                    SettingsActivity.togglePrinter.setChecked(true);
-                    SettingsActivity.togglePrinter.setEnabled(true);
+                    SettingsActivity.switchPrinter.setChecked(true);
+                    SettingsActivity.switchPrinter.setEnabled(true);
                     break;
                 case 2:
                     Toast.makeText(my_context, "BT Printer NOT connect!", Toast.LENGTH_SHORT).show();
-                    SettingsActivity.togglePrinter.setChecked(false);
-                    SettingsActivity.togglePrinter.setEnabled(true);
+                    SettingsActivity.switchPrinter.setChecked(false);
+                    SettingsActivity.switchPrinter.setEnabled(true);
                     last_printer_address = "";
                     break;
             }
@@ -149,8 +148,8 @@ public class SAFCONSTANT {
                 Intent intentOpenBluetoothSettings = new Intent();
                 intentOpenBluetoothSettings.setAction(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS);
                 act.startActivity(intentOpenBluetoothSettings);
-                SettingsActivity.togglePrinter.setEnabled(true);
-                SettingsActivity.togglePrinter.setChecked(true);
+                SettingsActivity.switchPrinter.setEnabled(true);
+                SettingsActivity.switchPrinter.setChecked(true);
             }  else if ( mPrintService !=null && mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED) {
                 Log.d("bt printer","connected baina");
             }   else{
