@@ -29,6 +29,7 @@ import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
+import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -62,24 +63,24 @@ public class SplashActivity extends AppCompatActivity {
 
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
 
-                if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
-                    Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-                    if (userRepo.count() > 1){
-                        openSomeActivity(LoginListActivity.class, true);
-                    } else {
-                        openSomeActivity(LoginImeiActivity.class, true);
-                    }
-                } else {
+        if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
+            Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+            if (userRepo.count() > 1){
+                openSomeActivity(LoginListActivity.class, true);
+            } else {
+                openSomeActivity(LoginImeiActivity.class, true);
+            }
+        } else {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
                     connectServer();
                     long diff = System.currentTimeMillis() - startTime;
                     Logger.d("Сэрвэрээс өгөгдөл татсан хугацаа: "+ Long.toString(diff) + " ms");
                 }
-            }
-        });
+            }, 100);
+        }
     }
 
     /**
@@ -116,7 +117,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
-
+                Logger.json(res);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

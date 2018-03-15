@@ -9,4 +9,24 @@
     <color name="active">#2f32d1</color>
     <color name="black">#000000</color>
     <color name="colorBlackOverlay">#44000000</color>
+
+    <!-- Screens background color-->
+    <color name="bg_screen1">#20d2bb</color>
+    <color name="bg_screen2">#3395ff</color>
+
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen">#262626</color>
+
+    <!-- dots active colors -->
+    <color name="dot_light_screen">#474848</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen</item>
+        <item>@color/dot_light_screen</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>@color/dot_dark_screen</item>
+        <item>@color/dot_dark_screen</item>
+    </array>
 </resources>

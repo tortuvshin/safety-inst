@@ -10,9 +10,11 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -34,8 +36,7 @@ public class SettingsActivity extends AppCompatActivity {
     private String fontSize;
     private EditText fontSizeEditText;
     @SuppressLint("StaticFieldLeak")
-    public static ToggleButton togglePrinter;
-
+    public static Switch switchPrinter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +50,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         fontSizeEditText = findViewById(R.id.txtFont);
-        AppCompatButton saveBtn = findViewById(R.id.saveSettings);
+        final AppCompatButton saveBtn = findViewById(R.id.saveSettings);
         AppCompatButton testBtn = findViewById(R.id.printFontTest);
 
-        togglePrinter= findViewById(R.id.toggleButtonPrinter);
+        switchPrinter = findViewById(R.id.switchPrinter);
         settingsRepo = new SettingsRepo();
 
         try {
@@ -87,28 +88,27 @@ public class SettingsActivity extends AppCompatActivity {
                 printFontTest();
             }
         });
-        togglePrinter.setOnClickListener(new View.OnClickListener() {
 
+        switchPrinter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (togglePrinter.isChecked()) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (switchPrinter.isChecked()) {
                     SAFCONSTANT.findBT(SettingsActivity.this);
-                    togglePrinter.toggle();
+                    switchPrinter.setChecked(true);
                 } else {
                     SAFCONSTANT.closeBT();
                 }
             }
         });
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if (SAFCONSTANT.checkPrinter()){
-            togglePrinter.setChecked(true);
+            switchPrinter.setChecked(true);
         }else{
-            togglePrinter.setChecked(false);
+            switchPrinter.setChecked(false);
         }
     }
 
