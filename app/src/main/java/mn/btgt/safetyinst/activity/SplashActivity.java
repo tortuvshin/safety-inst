@@ -64,6 +64,7 @@ public class SplashActivity extends AppCompatActivity {
         mHandler = new Handler(Looper.getMainLooper());
         Handler handler = new Handler(Looper.getMainLooper());
 
+        //
         if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
             Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
             if (userRepo.count() > 1){
