@@ -23,8 +23,8 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
 /**
  * Author: Turtuvshin Byambaa.
- * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
+ * Нэвтрэх хэсэг
  */
 
 public class LoginImeiActivity extends AppCompatActivity {

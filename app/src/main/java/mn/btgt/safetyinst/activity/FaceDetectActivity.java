@@ -77,8 +77,8 @@ import okhttp3.Response;
 
 /**
  * Author: Turtuvshin Byambaa.
- * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
+ * Зааварчилгаатай танилцсан хэрэглэгчийн зураг гарын үсгийг авч сэрвэрлүү илгээх
  */
 
 public final class FaceDetectActivity extends AppCompatActivity implements SurfaceHolder.Callback, Camera.PreviewCallback {

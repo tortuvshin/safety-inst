@@ -61,6 +61,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 launchHomeScreen();
                 finish();
             }
+        } else {
+            launchHomeScreen();
+            finish();
         }
 
         if (Build.VERSION.SDK_INT >= 21) {

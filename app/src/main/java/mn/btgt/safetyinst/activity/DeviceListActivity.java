@@ -23,6 +23,12 @@ import java.util.Set;
 
 import mn.btgt.safetyinst.R;
 
+/**
+ * Author: Turtuvshin Byambaa.
+ * URL: https://www.github.com/tortuvshin
+ * Printert холбогдсон төхөөрөмжүүдийн жагсаалт харуулах
+ */
+
 public class DeviceListActivity extends Activity {
 
     // Debugging

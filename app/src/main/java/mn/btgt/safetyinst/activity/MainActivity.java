@@ -41,8 +41,8 @@ import mn.btgt.safetyinst.views.CustomViewPager;
 
 /**
  * Author: Turtuvshin Byambaa.
- * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
+ * Зааварчилгаа унших үндсэн цонх
  */
 
 public class MainActivity extends AppCompatActivity {
