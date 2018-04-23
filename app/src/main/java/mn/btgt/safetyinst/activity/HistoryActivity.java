@@ -16,16 +16,18 @@ import java.util.List;
 import mn.btgt.safetyinst.adapter.HistoryAdapter;
 import mn.btgt.safetyinst.adapter.UserListAdapter;
 import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.database.model.SignData;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.database.repo.SignDataRepo;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 
 public class HistoryActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout swipeRefreshLayout = null;
     private Handler mHandler;
-    private SNoteRepo sNoteRepo;
+    private SignDataRepo signDataRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +44,10 @@ public class HistoryActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mHandler = new Handler(Looper.getMainLooper());
-        SNoteRepo sNoteRepo = new SNoteRepo();
-        final List<SNote> sNotes = sNoteRepo.selectAll();
+        SignDataRepo signDataRepo = new SignDataRepo();
+        final List<SignData> signData = signDataRepo.selectAll();
 
-        RecyclerView.Adapter mAdapter = new HistoryAdapter(this, sNotes);
+        RecyclerView.Adapter mAdapter = new HistoryAdapter(this, signData);
         mRecyclerView.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -54,7 +56,7 @@ public class HistoryActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        RecyclerView.Adapter mAdapter = new HistoryAdapter(HistoryActivity.this, sNotes);
+                        RecyclerView.Adapter mAdapter = new HistoryAdapter(HistoryActivity.this, signData);
                         mRecyclerView.setAdapter(mAdapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
