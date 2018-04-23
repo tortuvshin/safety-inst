@@ -35,8 +35,7 @@
             android:theme="@style/AppFullScreen" />
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/AppFullScreen">
-        </activity>
+            android:theme="@style/AppFullScreen"></activity>
         <activity
             android:name=".activity.LoginListActivity"
             android:theme="@style/AppFullScreen" />
@@ -69,9 +68,11 @@
             android:theme="@style/AppFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.HistoryActivity"></activity>
     </application>
 
 </manifest>
