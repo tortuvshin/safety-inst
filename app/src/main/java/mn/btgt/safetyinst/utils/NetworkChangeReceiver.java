@@ -111,8 +111,8 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                                 JSONArray ob = new JSONArray(String.valueOf(res));
                                 JSONObject resp = ob.getJSONObject(0);
 
-                                if (resp.getString("success").equals("1"))
-                                    signData.deleteAll();
+//                                if (resp.getString("success").equals("1"))
+//                                    signData.deleteAll();
 
                                 Toast.makeText(context, R.string.send_info_success, Toast.LENGTH_SHORT).show();
                             } catch (JSONException e) {
