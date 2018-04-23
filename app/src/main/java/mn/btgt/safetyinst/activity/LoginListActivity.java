@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,23 +30,27 @@ import mn.btgt.safetyinst.database.model.User;
 public class LoginListActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
+    private SwipeRefreshLayout swipeRefreshLayout = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_list);
 
-        RecyclerView mRecyclerView = findViewById(R.id.users_recycler_view);
+        final RecyclerView mRecyclerView = findViewById(R.id.users_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeUserList);
+        swipeRefreshLayout.setColorSchemeResources(R.color.bg_screen1, R.color.bg_screen2, R.color.bg_screen3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        TextView compName = findViewById(R.id.company_name);
+        final TextView compName = findViewById(R.id.company_name);
 
         UserRepo userRepo = new UserRepo();
-        SettingsRepo settingsRepo = new SettingsRepo();
+        final SettingsRepo settingsRepo = new SettingsRepo();
 
-        List<User> users = userRepo.selectAll();
+        final List<User> users = userRepo.selectAll();
 
         if (settingsRepo.select("company")!=null)
             compName.setText(settingsRepo.select("company"));
@@ -53,6 +58,19 @@ public class LoginListActivity extends AppCompatActivity {
         RecyclerView.Adapter mAdapter = new UserListAdapter(this, users);
         mRecyclerView.setAdapter(mAdapter);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RecyclerView.Adapter mAdapter = new UserListAdapter(LoginListActivity.this, users);
+                        mRecyclerView.setAdapter(mAdapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
         FloatingActionButton fab = findViewById(R.id.fabSettings);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

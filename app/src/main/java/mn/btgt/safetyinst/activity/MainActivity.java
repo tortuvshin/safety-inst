@@ -14,7 +14,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.adapter.UserListAdapter;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private LinearLayout dotsLayout;
     private Button btnNext;
-
+    private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar progressBar;
     private PrefManager prefManager;
 
@@ -97,10 +100,23 @@ public class MainActivity extends AppCompatActivity {
 
         changeStatusBarColor();
 
-        ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
+        final ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeSnote);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setAdapter(myViewPagerAdapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
