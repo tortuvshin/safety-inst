@@ -29,10 +29,38 @@
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/imei_text"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Imei бүртгэлгүй байна"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/imei"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Imei :"
+        android:layout_marginBottom="15dp"
+        android:textAlignment="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/imei_check_btn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Бүртгэл шалгах"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"/>
 
     <ProgressBar
         style="?android:attr/progressBarStyle"
+        android:id="@+id/splash_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

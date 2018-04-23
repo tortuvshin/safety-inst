@@ -14,7 +14,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -29,20 +31,42 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.adapter.UserListAdapter;
+import mn.btgt.safetyinst.database.model.Settings;
+import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.database.repo.SettingsRepo;
+import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
+import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import mn.btgt.safetyinst.views.CustomViewPager;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Author: Turtuvshin Byambaa.
- * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
+ * Зааварчилгаа унших үндсэн цонх
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -54,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private CustomViewPager viewPager;
     private LinearLayout dotsLayout;
     private Button btnNext;
-
+    private SwipeRefreshLayout swipeRefreshLayout = null;
     private ProgressBar progressBar;
     private PrefManager prefManager;
 
@@ -62,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int progressBarValue = 0;
     private Handler handler;
+    private Handler mHandler;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -80,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
-
+        mHandler = new Handler(Looper.getMainLooper());
         handler = new Handler(Looper.getMainLooper());
         prefManager = new PrefManager(this);
         viewPager = findViewById(R.id.pager);
@@ -97,10 +122,24 @@ public class MainActivity extends AppCompatActivity {
 
         changeStatusBarColor();
 
-        ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
+        final ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeSnote);
+        swipeRefreshLayout.setColorSchemeResources(R.color.bg_screen1, R.color.bg_screen2, R.color.bg_screen3);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSNote();
+                        viewPager.setAdapter(myViewPagerAdapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
         btnPrev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,6 +267,102 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
         }
     }
+
+    public void getSNote() {
+
+        if (!ConnectionDetector.isNetworkAvailable(MainActivity.this)){
+            Toast.makeText(MainActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("time", String.valueOf(System.currentTimeMillis()))
+                .addFormDataPart("imei", SAFCONSTANT.getImei(this))
+                .addFormDataPart("AndroidId", SAFCONSTANT.getAndroiId(this))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(SAFCONSTANT.API_URL)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("app", SAFCONSTANT.APP_NAME)
+                .addHeader("appV", SAFCONSTANT.getAppVersion(this))
+                .addHeader("Imei", SAFCONSTANT.getImei(this))
+                .addHeader("AndroidId", SAFCONSTANT.getAndroiId(this))
+                .addHeader("nuuts", SAFCONSTANT.getSecretCode(SAFCONSTANT.getImei(this), String.valueOf(System.currentTimeMillis())))
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logger.e("Server connection failed : " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                final String res = response.body().string();
+                Logger.json(res);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            JSONArray ob = new JSONArray(String.valueOf(res));
+                            if (ob.length() < 1)
+                                return;
+
+                            JSONObject setting = ob.getJSONObject(0);
+                            JSONArray users = setting.getJSONArray("users");
+                            JSONArray notes = setting.getJSONArray("notes");
+
+                            int success = setting.getInt("success");
+                            int error = setting.getInt("error");
+                            if (success== 0 && error == 900){
+                                Toast.makeText(MainActivity.this,
+                                        getString(R.string.error) + error,
+                                        Toast.LENGTH_SHORT).show();
+                            } else if ( success == 1) {
+
+                                Logger.json(notes.toString());
+
+                                if (notes.length() > 0){
+                                    SNoteRepo sNoteRepo = new SNoteRepo();
+
+                                    sNoteRepo.deleteAll();
+
+                                    for (int i = 0; i < notes.length(); i++) {
+                                        SNote sNote = new SNote();
+                                        sNote.setId(notes.getJSONObject(i).getString("id"));
+                                        sNote.setCategoryId(notes.getJSONObject(i).getString("category_id"));
+                                        sNote.setName(notes.getJSONObject(i).getString("name"));
+                                        sNote.setOrder(notes.getJSONObject(i).getString("orderx"));
+                                        sNote.setFrameType(notes.getJSONObject(i).getInt("frame_type"));
+                                        sNote.setFrameData(notes.getJSONObject(i).getString("frame_data"));
+                                        sNote.setVoiceData("");
+                                        sNote.setTimeout(notes.getJSONObject(i).getInt("timeout"));
+                                        sNoteRepo.insert(sNote);
+                                    }
+
+                                } else {
+                                    Toast.makeText(MainActivity.this, R.string.empty_note, Toast.LENGTH_LONG)
+                                            .show();
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
 
     /**
      * Зааварчилгаанууд хуудаслаж харуулах Adapter

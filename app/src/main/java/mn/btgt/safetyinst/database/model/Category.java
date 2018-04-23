@@ -3,6 +3,7 @@ package mn.btgt.safetyinst.database.model;
 /**
  * Author: Turtuvshin Byambaa.
  * Project: Safety Inst
+ * Ангилал модел
  * URL: https://www.github.com/tortuvshin
  */
 

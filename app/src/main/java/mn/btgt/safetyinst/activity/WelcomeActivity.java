@@ -61,6 +61,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 launchHomeScreen();
                 finish();
             }
+        } else {
+            launchHomeScreen();
+            finish();
         }
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -123,6 +126,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
     }
+
     private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length];
 

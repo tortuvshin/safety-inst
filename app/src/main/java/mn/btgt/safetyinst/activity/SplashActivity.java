@@ -9,6 +9,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
@@ -29,7 +33,6 @@ import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
-import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -49,7 +52,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private Handler mHandler;
     private UserRepo userRepo;
-
+    Button imeiCheck;
+    TextView imeiError, imeiText;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,31 +67,51 @@ public class SplashActivity extends AppCompatActivity {
         userRepo = new UserRepo();
 
         mHandler = new Handler(Looper.getMainLooper());
-        Handler handler = new Handler(Looper.getMainLooper());
 
-        if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
-            Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
-            if (userRepo.count() > 1){
-                openSomeActivity(LoginListActivity.class, true);
-            } else {
-                openSomeActivity(LoginImeiActivity.class, true);
+        imeiCheck = findViewById(R.id.imei_check_btn);
+        imeiError = findViewById(R.id.imei_text);
+        imeiText = findViewById(R.id.imei);
+        imeiError.setVisibility(View.INVISIBLE);
+        imeiText.setVisibility(View.INVISIBLE);
+        imeiCheck.setVisibility(View.INVISIBLE);
+        progressBar = findViewById(R.id.splash_progress);
+        //
+        checkUser();
+        imeiCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                connectServer();
             }
-        } else {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    connectServer();
-                    long diff = System.currentTimeMillis() - startTime;
-                    Logger.d("Сэрвэрээс өгөгдөл татсан хугацаа: "+ Long.toString(diff) + " ms");
-                }
-            }, 100);
-        }
+        });
     }
 
+    public void notUser(){
+
+        progressBar.setVisibility(View.INVISIBLE);
+        imeiError.setVisibility(View.VISIBLE);
+        imeiText.setVisibility(View.VISIBLE);
+        imeiCheck.setVisibility(View.VISIBLE);
+        imeiError.setText(R.string.imei_unlisted);
+        imeiText.setText("Таны imei: ".concat(SAFCONSTANT.getImei(SplashActivity.this)));
+    }
+
+
+    private void checkUser() {
+        if (userRepo.count() > 1){
+            openSomeActivity(LoginListActivity.class, true);
+        } else {
+           notUser();
+        }
+    }
     /**
      * Вэбээс хэрэглэгч, зааварчилгаа, тохиргооны мэдээлэл зэргийг татаж локал баазруу хадгална
      */
     public void connectServer() {
+
+        if (!ConnectionDetector.isNetworkAvailable(SplashActivity.this)){
+            Toast.makeText(SplashActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new MultipartBody.Builder()
@@ -137,7 +162,7 @@ public class SplashActivity extends AppCompatActivity {
                                 Toast.makeText(SplashActivity.this,
                                         R.string.imei_unlisted,
                                         Toast.LENGTH_SHORT).show();
-                                openSomeActivity(LoginImeiActivity.class, true);
+                                notUser();
                                 return;
                             } else if (success== 0 && error == 900){
                                 Toast.makeText(SplashActivity.this,
@@ -218,7 +243,7 @@ public class SplashActivity extends AppCompatActivity {
                                     if (users.length() > 1) {
                                         openSomeActivity(LoginListActivity.class, true);
                                     } else {
-                                        openSomeActivity(LoginImeiActivity.class, true);
+                                        notUser();
                                     }
                                 } else {
                                     Toast.makeText(SplashActivity.this, R.string.error_server_connection, Toast.LENGTH_LONG).show();
@@ -228,7 +253,7 @@ public class SplashActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(SplashActivity.this, R.string.imei_unlisted, Toast.LENGTH_LONG).show();
-                            openSomeActivity(LoginImeiActivity.class, true);
+                            notUser();
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
