@@ -3,6 +3,7 @@ package mn.btgt.safetyinst.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -70,7 +71,7 @@ public class LoginListActivity extends AppCompatActivity {
         final TextView compName = findViewById(R.id.company_name);
 
         userRepo = new UserRepo();
-        mHandler = new Handler(getMainLooper());
+        mHandler = new Handler(Looper.getMainLooper());
         UserRepo userRepo = new UserRepo();
         final SettingsRepo settingsRepo = new SettingsRepo();
 
