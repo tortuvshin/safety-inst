@@ -67,7 +67,6 @@ public class SplashActivity extends AppCompatActivity {
         userRepo = new UserRepo();
 
         mHandler = new Handler(Looper.getMainLooper());
-        Handler handler = new Handler(Looper.getMainLooper());
 
         imeiCheck = findViewById(R.id.imei_check_btn);
         imeiError = findViewById(R.id.imei_text);
