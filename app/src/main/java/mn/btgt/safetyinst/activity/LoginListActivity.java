@@ -97,11 +97,18 @@ public class LoginListActivity extends AppCompatActivity {
                 }, 1000);
             }
         });
-        FloatingActionButton fab = findViewById(R.id.fabSettings);
-        fab.setOnClickListener(new View.OnClickListener() {
+        com.github.clans.fab.FloatingActionButton historyFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.history_fab);
+        historyFab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-               startActivity(new Intent(LoginListActivity.this, SettingsActivity.class));
+            public void onClick(View v) {
+                startActivity(new Intent(LoginListActivity.this, HistoryActivity.class));
+            }
+        });
+        com.github.clans.fab.FloatingActionButton settingsFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.settings_fab);
+        settingsFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginListActivity.this, SettingsActivity.class));
             }
         });
     }

@@ -407,8 +407,8 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
 
-                            if (resp.getString("success").equals("1"))
-                                signDataRepo.deleteAll();
+//                            if (resp.getString("success").equals("1"))
+//                                signDataRepo.deleteAll();
 
                             Toast.makeText(FaceDetectActivity.this, R.string.send_info_success, Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
