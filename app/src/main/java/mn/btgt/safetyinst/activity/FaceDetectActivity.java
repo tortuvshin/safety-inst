@@ -263,7 +263,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         });
     }
 
-    private  void saveSignData(){
+    private void saveSignData(){
         userSigned.setsNoteId(prefManager.getSnoteId());
         userSigned.setUserId(prefManager.getUserId());
         userSigned.setViewDate(dateFormat.format(calendar.getTime()));

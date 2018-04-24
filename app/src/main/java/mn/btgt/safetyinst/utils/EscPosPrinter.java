@@ -224,8 +224,7 @@ public class EscPosPrinter {
         this.font_converter = font_converter;
         this.cut_paper_part = "PARTIAL";
         this.codepage = printer_codepage;
-        if (showLogo == 1) this.print_image = true;
-        else this.print_image = false;
+        this.print_image = showLogo == 1;
         this.reset();
     }
     public  void  clearData() {
