@@ -28,13 +28,13 @@ import mn.btgt.safetyinst.utils.Util;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     private final Context context;
     private List<SignData> signData;
-    private ImageLoader imageLoader;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private CardView cardView;
         private TextView mTextView;
         private TextView mSnoteText;
+        private TextView timeText;
         private ViewHolder(View v) {
             super(v);
 
@@ -45,6 +45,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             imageView = v.findViewById(R.id.his_img);
             mTextView = v.findViewById(R.id.his_user);
             mSnoteText = v.findViewById(R.id.snote_text);
+            timeText = v.findViewById(R.id.time_text);
             mTextView.setTypeface(roboto);
             mSnoteText.setTypeface(robotoLight);
         }
@@ -53,7 +54,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public HistoryAdapter(Context context, List<SignData> signData) {
         this.context = context;
         this.signData = signData;
-        imageLoader = new ImageLoader(context);
     }
 
     @Override
@@ -71,6 +71,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.imageView.setImageBitmap(ImageUtils.getImage(signData.get(position).getPhoto()));
         holder.mTextView.setText(signData.get(position).getUserName());
         holder.mSnoteText.setText(signData.get(position).getsNoteName());
+        holder.timeText.setText(signData.get(position).getViewDate());
     }
 
     @Override
