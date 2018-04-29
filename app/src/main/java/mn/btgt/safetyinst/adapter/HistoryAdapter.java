@@ -1,16 +1,12 @@
 package mn.btgt.safetyinst.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,12 +14,8 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.activity.LoginImeiActivity;
-import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.SignData;
 import mn.btgt.safetyinst.utils.ImageUtils;
-import mn.btgt.safetyinst.utils.SAFCONSTANT;
-import mn.btgt.safetyinst.utils.Util;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     private final Context context;

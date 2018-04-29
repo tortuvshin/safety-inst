@@ -179,7 +179,7 @@ public class SAFCONSTANT {
             if (!last_printer_address.equals(printer_address)) {
 
                 SharedPreferences.Editor editor = act.getSharedPreferences(
-                        SAFCONSTANT.SHARED_PREF_NAME, act.MODE_PRIVATE).edit();
+                        SAFCONSTANT.SHARED_PREF_NAME, Context.MODE_PRIVATE).edit();
                 editor.putString(SAFCONSTANT.PREF_PRINTER_ADDRESS, printer_address);
                 editor.apply();
 
@@ -196,8 +196,7 @@ public class SAFCONSTANT {
     public static boolean checkPrinter(){
         if (mPrintService == null) return false;
         if (mBluetoothAdapter == null) return false;
-        if (mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED) return true;
-        else return false;
+        return mPrintService.getState() == BluetoothPrintService.STATE_CONNECTED;
     }
 
     public static void sendData(byte[] data) {

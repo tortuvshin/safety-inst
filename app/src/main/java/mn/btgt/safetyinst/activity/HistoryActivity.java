@@ -10,19 +10,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import java.util.List;
 
 import mn.btgt.safetyinst.adapter.HistoryAdapter;
-import mn.btgt.safetyinst.adapter.UserListAdapter;
-import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.SignData;
-import mn.btgt.safetyinst.database.model.User;
-import mn.btgt.safetyinst.database.repo.SNoteRepo;
-import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.SignDataRepo;
-import mn.btgt.safetyinst.database.repo.UserRepo;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -45,7 +38,7 @@ public class HistoryActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeHistory);
+        swipeRefreshLayout = findViewById(R.id.swipeHistory);
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_screen1, R.color.bg_screen2, R.color.bg_screen3);
         mRecyclerView.setLayoutManager(mLayoutManager);
 

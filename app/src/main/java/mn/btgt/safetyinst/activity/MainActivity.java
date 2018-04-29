@@ -16,7 +16,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -40,17 +39,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.adapter.UserListAdapter;
-import mn.btgt.safetyinst.database.model.Settings;
-import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.model.SNote;
-import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
@@ -125,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         final ScreenSlidePagerAdapter myViewPagerAdapter = new ScreenSlidePagerAdapter(sNotes);
         viewPager.setAdapter(myViewPagerAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeSnote);
+        swipeRefreshLayout = findViewById(R.id.swipeSnote);
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_screen1, R.color.bg_screen2, R.color.bg_screen3);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

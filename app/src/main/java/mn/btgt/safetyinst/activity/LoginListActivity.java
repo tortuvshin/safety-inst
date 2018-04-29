@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,14 +20,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.adapter.UserListAdapter;
-import mn.btgt.safetyinst.database.model.SNote;
-import mn.btgt.safetyinst.database.model.Settings;
-import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;
@@ -65,7 +60,7 @@ public class LoginListActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeUserList);
+        swipeRefreshLayout = findViewById(R.id.swipeUserList);
         swipeRefreshLayout.setColorSchemeResources(R.color.bg_screen1, R.color.bg_screen2, R.color.bg_screen3);
         mRecyclerView.setLayoutManager(mLayoutManager);
         final TextView compName = findViewById(R.id.company_name);
@@ -97,14 +92,14 @@ public class LoginListActivity extends AppCompatActivity {
                 }, 1000);
             }
         });
-        com.github.clans.fab.FloatingActionButton historyFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.history_fab);
+        com.github.clans.fab.FloatingActionButton historyFab = findViewById(R.id.history_fab);
         historyFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginListActivity.this, HistoryActivity.class));
             }
         });
-        com.github.clans.fab.FloatingActionButton settingsFab = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.settings_fab);
+        com.github.clans.fab.FloatingActionButton settingsFab = findViewById(R.id.settings_fab);
         settingsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
