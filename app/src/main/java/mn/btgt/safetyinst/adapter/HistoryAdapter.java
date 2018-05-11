@@ -1,6 +1,7 @@
 package mn.btgt.safetyinst.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.model.SignData;
 import mn.btgt.safetyinst.utils.ImageUtils;
@@ -24,9 +24,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private CardView cardView;
-        private TextView mTextView;
-        private TextView mSnoteText;
+        private TextView userText;
+        private TextView noteText;
         private TextView timeText;
+        private ImageView isSendImage;
         private ViewHolder(View v) {
             super(v);
 
@@ -35,11 +36,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
             cardView = v.findViewById(R.id.history_card_view);
             imageView = v.findViewById(R.id.his_img);
-            mTextView = v.findViewById(R.id.his_user);
-            mSnoteText = v.findViewById(R.id.snote_text);
+            userText = v.findViewById(R.id.his_user);
+            noteText = v.findViewById(R.id.snote_text);
             timeText = v.findViewById(R.id.time_text);
-            mTextView.setTypeface(roboto);
-            mSnoteText.setTypeface(robotoLight);
+            isSendImage = v.findViewById(R.id.is_send);
+            isSendImage.setVisibility(View.INVISIBLE);
+            userText.setTypeface(roboto);
+            noteText.setTypeface(robotoLight);
         }
     }
 
@@ -52,7 +55,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.history_item, parent, false);
+                .inflate(R.layout.item_history, parent, false);
         HistoryAdapter.ViewHolder vh = new HistoryAdapter.ViewHolder(v);
         return vh;
     }
@@ -61,9 +64,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
 
         holder.imageView.setImageBitmap(ImageUtils.getImage(signData.get(position).getPhoto()));
-        holder.mTextView.setText(signData.get(position).getUserName());
-        holder.mSnoteText.setText(signData.get(position).getsNoteName());
+        holder.userText.setText(signData.get(position).getUserName());
+        holder.noteText.setText(signData.get(position).getsNoteName());
         holder.timeText.setText(signData.get(position).getViewDate());
+        if(signData.get(position).getSendStatus().equals("true")) {
+            holder.isSendImage.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

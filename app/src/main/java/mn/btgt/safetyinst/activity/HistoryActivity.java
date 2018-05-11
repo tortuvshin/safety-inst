@@ -132,19 +132,21 @@ public class HistoryActivity extends AppCompatActivity {
             {
                 for (SignData sData : sDataList)
                 {
-                    JSONObject sJSON = new JSONObject();
-                    sJSON.put("id", sData.getId());
-                    sJSON.put("user_id", sData.getUserId());
-                    sJSON.put("note_id", sData.getsNoteId());
-                    sJSON.put("user_name", sData.getUserName());
-                    sJSON.put("note_name", sData.getsNoteName());
-                    sJSON.put("signature_name", sData.getSignName());
-                    sJSON.put("photo_name", sData.getPhotoName());
-                    sJSON.put("view_date", sData.getViewDate());
-                    sJSON.put("send_status", sData.getSendStatus());
-                    sArray.put(sJSON);
-                    formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
-                    formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+                    if (sData.getSendStatus().equals("false")) {
+                        JSONObject sJSON = new JSONObject();
+                        sJSON.put("id", sData.getId());
+                        sJSON.put("user_id", sData.getUserId());
+                        sJSON.put("note_id", sData.getsNoteId());
+                        sJSON.put("user_name", sData.getUserName());
+                        sJSON.put("note_name", sData.getsNoteName());
+                        sJSON.put("signature_name", sData.getSignName());
+                        sJSON.put("photo_name", sData.getPhotoName());
+                        sJSON.put("view_date", sData.getViewDate());
+                        sJSON.put("send_status", sData.getSendStatus());
+                        sArray.put(sJSON);
+                        formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                        formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+                    }
                 }
                 formBody.addFormDataPart("json_data", sArray.toString());
                 Logger.d(sArray.toString());
@@ -190,7 +192,7 @@ public class HistoryActivity extends AppCompatActivity {
                                     for (SignData sData : signDatas)
                                     {
                                         SignData upSignData = new SignData();
-//                                        if (sData.getSendStatus().equals("false")) {
+                                        if (sData.getSendStatus().equals("false")) {
                                             upSignData.setId(sData.getId());
                                             upSignData.setsNoteId(sData.getsNoteId());
                                             upSignData.setUserId(sData.getUserId());
@@ -203,7 +205,7 @@ public class HistoryActivity extends AppCompatActivity {
                                             upSignData.setSignData(sData.getSignData());
                                             upSignData.setSendStatus("true");
                                             signDataRepo.update(upSignData);
-//                                        }
+                                        }
                                     }
                                     Toast.makeText(AppMain.getContext(), R.string.send_info_success, Toast.LENGTH_SHORT).show();
                                 }
