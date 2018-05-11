@@ -35,7 +35,7 @@ public class SAFCONSTANT {
     public static int    APP_ENV             = 1;
     public static boolean APP_DEBUG          = true;
     public static String APP_NAME            = "iSafe";
-    public static String WEB_URL             = "http://app.gps.mn";
+    public static String WEB_URL             = "http://mongolgps.com";
     public static String API_URL             = WEB_URL.concat("/phone.php/safe_settings");
     public static String SEND_URL            = WEB_URL.concat("/phone.php/safe_upload");
     public static String SETTINGS_COMPANY    = "company";
