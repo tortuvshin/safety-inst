@@ -4,10 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.database.DatabaseManager;
+import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.database.model.SignData;
 
 /**
@@ -64,6 +67,41 @@ public class SignDataRepo {
         } catch (Exception ex){
             ex.printStackTrace();
         } finally {
+            db.endTransaction();
+            DatabaseManager.getInstance().closeDatabase();
+        }
+    }
+
+    public void insertList(List<SignData> SList){
+        if (SList == null) {
+            return;
+        }
+        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        if (db == null) {
+            return;
+        }
+        db.beginTransaction();
+        try {
+            for( SignData signData : SList ){
+                ContentValues cv = new ContentValues();
+                cv.put(SignData.SIGNDATA_ID, signData.getId());
+                cv.put(SignData.SIGNDATA_USER_ID, signData.getUserId());
+                cv.put(SignData.SIGNDATA_SNOTE_ID, signData.getsNoteId());
+                cv.put(SignData.SIGNDATA_USERNAME, signData.getUserName());
+                cv.put(SignData.SIGNDATA_SNOTE_NAME, signData.getsNoteName());
+                cv.put(SignData.SIGNDATA_VIEWDATE, signData.getViewDate());
+                cv.put(SignData.SIGNDATA_SIGN_NAME, signData.getSignName());
+                cv.put(SignData.SIGNDATA_SIGN_DATA, signData.getSignData());
+                cv.put(SignData.SIGNDATA_PHOTO_NAME, signData.getPhotoName());
+                cv.put(SignData.SIGNDATA_PHOTO, signData.getPhoto());
+                cv.put(SignData.SIGNDATA_SENDSTATUS, signData.getSendStatus());
+                db.replace(Settings.TABLE_SETTINGS, null, cv);
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        finally {
             db.endTransaction();
             DatabaseManager.getInstance().closeDatabase();
         }
@@ -163,6 +201,7 @@ public class SignDataRepo {
         int rowCount = db.update(SignData.TABLE_SIGNDATAS, cv, SignData.SIGNDATA_ID + "=?",
                 new String[]{String.valueOf(signData.getId())});
         DatabaseManager.getInstance().closeDatabase();
+        Logger.d("Updated sign data column id "+signData.getId());
         return rowCount;
     }
 

@@ -264,6 +264,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     }
 
     private void saveSignData(){
+        userSigned.setId(UUID.randomUUID().toString().replace("-", ""));
         userSigned.setsNoteId(prefManager.getSnoteId());
         userSigned.setUserId(prefManager.getUserId());
         userSigned.setViewDate(dateFormat.format(calendar.getTime()));
@@ -273,7 +274,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         userSigned.setPhoto(btUserPhoto);
         userSigned.setSignName(signName);
         userSigned.setSignData(ImageUtils.getBytes(bmSignature));
-        userSigned.setSendStatus("0");
+        userSigned.setSendStatus("false");
         signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
         openDialog();

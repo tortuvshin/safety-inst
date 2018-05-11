@@ -90,6 +90,7 @@ public class HistoryActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -140,6 +141,7 @@ public class HistoryActivity extends AppCompatActivity {
                     sJSON.put("signature_name", sData.getSignName());
                     sJSON.put("photo_name", sData.getPhotoName());
                     sJSON.put("view_date", sData.getViewDate());
+                    sJSON.put("send_status", sData.getSendStatus());
                     sArray.put(sJSON);
                     formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
                     formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
@@ -183,8 +185,29 @@ public class HistoryActivity extends AppCompatActivity {
                                 JSONArray ob = new JSONArray(String.valueOf(res));
                                 JSONObject resp = ob.getJSONObject(0);
 
-//                                if (resp.getString("success").equals("1"))
-//                                    signData.deleteAll();
+                                if (resp.getString("success").equals("1")) {
+                                    List<SignData> signDatas = signData.selectAll();
+                                    for (SignData sData : signDatas)
+                                    {
+                                        SignData upSignData = new SignData();
+//                                        if (sData.getSendStatus().equals("false")) {
+                                            upSignData.setId(sData.getId());
+                                            upSignData.setsNoteId(sData.getsNoteId());
+                                            upSignData.setUserId(sData.getUserId());
+                                            upSignData.setViewDate(sData.getViewDate());
+                                            upSignData.setUserName(sData.getUserName());
+                                            upSignData.setsNoteName(sData.getsNoteName());
+                                            upSignData.setPhotoName(sData.getsNoteId());
+                                            upSignData.setPhoto(sData.getPhoto());
+                                            upSignData.setSignName(sData.getSignName());
+                                            upSignData.setSignData(sData.getSignData());
+                                            upSignData.setSendStatus("true");
+                                            signDataRepo.update(upSignData);
+//                                        }
+                                    }
+                                    Toast.makeText(AppMain.getContext(), R.string.send_info_success, Toast.LENGTH_SHORT).show();
+                                }
+
 
                                 Toast.makeText(AppMain.getContext(), R.string.send_info_success, Toast.LENGTH_SHORT).show();
                                 swipeRefreshLayout.setRefreshing(false);
