@@ -42,7 +42,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
 
         final Handler mHandler = new Handler(Looper.getMainLooper());
-        SignDataRepo signDataRepo = new SignDataRepo();
+        final SignDataRepo signDataRepo = new SignDataRepo();
         if (ConnectionDetector.isNetworkAvailable(context) && signDataRepo.count() > 0){
             final SignDataRepo signData = new SignDataRepo();
             List<SignData> sDataList = signData.selectAll();
@@ -57,20 +57,24 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
             try
             {
+
                 for (SignData sData : sDataList)
                 {
-                    JSONObject sJSON = new JSONObject();
-                    sJSON.put("id", sData.getId());
-                    sJSON.put("user_id", sData.getUserId());
-                    sJSON.put("note_id", sData.getsNoteId());
-                    sJSON.put("user_name", sData.getUserName());
-                    sJSON.put("note_name", sData.getsNoteName());
-                    sJSON.put("signature_name", sData.getSignName());
-                    sJSON.put("photo_name", sData.getPhotoName());
-                    sJSON.put("view_date", sData.getViewDate());
-                    sArray.put(sJSON);
-                    formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
-                    formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+                    if (sData.getSendStatus().equals("false")) {
+                        JSONObject sJSON = new JSONObject();
+                        sJSON.put("id", sData.getId());
+                        sJSON.put("user_id", sData.getUserId());
+                        sJSON.put("note_id", sData.getsNoteId());
+                        sJSON.put("user_name", sData.getUserName());
+                        sJSON.put("note_name", sData.getsNoteName());
+                        sJSON.put("signature_name", sData.getSignName());
+                        sJSON.put("photo_name", sData.getPhotoName());
+                        sJSON.put("view_date", sData.getViewDate());
+                        sJSON.put("send_status", sData.getSendStatus());
+                        sArray.put(sJSON);
+                        formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                        formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+                    }
                 }
                 formBody.addFormDataPart("json_data", sArray.toString());
                 Logger.d(sArray.toString());
@@ -111,10 +115,27 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                                 JSONArray ob = new JSONArray(String.valueOf(res));
                                 JSONObject resp = ob.getJSONObject(0);
 
-//                                if (resp.getString("success").equals("1"))
-//                                    signData.deleteAll();
-
-                                Toast.makeText(context, R.string.send_info_success, Toast.LENGTH_SHORT).show();
+                                if (resp.getString("success").equals("1")) {
+                                    List<SignData> signDatas = signData.selectAll();
+                                    for (SignData sData : signDatas)
+                                    {
+                                        SignData upSignData = new SignData();
+                                        if (sData.getSendStatus().equals("false")) {
+                                            upSignData.setsNoteId(sData.getsNoteId());
+                                            upSignData.setUserId(sData.getUserId());
+                                            upSignData.setViewDate(sData.getViewDate());
+                                            upSignData.setUserName(sData.getUserName());
+                                            upSignData.setsNoteName(sData.getsNoteName());
+                                            upSignData.setPhotoName(sData.getsNoteId());
+                                            upSignData.setPhoto(sData.getPhoto());
+                                            upSignData.setSignName(sData.getSignName());
+                                            upSignData.setSignData(sData.getSignData());
+                                            upSignData.setSendStatus("true");
+                                            signDataRepo.update(upSignData);
+                                        }
+                                    }
+                                    Toast.makeText(context, R.string.send_info_success, Toast.LENGTH_SHORT).show();
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 Logger.e("ERROR : ", e.getMessage() + " ");

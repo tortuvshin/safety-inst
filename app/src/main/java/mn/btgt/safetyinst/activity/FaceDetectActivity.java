@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import mn.btgt.safetyinst.AppMain;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.adapter.ImagePreviewAdapter;
 import mn.btgt.safetyinst.database.model.FaceResult;
@@ -263,7 +264,8 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         });
     }
 
-    private  void saveSignData(){
+    private void saveSignData(){
+        userSigned.setId(UUID.randomUUID().toString().replace("-", ""));
         userSigned.setsNoteId(prefManager.getSnoteId());
         userSigned.setUserId(prefManager.getUserId());
         userSigned.setViewDate(dateFormat.format(calendar.getTime()));
@@ -273,7 +275,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         userSigned.setPhoto(btUserPhoto);
         userSigned.setSignName(signName);
         userSigned.setSignData(ImageUtils.getBytes(bmSignature));
-        userSigned.setSendStatus("0");
+        userSigned.setSendStatus("false");
         signDataRepo.insert(userSigned);
         settingsRepo.insert(new Settings(SAFCONSTANT.SETTINGS_ISSIGNED, "yes"));
         openDialog();
@@ -340,7 +342,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
      */
     public void sendInfo() {
 
-        SignDataRepo signData = new SignDataRepo();
+        final SignDataRepo signData = new SignDataRepo();
         List<SignData> sDataList = signData.selectAll();
 
         JSONArray sArray = new JSONArray();
@@ -355,18 +357,21 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         {
             for (SignData sData : sDataList)
             {
-                JSONObject sJSON = new JSONObject();
-                sJSON.put("id", sData.getId());
-                sJSON.put("user_id", sData.getUserId());
-                sJSON.put("note_id", sData.getsNoteId());
-                sJSON.put("user_name", sData.getUserName());
-                sJSON.put("note_name", sData.getsNoteName());
-                sJSON.put("signature_name", sData.getSignName());
-                sJSON.put("photo_name", sData.getPhotoName());
-                sJSON.put("view_date", sData.getViewDate());
-                sArray.put(sJSON);
-                formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
-                formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+
+                if (sData.getSendStatus().equals("false")) {
+                    JSONObject sJSON = new JSONObject();
+                    sJSON.put("id", sData.getId());
+                    sJSON.put("user_id", sData.getUserId());
+                    sJSON.put("note_id", sData.getsNoteId());
+                    sJSON.put("user_name", sData.getUserName());
+                    sJSON.put("note_name", sData.getsNoteName());
+                    sJSON.put("signature_name", sData.getSignName());
+                    sJSON.put("photo_name", sData.getPhotoName());
+                    sJSON.put("view_date", sData.getViewDate());
+                    sArray.put(sJSON);
+                    formBody.addFormDataPart(sData.getSignName(), sData.getSignName(), RequestBody.create(MediaType.parse("image/*"), sData.getSignData()));
+                    formBody.addFormDataPart(sData.getPhotoName(), sData.getPhotoName(), RequestBody.create(MediaType.parse("image/*"), sData.getPhoto()));
+                }
             }
             formBody.addFormDataPart("json_data", sArray.toString());
             Logger.d(sArray.toString());
@@ -407,10 +412,28 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                             JSONArray ob = new JSONArray(String.valueOf(res));
                             JSONObject resp = ob.getJSONObject(0);
 
-//                            if (resp.getString("success").equals("1"))
-//                                signDataRepo.deleteAll();
-
-                            Toast.makeText(FaceDetectActivity.this, R.string.send_info_success, Toast.LENGTH_SHORT).show();
+                            if (resp.getString("success").equals("1")) {
+                                List<SignData> signDatas = signData.selectAll();
+                                for (SignData sData : signDatas)
+                                {
+                                    SignData upSignData = new SignData();
+                                    if (sData.getSendStatus().equals("false")) {
+                                        upSignData.setId(sData.getId());
+                                        upSignData.setsNoteId(sData.getsNoteId());
+                                        upSignData.setUserId(sData.getUserId());
+                                        upSignData.setViewDate(sData.getViewDate());
+                                        upSignData.setUserName(sData.getUserName());
+                                        upSignData.setsNoteName(sData.getsNoteName());
+                                        upSignData.setPhotoName(sData.getsNoteId());
+                                        upSignData.setPhoto(sData.getPhoto());
+                                        upSignData.setSignName(sData.getSignName());
+                                        upSignData.setSignData(sData.getSignData());
+                                        upSignData.setSendStatus("true");
+                                        signDataRepo.update(upSignData);
+                                    }
+                                }
+                                Toast.makeText(AppMain.getContext(), R.string.send_info_success, Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Logger.e("ERROR : ", e.getMessage() + " ");
