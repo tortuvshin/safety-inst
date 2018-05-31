@@ -39,7 +39,7 @@ public class FaceOverlayView extends View {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(Color.GREEN);
+        mPaint.setColor(Color.GRAY);
         mPaint.setStrokeWidth(stroke);
         mPaint.setStyle(Paint.Style.STROKE);
 
@@ -48,7 +48,7 @@ public class FaceOverlayView extends View {
         mTextPaint.setDither(true);
         int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, metrics);
         mTextPaint.setTextSize(size);
-        mTextPaint.setColor(Color.GREEN);
+        mTextPaint.setColor(Color.GRAY);
         mTextPaint.setStyle(Paint.Style.FILL);
     }
 
@@ -109,16 +109,10 @@ public class FaceOverlayView extends View {
                         rectF.right = getWidth() - left;
                     }
                     canvas.drawRect(rectF, mPaint);
-//                    canvas.drawText("ID " + face.getId(), rectF.left, rectF.bottom + mTextPaint.getTextSize(), mTextPaint);
-                    canvas.drawText("Нүүрний байрлал " + face.getConfidence(), rectF.left, rectF.bottom + mTextPaint.getTextSize() * 2, mTextPaint);
-                    canvas.drawText("Нүд хараа " + face.eyesDistance(), rectF.left, rectF.bottom + mTextPaint.getTextSize() * 3, mTextPaint);
                 }
             }
             canvas.restore();
         }
-
-//        DecimalFormat df2 = new DecimalFormat(".##");
-//        canvas.drawText("Detected_Frame/s: " + df2.format(fps) + " @ " + previewWidth + "x" + previewHeight, mTextPaint.getTextSize(), mTextPaint.getTextSize(), mTextPaint);
     }
 
     public void setPreviewWidth(int previewWidth) {
