@@ -1,8 +1,6 @@
-package mn.btgt.safetyinst.adapter;
+package mn.btgt.safetyinst.history;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

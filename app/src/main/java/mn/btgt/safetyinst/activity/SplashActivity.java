@@ -32,6 +32,8 @@ import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.SNote;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.database.model.Settings;
+import mn.btgt.safetyinst.login.LoginActivity;
+import mn.btgt.safetyinst.users.UsersActivity;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import okhttp3.Call;
@@ -98,7 +100,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void checkUser() {
         if (userRepo.count() > 1){
-            openSomeActivity(LoginListActivity.class, true);
+            openSomeActivity(UsersActivity.class, true);
         } else {
            notUser();
         }
@@ -233,7 +235,7 @@ public class SplashActivity extends AppCompatActivity {
                                     Toast.makeText(SplashActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
                                     if ( userRepo.count() == 0) {
-                                        openSomeActivity(LoginImeiActivity.class, true);
+                                        openSomeActivity(LoginActivity.class, true);
                                         return;
                                     }
                                 }
@@ -241,7 +243,7 @@ public class SplashActivity extends AppCompatActivity {
                                 if (setting.getString("error").equals("0")) {
 
                                     if (users.length() > 1) {
-                                        openSomeActivity(LoginListActivity.class, true);
+                                        openSomeActivity(UsersActivity.class, true);
                                     } else {
                                         notUser();
                                     }

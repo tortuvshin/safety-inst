@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.history;
 
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
-import mn.btgt.safetyinst.adapter.HistoryAdapter;
 import mn.btgt.safetyinst.database.model.SignData;
 import mn.btgt.safetyinst.database.repo.SignDataRepo;
 import mn.btgt.safetyinst.utils.ConnectionDetector;

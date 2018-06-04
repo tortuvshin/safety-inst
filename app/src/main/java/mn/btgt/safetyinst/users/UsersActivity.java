@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.users;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.adapter.UserListAdapter;
+import mn.btgt.safetyinst.history.HistoryActivity;
+import mn.btgt.safetyinst.activity.SettingsActivity;
 import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;
@@ -43,7 +44,7 @@ import okhttp3.Response;
  * URL: https://www.github.com/tortuvshin
  */
 
-public class LoginListActivity extends AppCompatActivity {
+public class UsersActivity extends AppCompatActivity {
 
     boolean doubleBackToExitPressedOnce = false;
     private SwipeRefreshLayout swipeRefreshLayout = null;
@@ -53,7 +54,7 @@ public class LoginListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_list);
+        setContentView(R.layout.activity_users);
 
         final RecyclerView mRecyclerView = findViewById(R.id.users_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -75,7 +76,7 @@ public class LoginListActivity extends AppCompatActivity {
         if (settingsRepo.select("company")!=null)
             compName.setText(settingsRepo.select("company"));
 
-        RecyclerView.Adapter mAdapter = new UserListAdapter(this, users);
+        RecyclerView.Adapter mAdapter = new UsersAdapter(this, users);
         mRecyclerView.setAdapter(mAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -85,7 +86,7 @@ public class LoginListActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         getUsers();
-                        RecyclerView.Adapter mAdapter = new UserListAdapter(LoginListActivity.this, users);
+                        RecyclerView.Adapter mAdapter = new UsersAdapter(UsersActivity.this, users);
                         mRecyclerView.setAdapter(mAdapter);
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -96,22 +97,22 @@ public class LoginListActivity extends AppCompatActivity {
         historyFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginListActivity.this, HistoryActivity.class));
+                startActivity(new Intent(UsersActivity.this, HistoryActivity.class));
             }
         });
         com.github.clans.fab.FloatingActionButton settingsFab = findViewById(R.id.settings_fab);
         settingsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginListActivity.this, SettingsActivity.class));
+                startActivity(new Intent(UsersActivity.this, SettingsActivity.class));
             }
         });
     }
 
     public void getUsers() {
 
-        if (!ConnectionDetector.isNetworkAvailable(LoginListActivity.this)){
-            Toast.makeText(LoginListActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
+        if (!ConnectionDetector.isNetworkAvailable(UsersActivity.this)){
+            Toast.makeText(UsersActivity.this, R.string.no_internet, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -160,12 +161,12 @@ public class LoginListActivity extends AppCompatActivity {
                             int success = setting.getInt("success");
                             int error = setting.getInt("error");
                             if (success == 0 && error == -11) {
-                                Toast.makeText(LoginListActivity.this,
+                                Toast.makeText(UsersActivity.this,
                                         R.string.imei_unlisted,
                                         Toast.LENGTH_SHORT).show();
                                 return;
                             } else if (success== 0 && error == 900){
-                                Toast.makeText(LoginListActivity.this,
+                                Toast.makeText(UsersActivity.this,
                                         getString(R.string.error) + error,
                                         Toast.LENGTH_SHORT).show();
                             } else if ( success == 1) {
@@ -179,7 +180,7 @@ public class LoginListActivity extends AppCompatActivity {
                                         user.setName(users.getJSONObject(i).getString("name"));
                                         user.setPosition(users.getJSONObject(i).getString("job"));
                                         user.setPhone(1);
-                                        user.setImei(SAFCONSTANT.getImei(LoginListActivity.this));
+                                        user.setImei(SAFCONSTANT.getImei(UsersActivity.this));
                                         user.setEmail("");
                                         user.setPassword(users.getJSONObject(i).getString("pass"));
                                         user.setAvatar(users.getJSONObject(i).getString("photo"));
@@ -187,7 +188,7 @@ public class LoginListActivity extends AppCompatActivity {
                                         userRepo.insert(user);
                                     }
                                 } else {
-                                    Toast.makeText(LoginListActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
+                                    Toast.makeText(UsersActivity.this, R.string.empty_user, Toast.LENGTH_LONG)
                                             .show();
                                 }
                             }
