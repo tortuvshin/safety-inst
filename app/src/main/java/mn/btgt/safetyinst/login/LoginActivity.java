@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.activity.MainActivity;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.utils.PrefManager;
@@ -27,7 +28,7 @@ import mn.btgt.safetyinst.utils.SAFCONSTANT;
  * Нэвтрэх хэсэг
  */
 
-public class LoginImeiActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private AppCompatButton loginBtn;
     private AppCompatEditText passText;
@@ -98,14 +99,14 @@ public class LoginImeiActivity extends AppCompatActivity {
                     stopManagingCursor(checkedUser);
                     checkedUser.close();
                     loginBtn.setEnabled(false);
-                    final ProgressDialog progressDialog = new ProgressDialog(LoginImeiActivity.this);
+                    final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
                     progressDialog.setIndeterminate(true);
                     progressDialog.setMessage(getString(R.string.loading));
                     progressDialog.show();
                     new android.os.Handler().post(
                             new Runnable() {
                                 public void run() {
-                                    Toast.makeText(LoginImeiActivity.this, R.string.welcome, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, R.string.welcome, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                     prefManager.setLogin(true);
                                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
@@ -118,7 +119,7 @@ public class LoginImeiActivity extends AppCompatActivity {
                 } else {
                     passText.setText("");
                     passText.startAnimation(shake);
-                    Toast.makeText(LoginImeiActivity.this, R.string.username_pass_incorrect, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.username_pass_incorrect, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 stopManagingCursor(checkedUser);
@@ -132,7 +133,7 @@ public class LoginImeiActivity extends AppCompatActivity {
             }
         } else {
             passText.startAnimation(shake);
-            Toast.makeText(LoginImeiActivity.this, R.string.enter_username_pass,Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, R.string.enter_username_pass,Toast.LENGTH_SHORT).show();
             return;
         }
     }

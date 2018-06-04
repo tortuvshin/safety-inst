@@ -31,14 +31,14 @@
             android:name=".activity.MainActivity"
             android:theme="@style/AppFullScreen" />
         <activity
-            android:name=".activity.LoginImeiActivity"
+            android:name=".login.LoginActivity"
             android:theme="@style/AppFullScreen" />
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/AppFullScreen">
         </activity>
         <activity
-            android:name=".activity.LoginListActivity"
+            android:name=".users.UsersActivity"
             android:theme="@style/AppFullScreen" />
 
         <provider
@@ -73,7 +73,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HistoryActivity">
+        <activity android:name=".history.HistoryActivity">
         </activity>
     </application>
 

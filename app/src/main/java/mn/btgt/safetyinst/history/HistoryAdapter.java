@@ -1,8 +1,6 @@
-package mn.btgt.safetyinst.adapter;
+package mn.btgt.safetyinst.history;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,10 +28,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         private ImageView isSendImage;
         private ViewHolder(View v) {
             super(v);
-
-            Typeface roboto = Typeface.createFromAsset(context.getAssets(),  "fonts/Roboto-Regular.ttf");
-            Typeface robotoLight = Typeface.createFromAsset(context.getAssets(),  "fonts/Roboto-Light.ttf");
-
             cardView = v.findViewById(R.id.history_card_view);
             imageView = v.findViewById(R.id.his_img);
             userText = v.findViewById(R.id.his_user);
@@ -41,8 +35,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             timeText = v.findViewById(R.id.time_text);
             isSendImage = v.findViewById(R.id.is_send);
             isSendImage.setVisibility(View.INVISIBLE);
-            userText.setTypeface(roboto);
-            noteText.setTypeface(robotoLight);
         }
     }
 

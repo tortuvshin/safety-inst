@@ -87,7 +87,6 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
     private int numberOfCameras; // Төхөөрөмжийн камерийн тоо
 
     public static final String TAG = FaceDetectActivity.class.getSimpleName();
-    private static final String BROADCAST_ADDRESS_SAFE = "btgt_isafe_broadcast";
 
     Bitmap bmSignature; // гарын үсэг
     byte[] btUserPhoto; // зураг
@@ -206,6 +205,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
             @Override
             public void onGestureStarted(GestureOverlayView gestureOverlayView, MotionEvent motionEvent) {
                 textView.setVisibility(View.INVISIBLE);
+                mCamera.stopPreview();
             }
 
             @Override
@@ -232,6 +232,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
                 isDrawSignature = false;
                 isImageCapture = false;
                 imagePreviewAdapter.clearAll();
+                startPreview();
             }
         });
 
@@ -498,7 +499,7 @@ public final class FaceDetectActivity extends AppCompatActivity implements Surfa
         super.onResume();
 
         Log.i(TAG, "onResume");
-        startPreview();
+//        startPreview();
     }
 
     /**

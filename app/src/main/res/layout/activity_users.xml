@@ -5,7 +5,7 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mn.btgt.safetyinst.activity.LoginListActivity">
+    tools:context="mn.btgt.safetyinst.users.UsersActivity">
 
     <android.widget.LinearLayout
         android:layout_width="match_parent"
