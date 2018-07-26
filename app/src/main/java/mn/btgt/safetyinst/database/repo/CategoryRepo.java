@@ -15,6 +15,7 @@ import mn.btgt.safetyinst.database.model.Category;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
+@Deprecated
 public class CategoryRepo {
 
     public CategoryRepo() {

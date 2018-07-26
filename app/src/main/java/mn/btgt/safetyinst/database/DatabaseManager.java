@@ -10,7 +10,7 @@ import com.orhanobut.logger.Logger;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class DatabaseManager {
     private Integer mOpenCounter = 0;
 

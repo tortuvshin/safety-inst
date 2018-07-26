@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.welcome;
 
 import android.Manifest;
 import android.content.Context;
@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import mn.btgt.safetyinst.R;
+import mn.btgt.safetyinst.splash.SplashActivity;
 import mn.btgt.safetyinst.utils.PrefManager;
 
 /**

@@ -7,6 +7,7 @@ package mn.btgt.safetyinst.database.model;
  * URL: https://www.github.com/tortuvshin
  */
 
+@Deprecated
 public class Category {
 
     public static final String TABLE_CATEGORYS       = "categorys";

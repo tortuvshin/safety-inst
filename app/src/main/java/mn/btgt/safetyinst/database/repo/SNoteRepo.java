@@ -15,7 +15,7 @@ import mn.btgt.safetyinst.database.model.SNote;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class SNoteRepo {
 
     public SNoteRepo() {

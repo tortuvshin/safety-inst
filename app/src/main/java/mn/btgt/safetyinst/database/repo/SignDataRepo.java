@@ -18,7 +18,7 @@ import mn.btgt.safetyinst.database.model.SignData;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class SignDataRepo {
 
     public SignDataRepo() {

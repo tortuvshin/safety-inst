@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.activity.MainActivity;
+import mn.btgt.safetyinst.MainActivity;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;
 import mn.btgt.safetyinst.utils.PrefManager;

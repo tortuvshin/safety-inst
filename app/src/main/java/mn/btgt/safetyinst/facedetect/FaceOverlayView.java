@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.views;
+package mn.btgt.safetyinst.facedetect;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

@@ -28,13 +28,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/AppFullScreen" />
         <activity
             android:name=".login.LoginActivity"
             android:theme="@style/AppFullScreen" />
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".splash.SplashActivity"
             android:theme="@style/AppFullScreen">
         </activity>
         <activity
@@ -48,11 +48,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".activity.DeviceListActivity"
+            android:name=".device.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/select_device"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".activity.SettingsActivity" />
+        <activity android:name=".settings.SettingsActivity" />
 
         <receiver
             android:name=".utils.NetworkChangeReceiver"
@@ -63,9 +63,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.FaceDetectActivity" />
+        <activity android:name=".facedetect.FaceDetectActivity" />
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".welcome.WelcomeActivity"
             android:theme="@style/AppFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

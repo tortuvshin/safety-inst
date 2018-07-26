@@ -20,8 +20,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import mn.btgt.safetyinst.activity.DeviceListActivity;
-import mn.btgt.safetyinst.activity.SettingsActivity;
+import mn.btgt.safetyinst.device.DeviceListActivity;
+import mn.btgt.safetyinst.settings.SettingsActivity;
 
 /**
  * Author: Turtuvshin Byambaa.
