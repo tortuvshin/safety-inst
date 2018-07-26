@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -42,13 +42,12 @@ import java.io.IOException;
 import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
-import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.facedetect.FaceDetectActivity;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
-import mn.btgt.safetyinst.views.CustomViewPager;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;

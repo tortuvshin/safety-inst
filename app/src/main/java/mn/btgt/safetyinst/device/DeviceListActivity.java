@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.device;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;

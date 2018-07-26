@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.adapter;
+package mn.btgt.safetyinst.facedetect;
 
 import android.content.Context;
 import android.graphics.Bitmap;

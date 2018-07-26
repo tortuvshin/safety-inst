@@ -24,7 +24,7 @@ import java.util.List;
 
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.history.HistoryActivity;
-import mn.btgt.safetyinst.activity.SettingsActivity;
+import mn.btgt.safetyinst.settings.SettingsActivity;
 import mn.btgt.safetyinst.database.repo.SettingsRepo;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;

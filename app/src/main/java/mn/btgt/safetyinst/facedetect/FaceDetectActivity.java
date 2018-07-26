@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.facedetect;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -53,7 +53,6 @@ import java.util.UUID;
 
 import mn.btgt.safetyinst.AppMain;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.adapter.ImagePreviewAdapter;
 import mn.btgt.safetyinst.database.model.FaceResult;
 import mn.btgt.safetyinst.database.model.Settings;
 import mn.btgt.safetyinst.database.model.SignData;
@@ -66,7 +65,6 @@ import mn.btgt.safetyinst.utils.ImageUtils;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 import mn.btgt.safetyinst.utils.Util;
-import mn.btgt.safetyinst.views.FaceOverlayView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;

@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.splash;
 
 import android.Manifest;
 import android.content.Intent;

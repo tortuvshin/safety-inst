@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.activity;
+package mn.btgt.safetyinst.settings;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
