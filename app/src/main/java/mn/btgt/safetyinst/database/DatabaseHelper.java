@@ -22,7 +22,7 @@ import mn.btgt.safetyinst.database.repo.UserRepo;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final int    DATABASE_VERSION = 34;

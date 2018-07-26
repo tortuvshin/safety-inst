@@ -7,7 +7,7 @@ import android.graphics.PointF;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class FaceResult extends Object {
 
     private PointF midEye;

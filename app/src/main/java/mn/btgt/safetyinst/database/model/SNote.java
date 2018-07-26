@@ -5,7 +5,7 @@ package mn.btgt.safetyinst.database.model;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class SNote {
 
     public static final String TABLE_SNOTE       = "snote";

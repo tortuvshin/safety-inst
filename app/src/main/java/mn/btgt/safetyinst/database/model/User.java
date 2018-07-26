@@ -6,7 +6,7 @@ package mn.btgt.safetyinst.database.model;
  * URL: https://www.github.com/tortuvshin
  */
 
-
+@Deprecated
 public class User {
 
     public static final String TABLE_USERS      = "users";

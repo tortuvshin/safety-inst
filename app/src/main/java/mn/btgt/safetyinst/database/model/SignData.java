@@ -7,7 +7,7 @@ import java.util.Arrays;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class SignData {
 
     public static final String TABLE_SIGNDATAS     = "sign_data";

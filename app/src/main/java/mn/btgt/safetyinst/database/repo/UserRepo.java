@@ -14,7 +14,7 @@ import mn.btgt.safetyinst.database.model.User;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class UserRepo {
 
     public UserRepo() {
