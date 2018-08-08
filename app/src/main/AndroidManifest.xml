@@ -54,14 +54,14 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".settings.SettingsActivity" />
 
-        <receiver
-            android:name=".utils.NetworkChangeReceiver"
-            android:label="NetworkChangeReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name=".utils.NetworkChangeReceiver"-->
+            <!--android:label="NetworkChangeReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />-->
+                <!--<action android:name="android.net.wifi.WIFI_STATE_CHANGED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <activity android:name=".facedetect.FaceDetectActivity" />
         <activity

@@ -34,7 +34,7 @@ import okhttp3.Response;
  * Project: Safety Inst
  * URL: https://www.github.com/tortuvshin
  */
-
+@Deprecated
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
