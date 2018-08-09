@@ -42,8 +42,8 @@ import java.io.IOException;
 import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
-import mn.btgt.safetyinst.database.repo.SNoteRepo;
-import mn.btgt.safetyinst.database.model.SNote;
+import mn.btgt.safetyinst.db.repo.SNoteRepo;
+import mn.btgt.safetyinst.db.model.SNote;
 import mn.btgt.safetyinst.facedetect.FaceDetectActivity;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.PrefManager;

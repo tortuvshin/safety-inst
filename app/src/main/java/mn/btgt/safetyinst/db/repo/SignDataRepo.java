@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database.repo;
+package mn.btgt.safetyinst.db.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -9,9 +9,9 @@ import com.orhanobut.logger.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.btgt.safetyinst.database.DatabaseManager;
-import mn.btgt.safetyinst.database.model.Settings;
-import mn.btgt.safetyinst.database.model.SignData;
+import mn.btgt.safetyinst.db.DatabaseManager;
+import mn.btgt.safetyinst.db.model.Settings;
+import mn.btgt.safetyinst.db.model.SignData;
 
 /**
  * Author: Turtuvshin Byambaa.

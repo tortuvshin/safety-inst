@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database.model;
+package mn.btgt.safetyinst.db.model;
 
 import android.graphics.PointF;
 

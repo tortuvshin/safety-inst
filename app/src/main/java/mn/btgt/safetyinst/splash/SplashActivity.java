@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.repo.SNoteRepo;
-import mn.btgt.safetyinst.database.repo.SettingsRepo;
-import mn.btgt.safetyinst.database.repo.UserRepo;
-import mn.btgt.safetyinst.database.model.SNote;
-import mn.btgt.safetyinst.database.model.User;
-import mn.btgt.safetyinst.database.model.Settings;
+import mn.btgt.safetyinst.db.repo.SNoteRepo;
+import mn.btgt.safetyinst.db.repo.SettingsRepo;
+import mn.btgt.safetyinst.db.repo.UserRepo;
+import mn.btgt.safetyinst.db.model.SNote;
+import mn.btgt.safetyinst.db.model.User;
+import mn.btgt.safetyinst.db.model.Settings;
 import mn.btgt.safetyinst.login.LoginActivity;
 import mn.btgt.safetyinst.users.UsersActivity;
 import mn.btgt.safetyinst.utils.ConnectionDetector;

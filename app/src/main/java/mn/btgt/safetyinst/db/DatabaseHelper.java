@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database;
+package mn.btgt.safetyinst.db;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -6,16 +6,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.orhanobut.logger.Logger;
 
 import mn.btgt.safetyinst.AppMain;
-import mn.btgt.safetyinst.database.model.Category;
-import mn.btgt.safetyinst.database.model.SNote;
-import mn.btgt.safetyinst.database.model.Settings;
-import mn.btgt.safetyinst.database.model.SignData;
-import mn.btgt.safetyinst.database.model.User;
-import mn.btgt.safetyinst.database.repo.CategoryRepo;
-import mn.btgt.safetyinst.database.repo.SNoteRepo;
-import mn.btgt.safetyinst.database.repo.SettingsRepo;
-import mn.btgt.safetyinst.database.repo.SignDataRepo;
-import mn.btgt.safetyinst.database.repo.UserRepo;
+import mn.btgt.safetyinst.db.model.Category;
+import mn.btgt.safetyinst.db.model.SNote;
+import mn.btgt.safetyinst.db.model.Settings;
+import mn.btgt.safetyinst.db.model.SignData;
+import mn.btgt.safetyinst.db.model.User;
+import mn.btgt.safetyinst.db.repo.CategoryRepo;
+import mn.btgt.safetyinst.db.repo.SNoteRepo;
+import mn.btgt.safetyinst.db.repo.SettingsRepo;
+import mn.btgt.safetyinst.db.repo.SignDataRepo;
+import mn.btgt.safetyinst.db.repo.UserRepo;
 
 /**
  * Author: Turtuvshin Byambaa.

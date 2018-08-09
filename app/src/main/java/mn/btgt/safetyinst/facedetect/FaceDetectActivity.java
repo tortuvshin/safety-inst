@@ -53,11 +53,11 @@ import java.util.UUID;
 
 import mn.btgt.safetyinst.AppMain;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.model.FaceResult;
-import mn.btgt.safetyinst.database.model.Settings;
-import mn.btgt.safetyinst.database.model.SignData;
-import mn.btgt.safetyinst.database.repo.SettingsRepo;
-import mn.btgt.safetyinst.database.repo.SignDataRepo;
+import mn.btgt.safetyinst.db.model.FaceResult;
+import mn.btgt.safetyinst.db.model.Settings;
+import mn.btgt.safetyinst.db.model.SignData;
+import mn.btgt.safetyinst.db.repo.SettingsRepo;
+import mn.btgt.safetyinst.db.repo.SignDataRepo;
 import mn.btgt.safetyinst.utils.CameraErrorCallback;
 import mn.btgt.safetyinst.utils.ConnectionDetector;
 import mn.btgt.safetyinst.utils.EscPosPrinter;

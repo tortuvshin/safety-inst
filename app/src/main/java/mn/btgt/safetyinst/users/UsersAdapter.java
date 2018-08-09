@@ -17,7 +17,7 @@ import java.util.List;
 
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.model.User;
+import mn.btgt.safetyinst.db.model.User;
 import mn.btgt.safetyinst.login.LoginActivity;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 

@@ -15,7 +15,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import mn.btgt.safetyinst.database.model.FaceResult;
+import mn.btgt.safetyinst.db.model.FaceResult;
 
 /**
  * Хүний царай илэрсэн тохиолдолд тухайн хэсгийг харуулах

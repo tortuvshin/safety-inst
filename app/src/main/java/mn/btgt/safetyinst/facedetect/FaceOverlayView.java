@@ -11,7 +11,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 
-import mn.btgt.safetyinst.database.model.FaceResult;
+import mn.btgt.safetyinst.db.model.FaceResult;
 
 /**
  * Нүүр царайны зургыг харуулах View

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import mn.btgt.safetyinst.R;
-import mn.btgt.safetyinst.database.model.SignData;
+import mn.btgt.safetyinst.db.model.SignData;
 import mn.btgt.safetyinst.utils.ImageUtils;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {

@@ -1,4 +1,4 @@
-package mn.btgt.safetyinst.database.model;
+package mn.btgt.safetyinst.db.model;
 
 import java.util.Arrays;
 
