@@ -17,8 +17,10 @@ import android.widget.Toast;
 import cloud.techstar.imageloader.ImageLoader;
 import mn.btgt.safetyinst.R;
 import mn.btgt.safetyinst.MainActivity;
+import mn.btgt.safetyinst.database.repo.SNoteRepo;
 import mn.btgt.safetyinst.database.repo.UserRepo;
 import mn.btgt.safetyinst.database.model.User;
+import mn.btgt.safetyinst.facedetect.FaceDetectActivity;
 import mn.btgt.safetyinst.utils.PrefManager;
 import mn.btgt.safetyinst.utils.SAFCONSTANT;
 
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView usernameText;
 
     private UserRepo userRepo;
+    private SNoteRepo sNoteRepo;
     private PrefManager prefManager;
 
     @Override
@@ -49,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.login);
 
         userRepo = new UserRepo();
+        sNoteRepo = new SNoteRepo();
         prefManager = new PrefManager(this);
         ImageLoader imageLoader = new ImageLoader(this);
 
@@ -109,7 +113,13 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.makeText(LoginActivity.this, R.string.welcome, Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
                                     prefManager.setLogin(true);
-                                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+                                    Intent i = null;
+                                    if(sNoteRepo.count() == 0) {
+                                        i = new Intent(getApplicationContext(), FaceDetectActivity.class);
+                                    } else {
+                                        i = new Intent(getApplicationContext(), MainActivity.class);
+                                    }
                                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(i);

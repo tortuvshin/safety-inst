@@ -110,10 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
         sNotes = sNoteRepo.selectAll();
 
-        if(sNoteRepo.count() == 0) {
-            startActivity(new Intent(MainActivity.this, FaceDetectActivity.class));
-        }
-
         NUM_PAGES = sNoteRepo.count();
         addBottomDots(0);
 

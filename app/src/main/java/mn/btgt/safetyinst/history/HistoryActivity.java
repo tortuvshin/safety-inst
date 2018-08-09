@@ -116,7 +116,9 @@ public class HistoryActivity extends AppCompatActivity {
     public void signSendServer(){
         if (ConnectionDetector.isNetworkAvailable(AppMain.getContext()) && signDataRepo.count() > 0){
             swipeRefreshLayout.setRefreshing(true);
+
             final SignDataRepo signData = new SignDataRepo();
+
             List<SignData> sDataList = signData.selectAll();
 
             JSONArray sArray = new JSONArray();
@@ -148,11 +150,17 @@ public class HistoryActivity extends AppCompatActivity {
                     }
                 }
                 formBody.addFormDataPart("json_data", sArray.toString());
+
                 Logger.d(sArray.toString());
             } catch (JSONException je) {
                 je.printStackTrace();
             }
 
+            if (sArray.length() == 0){
+                Toast.makeText(AppMain.getContext(), "Илгээх өгөгдөл байхгүй байна", Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+                return;
+            }
             MultipartBody requestBody = formBody.build();
 
             Request request = new Request.Builder()
